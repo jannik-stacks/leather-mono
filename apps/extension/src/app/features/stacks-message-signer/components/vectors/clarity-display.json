@@ -1,0 +1,66 @@
+[
+  {
+    "hex": "true",
+    "ascii": "true"
+  },
+  {
+    "hex": "false",
+    "ascii": "false"
+  },
+  {
+    "hex": "-1",
+    "ascii": "-1"
+  },
+  {
+    "hex": "u340282366920938463463374607431768211455",
+    "ascii": "u340282366920938463463374607431768211455"
+  },
+  {
+    "hex": "0x616263",
+    "ascii": "\"616263\""
+  },
+  {
+    "hex": "0x00ff",
+    "ascii": "\"00ff\""
+  },
+  {
+    "hex": "none",
+    "ascii": "none"
+  },
+  {
+    "hex": "some u1",
+    "ascii": "some u1"
+  },
+  {
+    "hex": "ok u1",
+    "ascii": "ok u1"
+  },
+  {
+    "hex": "err u2",
+    "ascii": "err u2"
+  },
+  {
+    "hex": "ST000000000000000000002AMW42H",
+    "ascii": "ST000000000000000000002AMW42H"
+  },
+  {
+    "hex": "ST000000000000000000002AMW42H.pox",
+    "ascii": "ST000000000000000000002AMW42H.pox"
+  },
+  {
+    "hex": "[true, u1]",
+    "ascii": "[true, u1]"
+  },
+  {
+    "hex": "n:v:u42s:\"abc\"",
+    "ascii": "n:v:u42s:\"abc\""
+  },
+  {
+    "hex": "\"abc\"",
+    "ascii": "\"abc\""
+  },
+  {
+    "hex": "u\"🌟\"",
+    "ascii": "u\"🌟\""
+  }
+]

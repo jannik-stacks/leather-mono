@@ -1,0 +1,30 @@
+{
+  "genuine": {
+    "accepted": true,
+    "commitment": "4633a8678e407cd7d113f9af5a0b461b6f97cb070db9b6cadc2e27fb8428fcfd"
+  },
+  "timestamp": {
+    "accepted": false,
+    "error": "Proposal commitment invalid: payload has been tampered with since proposal."
+  },
+  "payload": {
+    "accepted": false,
+    "error": "Proposal commitment invalid: payload has been tampered with since proposal."
+  },
+  "signature": {
+    "accepted": false,
+    "error": "Proposal commitment invalid: payload has been tampered with since proposal."
+  },
+  "threshold": {
+    "accepted": false,
+    "error": "Signer set tampered: re-derived address does not match the vault account."
+  },
+  "network": {
+    "accepted": false,
+    "error": "Transaction network does not match the vault account network."
+  },
+  "proposer": {
+    "accepted": false,
+    "error": "Proposer is not a signer on this account."
+  }
+}

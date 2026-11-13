@@ -1,9 +1,15 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
 import { assumedZeroFingerprint } from '@shared/utils';
 import { isRecord } from '@shared/utils/is-record';
 
 import { migrateMultiWalletSupport } from './migrate-2-3';
+import { migrateAccounts } from './stored-accounts.vectors-driver';
+
+const expectedStoredAccounts: unknown = JSON.parse(
+  readFileSync(__dirname + '/vectors/stored-accounts.json', 'utf8')
+);
 
 function readPath(value: unknown, ...path: string[]): unknown {
   return path.reduce<unknown>((current, key) => {
@@ -645,4 +651,46 @@ describe(migrateMultiWalletSupport.name, () => {
       expect(readPath(result, 'ordinals')).toBeUndefined();
     });
   });
+});
+
+test('loads stored software and Ledger accounts after the v1-v2 and v2-v3 migrations', () => {
+  const software = migrateAccounts({
+    keys: {
+      ids: ['default'],
+      entities: {
+        default: {
+          id: 'default',
+          type: 'software',
+          salt: '07070707070707070707070707070707',
+          encryptedSecretKey:
+            '070707070707070707070707070707079c344e86d8b6f5b4ed4d6a646844e9b01328cf847854e9dcbbaebf4b833a4d140ed8ca251d0d35b149bb086085ad971169fbe3419cb154c49e5b5cdbf30a68d9',
+        },
+      },
+    },
+    chains: {
+      stx: {
+        default: {
+          currentAccountIndex: 1,
+          currentAccountStacksDescriptor:
+            "[000f25e8/44'/5757'/0'/0/1]026b15fdaf16b01db1eb36314d1bc9edd274ec4bf166123164a62e3715eb42716c",
+        },
+      },
+    },
+  });
+  const ledger = migrateAccounts({
+    keys: {
+      ids: ['default'],
+      entities: {
+        default: {
+          id: 'default',
+          type: 'ledger',
+          publicKeys: [
+            { stxPublicKey: '02ffb37e6635be77b666f94204b20149ff91c7bea3502610d22645b8e0f334efc5' },
+            { stxPublicKey: '026b15fdaf16b01db1eb36314d1bc9edd274ec4bf166123164a62e3715eb42716c' },
+          ],
+        },
+      },
+    },
+  });
+  expect({ software, ledger }).toEqual(expectedStoredAccounts);
 });

@@ -1,0 +1,134 @@
+[
+  {
+    "self": "You will transfer exactly",
+    "other": "You will transfer exactly",
+    "contract": "The contract will transfer exactly",
+    "stake": "You will stake exactly"
+  },
+  {
+    "self": "You will transfer exactly",
+    "other": "Another address ST00…W42H will transfer exactly",
+    "contract": "The contract will transfer exactly",
+    "stake": "You will stake exactly"
+  },
+  {
+    "self": "You will transfer more than",
+    "other": "Another address ST00…W42H will transfer more than",
+    "contract": "The contract will transfer more than",
+    "stake": "You will stake more than"
+  },
+  {
+    "self": "You will transfer equal to or greater than",
+    "other": "Another address ST00…W42H will transfer equal to or greater than",
+    "contract": "The contract will transfer equal to or greater than",
+    "stake": "You will stake equal to or greater than"
+  },
+  {
+    "self": "You will transfer less than",
+    "other": "Another address ST00…W42H will transfer less than",
+    "contract": "The contract will transfer less than",
+    "stake": "You will stake less than"
+  },
+  {
+    "self": "You will transfer less than or equal to",
+    "other": "Another address ST00…W42H will transfer less than or equal to",
+    "contract": "The contract will transfer less than or equal to",
+    "stake": "You will stake less than or equal to"
+  },
+  {
+    "self": "You will transfer exactly",
+    "other": "Another address ST00…W42H will transfer exactly",
+    "contract": "The contract will transfer exactly",
+    "stake": "You will stake exactly"
+  },
+  {
+    "self": "You will transfer more than",
+    "other": "Another address ST00…W42H will transfer more than",
+    "contract": "The contract will transfer more than",
+    "stake": "You will stake more than"
+  },
+  {
+    "self": "You will transfer equal to or greater than",
+    "other": "Another address ST00…W42H will transfer equal to or greater than",
+    "contract": "The contract will transfer equal to or greater than",
+    "stake": "You will stake equal to or greater than"
+  },
+  {
+    "self": "You will transfer less than",
+    "other": "Another address ST00…W42H will transfer less than",
+    "contract": "The contract will transfer less than",
+    "stake": "You will stake less than"
+  },
+  {
+    "self": "You will transfer less than or equal to",
+    "other": "Another address ST00…W42H will transfer less than or equal to",
+    "contract": "The contract will transfer less than or equal to",
+    "stake": "You will stake less than or equal to"
+  },
+  {
+    "self": "You will transfer",
+    "other": "Another address ST00…W42H will transfer",
+    "contract": "The contract will transfer",
+    "stake": "You will transfer"
+  },
+  {
+    "self": "You will keep",
+    "other": "Another address ST00…W42H will keep",
+    "contract": "The contract will keep",
+    "stake": "You will keep"
+  },
+  {
+    "self": "You may transfer",
+    "other": "Another address ST00…W42H may transfer",
+    "contract": "The contract may transfer",
+    "stake": "You may transfer"
+  },
+  {
+    "self": "You will transfer exactly",
+    "other": "Another address ST00…W42H will transfer exactly",
+    "contract": "The contract will transfer exactly",
+    "stake": "You will stake exactly"
+  },
+  {
+    "self": "You will transfer more than",
+    "other": "Another address ST00…W42H will transfer more than",
+    "contract": "The contract will transfer more than",
+    "stake": "You will stake more than"
+  },
+  {
+    "self": "You will transfer equal to or greater than",
+    "other": "Another address ST00…W42H will transfer equal to or greater than",
+    "contract": "The contract will transfer equal to or greater than",
+    "stake": "You will stake equal to or greater than"
+  },
+  {
+    "self": "You will transfer less than",
+    "other": "Another address ST00…W42H will transfer less than",
+    "contract": "The contract will transfer less than",
+    "stake": "You will stake less than"
+  },
+  {
+    "self": "You will transfer less than or equal to",
+    "other": "Another address ST00…W42H will transfer less than or equal to",
+    "contract": "The contract will transfer less than or equal to",
+    "stake": "You will stake less than or equal to"
+  },
+  {
+    "self": "You may perform PoX actions",
+    "other": "You may perform PoX actions",
+    "contract": "The contract may perform PoX actions",
+    "stake": "You may perform PoX actions"
+  },
+  {
+    "self": "You must perform a PoX action",
+    "other": "Another address ST00…W42H must perform a PoX action",
+    "contract": "The contract must perform a PoX action",
+    "stake": "You must perform a PoX action"
+  },
+  {
+    "self": "You must not perform any PoX actions",
+    "other": "Another address ST00…W42H must not perform any PoX actions",
+    "contract": "The contract must not perform any PoX actions",
+    "stake": "You must not perform any PoX actions"
+  }
+]

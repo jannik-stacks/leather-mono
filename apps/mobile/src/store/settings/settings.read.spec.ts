@@ -44,3 +44,27 @@ describe(getStacksNetworkFromNetworkConfig.name, () => {
     expect(network.client.baseUrl).toEqual('https://api.private-1.hiro.so');
   });
 });
+
+test('loads persisted numeric chain IDs and subnets without changing the parent transaction version', () => {
+  const observed = [
+    { chainId: 1 },
+    { chainId: 2147483648 },
+    { chainId: 1, subnetChainId: 456 },
+    { chainId: 2147483648, subnetChainId: 789 },
+  ].map(chain => {
+    const network = getStacksNetworkFromNetworkConfig({
+      ...customChainIdNetwork,
+      chain: {
+        ...customChainIdNetwork.chain,
+        stacks: { ...customChainIdNetwork.chain.stacks, ...chain },
+      },
+    });
+    return { chainId: network.chainId, transactionVersion: network.transactionVersion };
+  });
+  expect(observed).toEqual([
+    { chainId: 1, transactionVersion: 0 },
+    { chainId: 2147483648, transactionVersion: 128 },
+    { chainId: 456, transactionVersion: 0 },
+    { chainId: 789, transactionVersion: 128 },
+  ]);
+});

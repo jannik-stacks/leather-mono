@@ -1,0 +1,33 @@
+{
+  "software": {
+    "software": [
+      {
+        "descriptor": "[000f25e8/44'/5757'/0'/0/1]026b15fdaf16b01db1eb36314d1bc9edd274ec4bf166123164a62e3715eb42716c",
+        "fingerprint": "000f25e8",
+        "accountIndex": 1,
+        "publicKey": "026b15fdaf16b01db1eb36314d1bc9edd274ec4bf166123164a62e3715eb42716c",
+        "address": "SP3F9HGJNBA6TGEVF8TB9TKGA2GZR707DTGMGG11V"
+      }
+    ],
+    "ledger": []
+  },
+  "ledger": {
+    "software": [],
+    "ledger": [
+      {
+        "descriptor": "[00000000/44'/5757'/0'/0/0]02ffb37e6635be77b666f94204b20149ff91c7bea3502610d22645b8e0f334efc5",
+        "fingerprint": "00000000",
+        "accountIndex": 0,
+        "publicKey": "02ffb37e6635be77b666f94204b20149ff91c7bea3502610d22645b8e0f334efc5",
+        "address": "SP281432855PWGVM7GCX85JRERB7TJ80NEBES6TTC"
+      },
+      {
+        "descriptor": "[00000000/44'/5757'/0'/0/1]026b15fdaf16b01db1eb36314d1bc9edd274ec4bf166123164a62e3715eb42716c",
+        "fingerprint": "00000000",
+        "accountIndex": 1,
+        "publicKey": "026b15fdaf16b01db1eb36314d1bc9edd274ec4bf166123164a62e3715eb42716c",
+        "address": "SP3F9HGJNBA6TGEVF8TB9TKGA2GZR707DTGMGG11V"
+      }
+    ]
+  }
+}

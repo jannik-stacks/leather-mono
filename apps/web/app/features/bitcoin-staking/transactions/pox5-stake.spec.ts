@@ -1,5 +1,7 @@
 import { ClarityType, deserializeCV } from '@stacks/transactions';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
+import * as pox5ContractVectorDriver from './pox5-contract.vectors-driver';
 import { decodePayoutPreference } from './pox5-signer-calldata';
 import { getStakeOptions } from './pox5-stake';
 
@@ -59,5 +61,68 @@ describe(getStakeOptions.name, () => {
     expect(() =>
       getStakeOptions({ ...baseArgs, signerManagerContractId: 'not-a-contract-id' })
     ).toThrowError();
+  });
+});
+
+describe('Stacks migration vectors: pox5-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/pox5-contract.json', 'utf8')
+  );
+
+  test('pins PoX-5 calldata, post-condition bytes and modes', () => {
+    const signerManagerContractId = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.signer-manager';
+    const pox5ContractId = 'SP000000000000000000002Q6VF78.pox-5';
+    const network = 'mainnet';
+    const base = {
+      signerManagerContractId,
+      pox5ContractId,
+      network,
+      amountMicroStx: 40000000n,
+      numCycles: 12,
+      startBurnHeight: 900000,
+    };
+    const update = {
+      pox5ContractId,
+      network,
+      newSignerManagerContractId: signerManagerContractId,
+      currentSignerManagerContractId: signerManagerContractId,
+      cyclesToExtend: 6,
+      amountIncreaseMicroStx: 0n,
+      currentAmountMicroStx: 40000000n,
+    };
+    const results = {
+      stake: pox5ContractVectorDriver.stake(base),
+      payout: pox5ContractVectorDriver.stake({
+        ...base,
+        payoutPreference: {
+          btcRewardAddress: 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
+          maxFeeSats: 2500n,
+          minClaimSats: 10000n,
+        },
+      }),
+      extend: pox5ContractVectorDriver.update(update),
+      increase: pox5ContractVectorDriver.update({
+        ...update,
+        cyclesToExtend: 0,
+        amountIncreaseMicroStx: 10000000n,
+      }),
+      unstake: pox5ContractVectorDriver.unstake({
+        currentSignerManagerContractId: signerManagerContractId,
+        pox5ContractId,
+        network,
+      }),
+      claim: pox5ContractVectorDriver.claim({
+        signerManagerContractId,
+        stakerAddress: 'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7',
+        rewardCycle: 3,
+        network,
+      }),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

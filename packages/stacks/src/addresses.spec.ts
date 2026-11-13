@@ -1,7 +1,12 @@
 import { ChainId } from '@stacks/network';
 import { describe, expect, it } from 'vitest';
 
+import { randomAddress } from './accounts.vectors-driver';
 import { deriveStxMultisigAddress } from './addresses';
+
+test('pins the read-only API sender generated with fixed entropy', () => {
+  expect(randomAddress()).toEqual('SP3K34Y7JSVKT7HYVCQ65T1Q6AFV10FSH7ATVAZJV');
+});
 
 // Deterministic compressed secp256k1 public keys derived from the private keys
 // 0x01… / 0x02… / 0x03…; the expected addresses were produced with

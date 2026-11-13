@@ -1,0 +1,150 @@
+{
+  "messages": [
+    {
+      "method": "stx_signMessage",
+      "data": {
+        "messageType": "utf8",
+        "message": "hello"
+      }
+    },
+    {
+      "method": "stx_signMessage",
+      "data": {
+        "messageType": "structured",
+        "network": "custom",
+        "domain": "02",
+        "message": "01"
+      }
+    },
+    {
+      "issues": [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "code": "invalid_value",
+                "values": ["utf8"],
+                "path": ["messageType"],
+                "message": "Invalid input: expected \"utf8\""
+              }
+            ],
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": ["domain"],
+                "message": "Invalid input: expected string, received undefined"
+              }
+            ]
+          ],
+          "path": [],
+          "message": "Invalid input"
+        }
+      ]
+    }
+  ],
+  "transfers": [
+    {
+      "method": "stx_transferStx",
+      "data": {
+        "recipient": "ST000000000000000000002AMW42H",
+        "amount": 1000,
+        "fee": 0,
+        "nonce": 0,
+        "sponsored": true
+      }
+    },
+    {
+      "issues": [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "code": "custom",
+                "path": [],
+                "message": "Invalid standard Stacks principal address"
+              }
+            ],
+            [
+              {
+                "code": "custom",
+                "path": [],
+                "message": "Invalid contract principal (must be address.contract-name format)"
+              }
+            ]
+          ],
+          "path": ["recipient"],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "int",
+          "format": "safeint",
+          "code": "invalid_type",
+          "path": ["amount"],
+          "message": "Amount must be an integer describing µSTX"
+        }
+      ]
+    },
+    {
+      "issues": [
+        {
+          "code": "custom",
+          "path": ["memo"],
+          "message": "Invalid memo string"
+        }
+      ]
+    }
+  ],
+  "calls": {
+    "method": "stx_callContract",
+    "data": {
+      "contract": "ST000000000000000000002AMW42H.token",
+      "functionName": "transfer",
+      "functionArgs": ["01"],
+      "postConditions": [],
+      "postConditionMode": "originator",
+      "sponsored": true
+    }
+  },
+  "deploy": {
+    "method": "stx_deployContract",
+    "data": {
+      "name": "hello",
+      "clarityCode": "(define-public (hello) (ok u1))"
+    }
+  },
+  "account": {
+    "issues": [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": ["name"],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+  },
+  "results": [
+    {
+      "txid": "abc",
+      "transaction": "deadbeef"
+    },
+    [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": ["transaction"],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ],
+    [
+      {
+        "expected": "string",
+        "code": "invalid_type",
+        "path": ["transaction"],
+        "message": "Invalid input: expected string, received undefined"
+      }
+    ]
+  ]
+}

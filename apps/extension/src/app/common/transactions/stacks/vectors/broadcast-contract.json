@@ -1,0 +1,33 @@
+[
+  {
+    "success": [
+      {
+        "txid": "bc1267dee77ba1b2a80311323d7903a9ee1206797ec06256b4ec230b2da599aa",
+        "hex": "808000000004050e8321711b6c80b9137997b99ad33252b6d6a3cb0020000000000001000000000000014100000000000103020000000000051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "success": [],
+    "errors": [
+      {
+        "error": {
+          "name": "BadNonce",
+          "message": "transaction rejected"
+        }
+      }
+    ]
+  },
+  {
+    "success": [],
+    "errors": [
+      {
+        "error": {
+          "name": "TransactionBroadcastError",
+          "message": "Transaction broadcast but returned no txid"
+        }
+      }
+    ]
+  }
+]

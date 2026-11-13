@@ -1,0 +1,60 @@
+{
+  "encryption": {
+    "salt": "07070707070707070707070707070707",
+    "encryptedSecretKey": "070707070707070707070707070707079c344e86d8b6f5b4ed4d6a646844e9b01328cf847854e9dcbbaebf4b833a4d140ed8ca251d0d35b149bb086085ad971169fbe3419cb154c49e5b5cdbf30a68d9",
+    "encryptionKey": "7002728d90ebd2ef32b51a6d197970a6788baddfed67034c7b98f35fc5ba1762972f2dd332bcd9e2bb406b51dfd5c6dd"
+  },
+  "legacyEncryption": "07070707070707070707070707070707f66913750055a7e02f89f99ce8cd57db28b00cd5fddee029166c425929b5215ae20be7bf7e4bdb3bbec8582c0b872bed06e416a0335fbb12521e307872dc44e3",
+  "salted": {
+    "secretKey": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "fingerprint": "73c5da0a",
+    "salt": "07070707070707070707070707070707",
+    "encryptionKey": "7002728d90ebd2ef32b51a6d197970a6788baddfed67034c7b98f35fc5ba1762972f2dd332bcd9e2bb406b51dfd5c6dd",
+    "reencryptedMnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "originalCiphertextPreserved": true,
+    "derivations": [
+      [
+        {
+          "password": "vector-password",
+          "salt": "07070707070707070707070707070707"
+        }
+      ]
+    ],
+    "encryptedSecretKey": "070707070707070707070707070707079c344e86d8b6f5b4ed4d6a646844e9b01328cf847854e9dcbbaebf4b833a4d140ed8ca251d0d35b149bb086085ad971169fbe3419cb154c49e5b5cdbf30a68d9"
+  },
+  "cached": {
+    "secretKey": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "fingerprint": "73c5da0a",
+    "salt": "07070707070707070707070707070707",
+    "encryptionKey": "7002728d90ebd2ef32b51a6d197970a6788baddfed67034c7b98f35fc5ba1762972f2dd332bcd9e2bb406b51dfd5c6dd",
+    "reencryptedMnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "originalCiphertextPreserved": true,
+    "derivations": [],
+    "encryptedSecretKey": "070707070707070707070707070707079c344e86d8b6f5b4ed4d6a646844e9b01328cf847854e9dcbbaebf4b833a4d140ed8ca251d0d35b149bb086085ad971169fbe3419cb154c49e5b5cdbf30a68d9"
+  },
+  "legacy": {
+    "secretKey": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "fingerprint": "73c5da0a",
+    "salt": "07070707070707070707070707070707",
+    "encryptionKey": "7002728d90ebd2ef32b51a6d197970a6788baddfed67034c7b98f35fc5ba1762972f2dd332bcd9e2bb406b51dfd5c6dd",
+    "reencryptedMnemonic": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+    "originalCiphertextPreserved": false,
+    "derivations": [
+      [
+        {
+          "password": "vector-password",
+          "salt": "07070707070707070707070707070707"
+        }
+      ]
+    ],
+    "encryptedSecretKey": "070707070707070707070707070707079c344e86d8b6f5b4ed4d6a646844e9b01328cf847854e9dcbbaebf4b833a4d140ed8ca251d0d35b149bb086085ad971169fbe3419cb154c49e5b5cdbf30a68d9"
+  },
+  "wrongPassword": {
+    "name": "OperationError",
+    "error": "The operation failed for an operation-specific reason"
+  },
+  "tampered": {
+    "name": "OperationError",
+    "error": "The operation failed for an operation-specific reason"
+  }
+}

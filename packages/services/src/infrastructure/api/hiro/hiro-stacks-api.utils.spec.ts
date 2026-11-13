@@ -6,8 +6,10 @@ import type {
   TokenTransferTransaction,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
+import * as hiroMappingContractVectorDriver from './hiro-mapping-contract.vectors-driver';
 import { filterVerboseUnusedTransactionWithTransfersData } from './hiro-stacks-api.utils';
 
 function createMockAbstractTransaction(
@@ -142,5 +144,92 @@ describe('filterVerboseUnusedTransactionWithTransfersData', () => {
     );
 
     expect(result.tx).toEqual(createMockTokenTransferTransaction());
+  });
+});
+
+describe('Stacks migration vectors: hiro-mapping-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/hiro-mapping-contract.json', 'utf8')
+  );
+
+  test('pins Hiro metadata and large balance response mapping', () => {
+    const results = {
+      transaction: hiroMappingContractVectorDriver.transaction({
+        tx: {
+          tx_id: '0xabc',
+          nonce: 42,
+          fee_rate: '9007199254740993',
+          sender_address: 'ST000000000000000000002AMW42H',
+          sponsored: true,
+          post_condition_mode: 'deny',
+          post_conditions: [],
+          anchor_mode: 'any',
+          block_hash: '0xblock',
+          block_height: 123,
+          block_time: 1700000000,
+          block_time_iso: '2023-11-14T22:13:20.000Z',
+          burn_block_height: 100,
+          burn_block_time: 1699999990,
+          burn_block_time_iso: '2023-11-14T22:13:10.000Z',
+          parent_burn_block_time: 1699999980,
+          parent_burn_block_time_iso: '2023-11-14T22:13:00.000Z',
+          canonical: true,
+          tx_index: 0,
+          tx_status: 'success',
+          tx_result: { hex: '0x0703', repr: '(ok true)' },
+          event_count: 0,
+          parent_block_hash: '0xparent',
+          is_unanchored: false,
+          microblock_hash: '',
+          microblock_sequence: 0,
+          microblock_canonical: true,
+          execution_cost_read_count: 1,
+          execution_cost_read_length: 2,
+          execution_cost_runtime: 3,
+          execution_cost_write_count: 4,
+          execution_cost_write_length: 5,
+          events: [],
+          tx_type: 'contract_call',
+          contract_call: {
+            contract_id: 'ST000000000000000000002AMW42H.token',
+            function_name: 'transfer',
+            function_signature: '(define-public (transfer (amount uint)))',
+            function_args: [
+              {
+                hex: '0x0100000000000000000000000000000001',
+                repr: 'u1',
+                name: 'amount',
+                type: 'uint',
+              },
+            ],
+          },
+        },
+        stx_sent: '9007199254740993',
+        stx_received: '0',
+        stx_transfers: [],
+      }),
+      balances: [
+        hiroMappingContractVectorDriver.balance('9007199254740993', '18446744073709551617'),
+        hiroMappingContractVectorDriver.balance('not-a-number', ''),
+      ],
+      collection: [
+        undefined,
+        null,
+        'bad',
+        {},
+        { name: 'fallback', total_items: '12' },
+        { collection_name: 'Leather', location_url: 'https://example.test', total_items: 12 },
+      ].map(hiroMappingContractVectorDriver.collection),
+      attributes: hiroMappingContractVectorDriver.attributes([
+        { trait_type: 'rank', value: '9007199254740993' },
+        { trait_type: 'color', value: 'red' },
+      ]),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

@@ -1,4 +1,8 @@
+import { serializeCV } from '@stacks/transactions';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
+
+import { clarityValueSchema } from '@leather.io/rpc';
 
 import { RouteUrls } from '@shared/route-urls';
 
@@ -168,5 +172,20 @@ describe('ledger flow hand-off', () => {
     Reflect.set(globalThis, 'chrome', { storage: {} });
 
     await expect(consumeLedgerFlowHandoff(token)).resolves.toBeNull();
+  });
+
+  test('loads an existing session handoff containing a stored Clarity value', async () => {
+    const storedRequest = {
+      kind: 'sign-stacks-message',
+      message: { messageType: 'structured', message: { type: 'uint', value: '42' } },
+    };
+    const { store } = installSessionStorage({
+      [handoffKey]: { request: storedRequest, createdAt: Date.now(), token },
+    });
+    const loaded = await consumeLedgerFlowHandoff(token);
+    expect(loaded).toEqual(storedRequest);
+    const parsed = z.object({ message: z.object({ message: clarityValueSchema }) }).parse(loaded);
+    expect(serializeCV(parsed.message.message)).toEqual('010000000000000000000000000000002a');
+    expect(store[handoffKey]).toBeUndefined();
   });
 });

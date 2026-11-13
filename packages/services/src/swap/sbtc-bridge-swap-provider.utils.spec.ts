@@ -1,5 +1,6 @@
 import { AxiosError, AxiosHeaders, type AxiosResponse, CanceledError } from 'axios';
 import BigNumber from 'bignumber.js';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import type { EmilySbtcLimitsResponse } from '../infrastructure/api/emily/emily-api.types';
@@ -11,6 +12,7 @@ import {
   sbtcStacksAddressMap,
   toXOnlyPublicKeyHex,
 } from './sbtc-bridge-swap-provider.utils';
+import * as withdrawalContractVectorDriver from './withdrawal-contract.vectors-driver';
 
 const xOnlySignersPublicKey = '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798';
 
@@ -279,5 +281,43 @@ describe(toXOnlyPublicKeyHex.name, () => {
 
   it('rejects keys of any other length', () => {
     expect(() => toXOnlyPublicKeyHex('abcdef')).toThrowError('Invalid public key length');
+  });
+});
+
+describe('Stacks migration vectors: withdrawal-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/withdrawal-contract.json', 'utf8')
+  );
+
+  test('pins sBTC withdrawal calldata, post-conditions and address rejection', () => {
+    const results = [
+      withdrawalContractVectorDriver.withdrawal(
+        'ST000000000000000000002AMW42H',
+        'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
+        123456789,
+        2500,
+        'mainnet'
+      ),
+      withdrawalContractVectorDriver.withdrawal(
+        'ST000000000000000000002AMW42H',
+        'bc1pmfr3p9j00pfxjh0zmgp99y8zftmd3s5pmedqhyptwy6lm87hf5sspknck9',
+        100,
+        0,
+        'testnet'
+      ),
+      withdrawalContractVectorDriver.withdrawal(
+        'ST000000000000000000002AMW42H',
+        'bad-address',
+        100,
+        0,
+        'mainnet'
+      ),
+    ];
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });
