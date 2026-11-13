@@ -1,6 +1,8 @@
 import { ChainId } from '@stacks/network';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
+import * as networkPersistenceContractVectorDriver from './network-persistence-contract.vectors-driver';
 import { type PersistedNetworkConfiguration, networksSlice } from './networks.slice';
 
 const { addNetwork, changeNetwork, removeNetwork } = networksSlice.actions;
@@ -46,5 +48,29 @@ describe('networksSlice', () => {
   test('changes the current network', () => {
     const state = networksSlice.reducer(initialState(), changeNetwork('devnet'));
     expect(state.currentNetworkId).toBe('devnet');
+  });
+});
+
+describe('Stacks migration vectors: network-persistence-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/network-persistence-contract.json', 'utf8')
+  );
+
+  test('pins persisted custom Stacks network data', () => {
+    const results = networkPersistenceContractVectorDriver.persist({
+      id: 'vector-devnet',
+      name: 'Vector devnet',
+      chainId: 256,
+      url: 'http://localhost:3999',
+      bitcoinNetwork: 'regtest',
+      mode: 'testnet',
+      bitcoinUrl: 'http://localhost:8999/api',
+    });
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

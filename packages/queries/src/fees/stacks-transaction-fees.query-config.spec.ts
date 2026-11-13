@@ -1,9 +1,11 @@
 import { makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
 import { defaultNetworksKeyedById } from '@leather.io/models';
 import type { UserSettings } from '@leather.io/services';
 
+import * as feeQueryContractVectorDriver from './fee-query-contract.vectors-driver';
 import { createStacksTransactionFeesQueryKey } from './stacks-transaction-fees.query-config';
 
 const settings: UserSettings = {
@@ -42,5 +44,23 @@ describe(createStacksTransactionFeesQueryKey.name, () => {
     expect(createStacksTransactionFeesQueryKey(tx, settings, 2)).not.toEqual(
       createStacksTransactionFeesQueryKey(tx, settings, 3)
     );
+  });
+});
+
+describe('Stacks migration vectors: fee-query-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/fee-query-contract.json', 'utf8')
+  );
+
+  test('pins payload, multisig threshold and signer count fee query keys', () => {
+    const hex =
+      '8080000000040563859964ea29ad5a0916500860e2c4adec0a6b270020000000000001000000000000014100000000000203020000000000051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000';
+    const results = [undefined, 2, 3].map(count => feeQueryContractVectorDriver.query(hex, count));
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

@@ -1,0 +1,150 @@
+{
+  "select": {
+    "result": {
+      "status": "connected",
+      "addresses": [
+        {
+          "symbol": "STX",
+          "address": "ST000000000000000000002AMW42H",
+          "publicKey": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec"
+        }
+      ]
+    },
+    "requests": [
+      [
+        {
+          "enableLocalStorage": false,
+          "forceWalletSelect": true
+        },
+        "getAddresses",
+        {
+          "addresses": ["payment", "ordinals", "stacks"]
+        }
+      ]
+    ],
+    "selections": []
+  },
+  "leather": {
+    "result": {
+      "status": "connected",
+      "addresses": [
+        {
+          "symbol": "STX",
+          "address": "ST000000000000000000002AMW42H",
+          "publicKey": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec"
+        }
+      ]
+    },
+    "requests": [
+      [
+        {
+          "enableLocalStorage": false,
+          "forceWalletSelect": false
+        },
+        "getAddresses",
+        {
+          "addresses": ["payment", "ordinals", "stacks"]
+        }
+      ]
+    ],
+    "selections": [["LeatherProvider"]]
+  },
+  "canceled": {
+    "result": {
+      "status": "canceled",
+      "sessionRevoked": false
+    },
+    "requests": [
+      [
+        {
+          "enableLocalStorage": false,
+          "forceWalletSelect": true
+        },
+        "getAddresses",
+        {
+          "addresses": ["payment", "ordinals", "stacks"]
+        }
+      ]
+    ],
+    "selections": []
+  },
+  "revoke": {
+    "revoked": true,
+    "requests": [["wallet_disconnect"], ["wallet_disconnect"]],
+    "disconnected": [[]]
+  },
+  "unsupported": {
+    "revoked": false,
+    "requests": [["wallet_disconnect"], ["wallet_disconnect"]],
+    "disconnected": [[]]
+  },
+  "leatherDisconnect": {
+    "revoked": false,
+    "requests": [],
+    "disconnected": [[]]
+  },
+  "rejections": [
+    [
+      {
+        "direct": true,
+        "nested": true
+      },
+      {
+        "direct": false,
+        "nested": false
+      },
+      {
+        "direct": true,
+        "nested": true
+      },
+      {
+        "direct": false,
+        "nested": false
+      }
+    ],
+    [
+      {
+        "direct": true,
+        "nested": true
+      },
+      {
+        "direct": true,
+        "nested": true
+      },
+      {
+        "direct": true,
+        "nested": true
+      },
+      {
+        "direct": false,
+        "nested": false
+      }
+    ]
+  ],
+  "call": {
+    "result": {
+      "txid": "abc",
+      "transaction": "deadbeef"
+    },
+    "calls": [
+      {
+        "method": "stx_callContract",
+        "params": {
+          "contract": "SP000000000000000000002Q6VF78.pox-5",
+          "functionName": "stake",
+          "functionArgs": ["09"],
+          "postConditionMode": "deny"
+        },
+        "enableLocalStorage": false
+      }
+    ]
+  },
+  "noProvider": {
+    "name": "WalletProviderUnavailableError",
+    "error": "No wallet provider is selected"
+  },
+  "malformed": {
+    "name": "Error",
+    "error": "Invalid contract identifier: invalid"
+  }
+}

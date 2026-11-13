@@ -1,9 +1,11 @@
 import { HDKey } from '@scure/bip32';
 import { ChainId } from '@stacks/network';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import { deriveBip39SeedFromMnemonic } from '@leather.io/crypto';
 import { testMnemonic, testMnemonicWithLeadingZeros } from '@leather.io/test-config';
 
+import * as accountsVectorDriver from './accounts.vectors-driver';
 import {
   cleanHex,
   deriveStxPrivateKey,
@@ -299,5 +301,36 @@ describe(getStacksAssetStringParts.name, () => {
       contractAssetName: 'contract-name',
       contractName: 'contract-name',
     });
+  });
+});
+
+describe('Stacks migration vectors: accounts', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/accounts.json', 'utf8')
+  );
+
+  test('pins Leather and Ledger account paths, compressed keys and ordered addresses', () => {
+    const seed = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    const keys = [
+      '031b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f',
+      '024d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766',
+    ];
+    const results = {
+      leather0: accountsVectorDriver.account(seed, 0, 'stacks'),
+      leather3: accountsVectorDriver.account(seed, 3, 'stacks'),
+      ledger0: accountsVectorDriver.account(seed, 0, 'ledgerLive'),
+      ledger3: accountsVectorDriver.account(seed, 3, 'ledgerLive'),
+      addresses: [1, 2147483648, 256].map(chainId => ({
+        one: accountsVectorDriver.multisig(keys, 1, chainId),
+        two: accountsVectorDriver.multisig(keys, 2, chainId),
+        reversed: accountsVectorDriver.multisig([...keys].reverse(), 2, chainId),
+      })),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

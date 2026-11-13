@@ -1,6 +1,25 @@
-import { describe, expect, test } from 'vitest';
+import * as SecureStore from 'expo-secure-store';
+import { describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
+import { deriveRootKeychainFromMnemonic } from '@leather.io/crypto';
+import { deriveStxPublicKey, initalizeStacksSigner } from '@leather.io/stacks';
+import { testMnemonicWithLeadingZeros } from '@leather.io/test-config';
+
+import { searchForMnemonic } from '../secure-store/secure-store-access';
+import { getSecureStoreKeys } from '../secure-store/secure-store-keys';
+import { migrateFlattenKeychains } from './migrate-0-1-flatten-keychains';
 import { migratePadFingerprints } from './migrate-1-2-pad-fingerprints';
+
+vi.mock('expo-secure-store', () => ({
+  getItemAsync: vi.fn(),
+  WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'WHEN_UNLOCKED_THIS_DEVICE_ONLY',
+}));
+vi.mock('@lingui/core/macro', () => ({
+  t(strings: TemplateStringsArray, ...values: unknown[]) {
+    return String.raw(strings, ...values);
+  },
+}));
 
 const v1State = {
   wallets: {
@@ -436,4 +455,74 @@ describe(migratePadFingerprints.name, () => {
     };
     expect(migratePadFingerprints(v1Clone)).toEqual(v2Clone);
   });
+});
+
+test('loads old persist-root Stacks keychains through both migrations and secure-store key versions', async () => {
+  const origin = "f25e8/44'/5757'/0'/0/0";
+  const stored = {
+    ...v1State,
+    keychains: {
+      bitcoin: { ids: [], entities: {} },
+      stacks: { ids: [origin], entities: { [origin]: v1State.keychains.entities[origin] } },
+    },
+  };
+  const flattened = migrateFlattenKeychains(stored);
+  const unpadded = { ...v1State, keychains: flattened.keychains };
+  const padded = migratePadFingerprints(unpadded);
+  const legacy = flattened.keychains.entities[origin];
+  const current = padded.keychains.entities["000f25e8/44'/5757'/0'/0/0"];
+  if (!legacy || !current) throw new Error('Missing migrated Stacks keychain');
+  const results = [];
+  for (const input of [
+    { descriptor: legacy.descriptor, storedKey: 'f25e8' },
+    { descriptor: current.descriptor, storedKey: 'mnemonic_v2_000f25e8' },
+  ]) {
+    vi.mocked(SecureStore.getItemAsync).mockImplementation(key =>
+      Promise.resolve(key === input.storedKey ? testMnemonicWithLeadingZeros : null)
+    );
+    const signer = initalizeStacksSigner({
+      descriptor: input.descriptor,
+      network: 'mainnet',
+      signFn() {
+        throw new Error('No signing requested');
+      },
+      signMessageFn() {
+        throw new Error('No signing requested');
+      },
+      signStructuredMessageFn() {
+        throw new Error('No signing requested');
+      },
+    });
+    const loaded = await searchForMnemonic(
+      getSecureStoreKeys(z.object({ fingerprint: z.string() }).parse(signer).fingerprint)
+    );
+    if (!loaded.mnemonic) throw new Error('Stored mnemonic not found');
+    const keychain = await deriveRootKeychainFromMnemonic(loaded.mnemonic);
+    results.push({
+      fingerprint: z.object({ fingerprint: z.string() }).parse(signer).fingerprint,
+      accountIndex: signer.accountIndex,
+      address: signer.address,
+      derivedPublicKey: deriveStxPublicKey({ keychain, index: signer.accountIndex }),
+      storeKeys: loaded.storeKeys,
+    });
+  }
+  expect(results).toEqual([
+    {
+      accountIndex: 0,
+      address: 'SP281432855PWGVM7GCX85JRERB7TJ80NEBES6TTC',
+      derivedPublicKey: '02ffb37e6635be77b666f94204b20149ff91c7bea3502610d22645b8e0f334efc5',
+      fingerprint: 'f25e8',
+      storeKeys: { mnemonicStoreKey: 'f25e8', passphraseStoreKey: 'f25e8_passphrase' },
+    },
+    {
+      accountIndex: 0,
+      address: 'SP281432855PWGVM7GCX85JRERB7TJ80NEBES6TTC',
+      derivedPublicKey: '02ffb37e6635be77b666f94204b20149ff91c7bea3502610d22645b8e0f334efc5',
+      fingerprint: '000f25e8',
+      storeKeys: {
+        mnemonicStoreKey: 'mnemonic_v2_000f25e8',
+        passphraseStoreKey: 'mnemonic_v2_passphrase_000f25e8',
+      },
+    },
+  ]);
 });

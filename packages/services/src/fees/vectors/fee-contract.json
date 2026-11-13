@@ -1,0 +1,212 @@
+[
+  {
+    "type": {
+      "low": {
+        "default": 1000,
+        "minimum": 500,
+        "maximum": 5000
+      },
+      "standard": {
+        "default": 2000,
+        "minimum": 1000,
+        "maximum": 10000
+      },
+      "high": {
+        "default": 5000,
+        "minimum": 2000,
+        "maximum": 20000
+      }
+    },
+    "defaults": {
+      "high": 5000,
+      "standard": 2000,
+      "low": 1000
+    },
+    "minimum": 518,
+    "bounded": {
+      "low": 1000,
+      "standard": 2000,
+      "high": 5000
+    },
+    "quote": {
+      "type": "stacksFeeRate",
+      "value": {
+        "amount": "1500",
+        "symbol": "STX",
+        "decimals": 6
+      },
+      "rate": 5,
+      "rateUnit": "µSTX/byte",
+      "estimatedTxSize": 345,
+      "sizeUnit": "byte"
+    }
+  },
+  {
+    "type": {
+      "low": {
+        "default": 1000,
+        "minimum": 500,
+        "maximum": 5000
+      },
+      "standard": {
+        "default": 2000,
+        "minimum": 1000,
+        "maximum": 10000
+      },
+      "high": {
+        "default": 5000,
+        "minimum": 2000,
+        "maximum": 20000
+      }
+    },
+    "defaults": {
+      "high": 5000,
+      "standard": 2000,
+      "low": 1000
+    },
+    "minimum": 518,
+    "bounded": {
+      "low": 518,
+      "standard": 2000,
+      "high": 5000
+    },
+    "quote": {
+      "type": "stacksFeeRate",
+      "value": {
+        "amount": "1500",
+        "symbol": "STX",
+        "decimals": 6
+      },
+      "rate": 5,
+      "rateUnit": "µSTX/byte",
+      "estimatedTxSize": 345,
+      "sizeUnit": "byte"
+    }
+  },
+  {
+    "type": {
+      "low": {
+        "default": 1000,
+        "minimum": 500,
+        "maximum": 5000
+      },
+      "standard": {
+        "default": 2000,
+        "minimum": 1000,
+        "maximum": 10000
+      },
+      "high": {
+        "default": 5000,
+        "minimum": 2000,
+        "maximum": 20000
+      }
+    },
+    "defaults": {
+      "high": 5000,
+      "standard": 2000,
+      "low": 1000
+    },
+    "minimum": 518,
+    "bounded": {
+      "low": 518,
+      "standard": 1000,
+      "high": 2000
+    },
+    "quote": {
+      "type": "stacksFeeRate",
+      "value": {
+        "amount": "1500",
+        "symbol": "STX",
+        "decimals": 6
+      },
+      "rate": 5,
+      "rateUnit": "µSTX/byte",
+      "estimatedTxSize": 345,
+      "sizeUnit": "byte"
+    }
+  },
+  {
+    "type": {
+      "low": {
+        "default": 1000,
+        "minimum": 500,
+        "maximum": 5000
+      },
+      "standard": {
+        "default": 2000,
+        "minimum": 1000,
+        "maximum": 10000
+      },
+      "high": {
+        "default": 5000,
+        "minimum": 2000,
+        "maximum": 20000
+      }
+    },
+    "defaults": {
+      "high": 5000,
+      "standard": 2000,
+      "low": 1000
+    },
+    "minimum": 518,
+    "bounded": {
+      "low": 800,
+      "standard": 1600,
+      "high": 4000
+    },
+    "quote": {
+      "type": "stacksFeeRate",
+      "value": {
+        "amount": "1500",
+        "symbol": "STX",
+        "decimals": 6
+      },
+      "rate": 5,
+      "rateUnit": "µSTX/byte",
+      "estimatedTxSize": 345,
+      "sizeUnit": "byte"
+    }
+  },
+  {
+    "type": {
+      "low": {
+        "default": 1000,
+        "minimum": 500,
+        "maximum": 5000
+      },
+      "standard": {
+        "default": 2000,
+        "minimum": 1000,
+        "maximum": 10000
+      },
+      "high": {
+        "default": 5000,
+        "minimum": 2000,
+        "maximum": 20000
+      }
+    },
+    "defaults": {
+      "high": 5000,
+      "standard": 2000,
+      "low": 1000
+    },
+    "minimum": 518,
+    "bounded": {
+      "low": 5000,
+      "standard": 10000,
+      "high": 20000
+    },
+    "quote": {
+      "type": "stacksFeeRate",
+      "value": {
+        "amount": "1500",
+        "symbol": "STX",
+        "decimals": 6
+      },
+      "rate": 5,
+      "rateUnit": "µSTX/byte",
+      "estimatedTxSize": 345,
+      "sizeUnit": "byte"
+    }
+  }
+]

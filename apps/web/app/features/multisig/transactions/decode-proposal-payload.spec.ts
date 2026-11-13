@@ -133,3 +133,22 @@ describe(decodeProposalPayload.name, () => {
     });
   });
 });
+
+test('loads a fixed stored STX proposal payload into recipient, amount, memo and fee', () => {
+  const payload = decodeProposalPayload(
+    { network: 'stx:testnet', multisigAddress: 'ST000000000000000000002AMW42H' },
+    '80800000000400fc7250a211deddc70ee5a2738de5f07817351cef0020000000000001000000000000014100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003020000000000051a00000000000000000000000000000000000000000020000000000001f09f8c9f000000000000000000000000000000000000000000000000000000000000'
+  );
+  if (payload?.type !== 'stxTransfer') throw new Error('Expected stored STX transfer');
+  expect({
+    recipient: payload.recipient,
+    amount: payload.amount.amount.toString(),
+    memo: payload.memo,
+    fee: payload.fee.amount.toString(),
+  }).toEqual({
+    recipient: 'ST000000000000000000002AMW42H',
+    amount: '9007199254740993',
+    memo: '🌟',
+    fee: '321',
+  });
+});

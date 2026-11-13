@@ -1,0 +1,34 @@
+{
+  "plain": [
+    {
+      "signature": "a2e4aa57a24d9fa24ebabbb825f11a827cc36fcf79622022eccd0e3453c4dfb438fb0ac8b66798fea99f0e2f4045e58f831d65b0975184a0811622dde614769201",
+      "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa"
+    },
+    {
+      "signature": "3909a243513f77318963e78d87410744b682e4fbbcee8db459bdf7e1b2e3ef867fce94c9c4acabf6e40ab043b6e0793dd0b51f06e123463b8b38df82d990b89d01",
+      "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa"
+    },
+    {
+      "signature": "ac77fbeae9624cfd91fe00e63ee42f86890caccede31824c01a54b13bbaed004287429200e601d017a9e894eab307ce1c4c5d5d39866264640e49e1cbdbc377f00",
+      "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa"
+    }
+  ],
+  "structured": [
+    {
+      "signature": "2d31fab788ad2af399f914f341c6c7bc9a4c1b7de17c8cfeff42b521e1972c6500010425f54a50120ce499779037e652dbb5dd400b4d0442fe3deb889fb8024600",
+      "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa"
+    },
+    {
+      "signature": "13efdd24048c7d971e3c374360b8652ee1979ada51d34fcc72deda09808ab9f2217be07d05019feee6b83306760f40600be860c065a492f283492b581bbf8d8000",
+      "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa"
+    },
+    {
+      "signature": "cabd7c7314169ddfebf7f768f25ace2c21cbc2074c0334abf6ee5004986779b2406f76dae4fdc2f89ae7fa63108e658724f94a812598dfbd1ff0d7422cd3198e00",
+      "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa"
+    }
+  ],
+  "valid": true,
+  "malformed": false,
+  "wrongMessage": false,
+  "wrongDomain": false
+}

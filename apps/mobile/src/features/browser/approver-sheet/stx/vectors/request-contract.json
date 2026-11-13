@@ -1,0 +1,70 @@
+[
+  {
+    "fee": {
+      "amount": "3000",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7
+  },
+  {
+    "fee": {
+      "amount": "1000",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7
+  },
+  {
+    "fee": {
+      "amount": "3000",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7
+  },
+  {
+    "fee": {
+      "amount": "3000",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7
+  },
+  {
+    "fee": {
+      "amount": "3000",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 3
+  },
+  {
+    "fee": {
+      "amount": "0",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7,
+    "sponsored": true
+  },
+  {
+    "fee": {
+      "amount": "0",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7,
+    "sponsored": true
+  },
+  {
+    "fee": {
+      "amount": "3000",
+      "symbol": "STX",
+      "decimals": 6
+    },
+    "nonce": 7,
+    "postConditions": ["0301030000000002625a00"],
+    "postConditionMode": "originator"
+  }
+]

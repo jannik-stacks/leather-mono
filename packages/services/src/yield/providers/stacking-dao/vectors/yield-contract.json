@@ -1,0 +1,56 @@
+[
+  {
+    "calls": [
+      {
+        "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+        "contractName": "ststxbtc-tracking-v2",
+        "functionName": "get-pending-rewards",
+        "functionArgs": [
+          "051a0000000000000000000000000000000000000000",
+          "051a0000000000000000000000000000000000000000"
+        ]
+      }
+    ]
+  },
+  {
+    "calls": [
+      {
+        "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+        "contractName": "ststxbtc-tracking-v2",
+        "functionName": "get-pending-rewards",
+        "functionArgs": [
+          "051a0000000000000000000000000000000000000000",
+          "051a0000000000000000000000000000000000000000"
+        ]
+      }
+    ]
+  },
+  {
+    "error": "Invalid Clarity response format",
+    "calls": [
+      {
+        "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+        "contractName": "ststxbtc-tracking-v2",
+        "functionName": "get-pending-rewards",
+        "functionArgs": [
+          "051a0000000000000000000000000000000000000000",
+          "051a0000000000000000000000000000000000000000"
+        ]
+      }
+    ]
+  },
+  {
+    "error": "Invalid Clarity response format",
+    "calls": [
+      {
+        "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+        "contractName": "ststxbtc-tracking-v2",
+        "functionName": "get-pending-rewards",
+        "functionArgs": [
+          "051a0000000000000000000000000000000000000000",
+          "051a0000000000000000000000000000000000000000"
+        ]
+      }
+    ]
+  }
+]

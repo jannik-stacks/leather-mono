@@ -1,0 +1,69 @@
+[
+  {
+    "fingerprint": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/2]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/2'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ],
+    "index": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ],
+    "id": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ]
+  },
+  {
+    "fingerprint": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/2]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/2'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ],
+    "index": [],
+    "id": []
+  },
+  {
+    "fingerprint": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/2]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/2'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ],
+    "index": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/2]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/2'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ],
+    "id": [
+      {
+        "descriptor": "[24682ead/44'/5757'/0'/0/2]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      },
+      {
+        "descriptor": "[24682ead/44'/5757'/2'/0/0]025b2c58cbf22ad02e1a53041189ace847192834e0664cab4ed1a39676e8a8ddf8"
+      }
+    ]
+  }
+]

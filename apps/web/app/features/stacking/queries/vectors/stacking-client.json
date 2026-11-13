@@ -1,0 +1,377 @@
+{
+  "mainnet": {
+    "results": [
+      {
+        "cacheKey": "[\"get-status\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":20,\"singleSig\":22},\"bootAddress\":\"SP000000000000000000002Q6VF78\",\"chainId\":1,\"client\":{\"baseUrl\":\"https://api.mainnet.hiro.so\"},\"magicBytes\":\"X2\",\"peerNetworkId\":385875968,\"transactionVersion\":0},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stacked": false
+        }
+      },
+      {
+        "cacheKey": "[\"get-core-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":20,\"singleSig\":22},\"bootAddress\":\"SP000000000000000000002Q6VF78\",\"chainId\":1,\"client\":{\"baseUrl\":\"https://api.mainnet.hiro.so\"},\"magicBytes\":\"X2\",\"peerNetworkId\":385875968,\"transactionVersion\":0},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "burn_block_height": 250,
+          "stacks_tip_height": 42
+        }
+      },
+      {
+        "cacheKey": "[\"get-seconds-until-next-cycle\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":20,\"singleSig\":22},\"bootAddress\":\"SP000000000000000000002Q6VF78\",\"chainId\":1,\"client\":{\"baseUrl\":\"https://api.mainnet.hiro.so\"},\"magicBytes\":\"X2\",\"peerNetworkId\":385875968,\"transactionVersion\":0},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": 1170000
+      },
+      {
+        "cacheKey": "[\"get-pox-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":20,\"singleSig\":22},\"bootAddress\":\"SP000000000000000000002Q6VF78\",\"chainId\":1,\"client\":{\"baseUrl\":\"https://api.mainnet.hiro.so\"},\"magicBytes\":\"X2\",\"peerNetworkId\":385875968,\"transactionVersion\":0},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "contract_id": "ST000000000000000000002AMW42H.pox-4",
+          "reward_cycle_length": 2100,
+          "first_burnchain_block_height": 100,
+          "current_burnchain_block_height": 250,
+          "contract_versions": [
+            {
+              "contract_id": "ST000000000000000000002AMW42H.pox-4",
+              "activation_burnchain_block_height": 100
+            }
+          ]
+        }
+      },
+      {
+        "cacheKey": "[\"get-account-extended-balances\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":20,\"singleSig\":22},\"bootAddress\":\"SP000000000000000000002Q6VF78\",\"chainId\":1,\"client\":{\"baseUrl\":\"https://api.mainnet.hiro.so\"},\"magicBytes\":\"X2\",\"peerNetworkId\":385875968,\"transactionVersion\":0},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stx": {
+            "balance": "9007199254740993",
+            "total_sent": "2",
+            "total_received": "9007199254740995",
+            "locked": "100"
+          },
+          "fungible_tokens": {},
+          "non_fungible_tokens": {}
+        }
+      }
+    ],
+    "contract": "ST000000000000000000002AMW42H.pox-4",
+    "requests": [
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/accounts/ST000000000000000000002AMW42H?proof=0",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-4/get-stacker-info",
+        "body": "{\"sender\":\"ST000000000000000000002AMW42H\",\"arguments\":[\"0x051a0000000000000000000000000000000000000000\"]}"
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/info/network_block_times",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/address/ST000000000000000000002AMW42H/balances",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      }
+    ]
+  },
+  "testnet": {
+    "results": [
+      {
+        "cacheKey": "[\"get-status\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stacked": false
+        }
+      },
+      {
+        "cacheKey": "[\"get-core-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "burn_block_height": 250,
+          "stacks_tip_height": 42
+        }
+      },
+      {
+        "cacheKey": "[\"get-seconds-until-next-cycle\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": 234000
+      },
+      {
+        "cacheKey": "[\"get-pox-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "contract_id": "ST000000000000000000002AMW42H.pox-4",
+          "reward_cycle_length": 2100,
+          "first_burnchain_block_height": 100,
+          "current_burnchain_block_height": 250,
+          "contract_versions": [
+            {
+              "contract_id": "ST000000000000000000002AMW42H.pox-4",
+              "activation_burnchain_block_height": 100
+            }
+          ]
+        }
+      },
+      {
+        "cacheKey": "[\"get-account-extended-balances\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stx": {
+            "balance": "9007199254740993",
+            "total_sent": "2",
+            "total_received": "9007199254740995",
+            "locked": "100"
+          },
+          "fungible_tokens": {},
+          "non_fungible_tokens": {}
+        }
+      }
+    ],
+    "contract": "ST000000000000000000002AMW42H.pox-4",
+    "requests": [
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/accounts/ST000000000000000000002AMW42H?proof=0",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-4/get-stacker-info",
+        "body": "{\"sender\":\"ST000000000000000000002AMW42H\",\"arguments\":[\"0x051a0000000000000000000000000000000000000000\"]}"
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/info/network_block_times",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/address/ST000000000000000000002AMW42H/balances",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      }
+    ]
+  },
+  "stacked": {
+    "results": [
+      {
+        "cacheKey": "[\"get-status\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stacked": true,
+          "details": {
+            "first_reward_cycle": 100,
+            "lock_period": 6,
+            "unlock_height": 999,
+            "pox_address": {
+              "version": "00",
+              "hashbytes": "0707070707070707070707070707070707070707"
+            }
+          }
+        }
+      },
+      {
+        "cacheKey": "[\"get-core-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "burn_block_height": 250,
+          "stacks_tip_height": 42
+        }
+      },
+      {
+        "cacheKey": "[\"get-seconds-until-next-cycle\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": 234000
+      },
+      {
+        "cacheKey": "[\"get-pox-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "contract_id": "ST000000000000000000002AMW42H.pox-4",
+          "reward_cycle_length": 2100,
+          "first_burnchain_block_height": 100,
+          "current_burnchain_block_height": 250,
+          "contract_versions": [
+            {
+              "contract_id": "ST000000000000000000002AMW42H.pox-4",
+              "activation_burnchain_block_height": 100
+            }
+          ]
+        }
+      },
+      {
+        "cacheKey": "[\"get-account-extended-balances\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stx": {
+            "balance": "9007199254740993",
+            "total_sent": "2",
+            "total_received": "9007199254740995",
+            "locked": "100"
+          },
+          "fungible_tokens": {},
+          "non_fungible_tokens": {}
+        }
+      }
+    ],
+    "contract": "ST000000000000000000002AMW42H.pox-4",
+    "requests": [
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/accounts/ST000000000000000000002AMW42H?proof=0",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-4/get-stacker-info",
+        "body": "{\"sender\":\"ST000000000000000000002AMW42H\",\"arguments\":[\"0x051a0000000000000000000000000000000000000000\"]}"
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/info/network_block_times",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/address/ST000000000000000000002AMW42H/balances",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      }
+    ]
+  },
+  "malformed": {
+    "results": [
+      {
+        "cacheKey": "[\"get-status\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "error": "Error fetching stacker info"
+      },
+      {
+        "cacheKey": "[\"get-core-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "burn_block_height": 250,
+          "stacks_tip_height": 42
+        }
+      },
+      {
+        "cacheKey": "[\"get-seconds-until-next-cycle\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": 234000
+      },
+      {
+        "cacheKey": "[\"get-pox-info\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "contract_id": "ST000000000000000000002AMW42H.pox-4",
+          "reward_cycle_length": 2100,
+          "first_burnchain_block_height": 100,
+          "current_burnchain_block_height": 250,
+          "contract_versions": [
+            {
+              "contract_id": "ST000000000000000000002AMW42H.pox-4",
+              "activation_burnchain_block_height": 100
+            }
+          ]
+        }
+      },
+      {
+        "cacheKey": "[\"get-account-extended-balances\",{\"address\":\"ST000000000000000000002AMW42H\",\"network\":{\"addressVersion\":{\"multiSig\":21,\"singleSig\":26},\"bootAddress\":\"ST000000000000000000002AMW42H\",\"chainId\":2147483648,\"client\":{\"baseUrl\":\"https://api.testnet.hiro.so\"},\"magicBytes\":\"T2\",\"peerNetworkId\":4278190080,\"transactionVersion\":128},\"client\":{\"baseUrl\":\"https://stacks.example\"}}]",
+        "value": {
+          "stx": {
+            "balance": "9007199254740993",
+            "total_sent": "2",
+            "total_received": "9007199254740995",
+            "locked": "100"
+          },
+          "fungible_tokens": {},
+          "non_fungible_tokens": {}
+        }
+      }
+    ],
+    "contract": "ST000000000000000000002AMW42H.pox-4",
+    "requests": [
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/accounts/ST000000000000000000002AMW42H?proof=0",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/contracts/call-read/ST000000000000000000002AMW42H/pox-4/get-stacker-info",
+        "body": "{\"sender\":\"ST000000000000000000002AMW42H\",\"arguments\":[\"0x051a0000000000000000000000000000000000000000\"]}"
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/info/network_block_times",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/info",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/extended/v1/address/ST000000000000000000002AMW42H/balances",
+        "body": null
+      },
+      {
+        "url": "https://stacks.example/v2/pox",
+        "body": null
+      }
+    ]
+  }
+}

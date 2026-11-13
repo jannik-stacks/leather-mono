@@ -1,4 +1,5 @@
 import { privateKeyToPublic, stringAsciiCV } from '@stacks/transactions';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import { computeProposalHash, decodeProposalPayload } from '@leather.io/crypto';
 import type { MultisigTransaction, VaultAccount, VaultAccountSigner } from '@leather.io/models';
@@ -10,6 +11,7 @@ import {
 
 import { deriveMultisigAddress } from '../derive-multisig-address';
 import { preSignVerification } from './pre-sign-verification';
+import * as proposalContractVectorDriver from './proposal-contract.vectors-driver';
 
 const proposerUserId = '5ac53c09-7d42-4d0b-876f-15ef03b0ece5';
 
@@ -409,5 +411,122 @@ describe(`${preSignVerification.name} (STX, real extension-signed)`, () => {
     expect(() =>
       preSignVerification({ transaction: realStxTransaction, account: realStxAccount })
     ).not.toThrow();
+  });
+});
+
+describe('Stacks migration vectors: proposal-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/proposal-contract.json', 'utf8')
+  );
+
+  const realStxAccount = {
+    id: '1c6e1479-4c6d-4495-b50e-2af7812ff2e6',
+    vaultId: '476656f3-5967-4be0-92df-fcc79e031d6b',
+    name: 'STX 2of3 (deux)',
+    icon: 'piggybank',
+    network: 'stx:mainnet',
+    threshold: 2,
+    multisigAddress: 'SM3D2DNRRVABKVTZTD680CTNCD6KDPTRGC06G4JKK',
+    accountIndex: 1,
+    createdAt: '2026-06-23T14:03:56.337Z',
+    signers: [
+      {
+        network: 'stx:mainnet',
+        publicKey: '024af1cf1974636213c5c197bb5eb8cc34601f17d1923bfb9fbe4f72a45abfa114',
+        address: 'SP3FJQK31NMDM594YKP1640V5WESX38ENSSJ3YC6B',
+        id: '99e0ec6e-58ba-4fa5-a908-6c45860d3291',
+        userId: '834974b4-239b-4cb0-9e1c-f01813510394',
+        xpub: null,
+        xpubOriginFingerprint: null,
+        xpubOriginPath: null,
+        signerIndex: 0,
+        signingPubkey: '024af1cf1974636213c5c197bb5eb8cc34601f17d1923bfb9fbe4f72a45abfa114',
+      },
+      {
+        network: 'stx:mainnet',
+        publicKey: '03bea6b877b6007ace146b99f96b47373b50a61db4ae0801366ce8e3ffd2e6e1e0',
+        address: 'SPJYYA9MHWS5Z53WWNZN91AC1M4DB8P59DCENJMA',
+        id: '65f873ca-f4b7-4d48-9bd8-a9222e121c06',
+        userId: '0b9161c6-91ee-46f7-abdf-fbd93d4fe618',
+        xpub: null,
+        xpubOriginFingerprint: null,
+        xpubOriginPath: null,
+        signerIndex: 1,
+        signingPubkey: '03bea6b877b6007ace146b99f96b47373b50a61db4ae0801366ce8e3ffd2e6e1e0',
+      },
+      {
+        network: 'stx:mainnet',
+        publicKey: '033e8d8852ea1beb9bb7f65d1a4f8d56c038e50e65faf7bf1c7e7584d55f11d1f4',
+        address: 'SP3TB3AJ0XMZ9S6CGY2CQ6R06H1Z6DJQ1SH15ZP2H',
+        id: 'd9dfe9cb-3f00-4d5b-afab-44058c753be0',
+        userId: '27298df0-7632-487b-8d94-64a36b9f2d9c',
+        xpub: null,
+        xpubOriginFingerprint: null,
+        xpubOriginPath: null,
+        signerIndex: 2,
+        signingPubkey: '033e8d8852ea1beb9bb7f65d1a4f8d56c038e50e65faf7bf1c7e7584d55f11d1f4',
+      },
+    ],
+    pendingTransactionCount: 0,
+    queuedTransactionCount: 0,
+  } satisfies Parameters<typeof proposalContractVectorDriver.verify>[0]['account'];
+  const realStxTransaction = {
+    id: '577bc094-e9c8-4266-9dd5-c682d4b0b19d',
+    vaultAccountId: realStxAccount.id,
+    network: 'stx:mainnet',
+    proposerUserId: '834974b4-239b-4cb0-9e1c-f01813510394',
+    proposalRawPayload:
+      '00000000010405da26d718da973debfa6990066aac69a6db6b106000000000000000000000000000000320000000000002030200000000000516f4b1aa40ed3e9c9990f099736006887e66cae1cc00000000002dc6c000000000000000000000000000000000000000000000000000000000000000000000',
+    proposalSignature:
+      'c8941d4a3b93f8b6d26c4804ce3119dd2b6232034a7b972b3d43551058fdaf8a5f34f8d1798f35d549b549c62c83ebfbe36b08748af38d3b008b57d259076eed01',
+    proposalTimestamp: 1782224530,
+    proposalHash: '4633a8678e407cd7d113f9af5a0b461b6f97cb070db9b6cadc2e27fb8428fcfd',
+    nonce: 0,
+    txId: 'bc1267dee77ba1b2a80311323d7903a9ee1206797ec06256b4ec230b2da599aa',
+    status: 'broadcast',
+    signatures: [],
+    broadcastAt: '2026-06-24T08:10:34.402Z',
+    createdAt: '2026-06-23T14:22:13.305Z',
+    updatedAt: '2026-06-24T08:10:34.402Z',
+  } satisfies Parameters<typeof proposalContractVectorDriver.verify>[0]['transaction'];
+
+  test('pins a real extension-signed proposal commitment and rejects tampering', () => {
+    const base = { account: realStxAccount, transaction: realStxTransaction };
+    const results = {
+      genuine: proposalContractVectorDriver.verify(base),
+      timestamp: proposalContractVectorDriver.verify({
+        ...base,
+        transaction: { ...realStxTransaction, proposalTimestamp: 1782224531 },
+      }),
+      payload: proposalContractVectorDriver.verify({
+        ...base,
+        transaction: {
+          ...realStxTransaction,
+          proposalRawPayload: '01' + realStxTransaction.proposalRawPayload.slice(2),
+        },
+      }),
+      signature: proposalContractVectorDriver.verify({
+        ...base,
+        transaction: { ...realStxTransaction, proposalSignature: '00'.repeat(65) },
+      }),
+      threshold: proposalContractVectorDriver.verify({
+        ...base,
+        account: { ...realStxAccount, threshold: 3 },
+      }),
+      network: proposalContractVectorDriver.verify({
+        ...base,
+        transaction: { ...realStxTransaction, network: 'stx:testnet' },
+      }),
+      proposer: proposalContractVectorDriver.verify({
+        ...base,
+        transaction: { ...realStxTransaction, proposerUserId: 'unknown' },
+      }),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

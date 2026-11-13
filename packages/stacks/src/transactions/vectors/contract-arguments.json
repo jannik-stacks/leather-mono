@@ -1,0 +1,290 @@
+{
+  "sip10": [
+    [
+      {
+        "hex": "01ffffffffffffffffffffffffffffffff",
+        "json": {
+          "type": "uint",
+          "value": "340282366920938463463374607431768211455"
+        },
+        "repr": "u340282366920938463463374607431768211455"
+      },
+      {
+        "hex": "051a0000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "ST000000000000000000002AMW42H"
+        },
+        "repr": "ST000000000000000000002AMW42H"
+      },
+      {
+        "hex": "05160000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "SP000000000000000000002Q6VF78"
+        },
+        "repr": "SP000000000000000000002Q6VF78"
+      },
+      {
+        "hex": "09",
+        "json": {
+          "type": "(optional none)",
+          "value": null
+        },
+        "repr": "none"
+      }
+    ],
+    [
+      {
+        "hex": "01ffffffffffffffffffffffffffffffff",
+        "json": {
+          "type": "uint",
+          "value": "340282366920938463463374607431768211455"
+        },
+        "repr": "u340282366920938463463374607431768211455"
+      },
+      {
+        "hex": "051a0000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "ST000000000000000000002AMW42H"
+        },
+        "repr": "ST000000000000000000002AMW42H"
+      },
+      {
+        "hex": "05160000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "SP000000000000000000002Q6VF78"
+        },
+        "repr": "SP000000000000000000002Q6VF78"
+      },
+      {
+        "hex": "09",
+        "json": {
+          "type": "(optional none)",
+          "value": null
+        },
+        "repr": "none"
+      }
+    ],
+    [
+      {
+        "hex": "01ffffffffffffffffffffffffffffffff",
+        "json": {
+          "type": "uint",
+          "value": "340282366920938463463374607431768211455"
+        },
+        "repr": "u340282366920938463463374607431768211455"
+      },
+      {
+        "hex": "051a0000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "ST000000000000000000002AMW42H"
+        },
+        "repr": "ST000000000000000000002AMW42H"
+      },
+      {
+        "hex": "05160000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "SP000000000000000000002Q6VF78"
+        },
+        "repr": "SP000000000000000000002Q6VF78"
+      },
+      {
+        "hex": "0a020000000568656c6c6f",
+        "json": {
+          "type": "(optional (buff 5))",
+          "value": {
+            "type": "(buff 5)",
+            "value": "0x68656c6c6f"
+          }
+        },
+        "repr": "(some 0x68656c6c6f)"
+      }
+    ],
+    [
+      {
+        "hex": "01ffffffffffffffffffffffffffffffff",
+        "json": {
+          "type": "uint",
+          "value": "340282366920938463463374607431768211455"
+        },
+        "repr": "u340282366920938463463374607431768211455"
+      },
+      {
+        "hex": "051a0000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "ST000000000000000000002AMW42H"
+        },
+        "repr": "ST000000000000000000002AMW42H"
+      },
+      {
+        "hex": "05160000000000000000000000000000000000000000",
+        "json": {
+          "type": "principal",
+          "value": "SP000000000000000000002Q6VF78"
+        },
+        "repr": "SP000000000000000000002Q6VF78"
+      },
+      {
+        "hex": "0a0200000004f09f8c9f",
+        "json": {
+          "type": "(optional (buff 4))",
+          "value": {
+            "type": "(buff 4)",
+            "value": "0xf09f8c9f"
+          }
+        },
+        "repr": "(some 0xf09f8c9f)"
+      }
+    ]
+  ],
+  "sip9": [
+    {
+      "hex": "0c0000000201610a010000000000000001000000000000000001620b000000020309",
+      "json": {
+        "type": "(tuple (a (optional uint)) (b (list 2 bool)))",
+        "value": {
+          "a": {
+            "type": "(optional uint)",
+            "value": {
+              "type": "uint",
+              "value": "18446744073709551616"
+            }
+          },
+          "b": {
+            "type": "(list 2 bool)",
+            "value": [
+              {
+                "type": "bool",
+                "value": true
+              },
+              {
+                "type": "(optional none)",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "repr": "(tuple (a (some u18446744073709551616)) (b (list true none)))"
+    },
+    {
+      "hex": "051a0000000000000000000000000000000000000000",
+      "json": {
+        "type": "principal",
+        "value": "ST000000000000000000002AMW42H"
+      },
+      "repr": "ST000000000000000000002AMW42H"
+    },
+    {
+      "hex": "05160000000000000000000000000000000000000000",
+      "json": {
+        "type": "principal",
+        "value": "SP000000000000000000002Q6VF78"
+      },
+      "repr": "SP000000000000000000002Q6VF78"
+    }
+  ],
+  "decoded": [
+    {
+      "hex": "00ffffffffffffffffffffffffffffffff",
+      "json": {
+        "type": "int",
+        "value": "-1"
+      },
+      "repr": "-1"
+    },
+    {
+      "hex": "0100000000000000010000000000000000",
+      "json": {
+        "type": "uint",
+        "value": "18446744073709551616"
+      },
+      "repr": "u18446744073709551616"
+    },
+    {
+      "hex": "0a07010000000000000000000000000000002a",
+      "json": {
+        "type": "(optional (response uint UnknownType))",
+        "value": {
+          "type": "(response uint UnknownType)",
+          "value": {
+            "type": "uint",
+            "value": "42"
+          },
+          "success": true
+        }
+      },
+      "repr": "(some (ok u42))"
+    },
+    {
+      "hex": "080d00000003626164",
+      "json": {
+        "type": "(response UnknownType (string-ascii 3))",
+        "value": {
+          "type": "(string-ascii 3)",
+          "value": "bad"
+        },
+        "success": false
+      },
+      "repr": "(err \"bad\")"
+    },
+    {
+      "hex": "0e00000004f09f8c9f",
+      "json": {
+        "type": "(string-utf8 4)",
+        "value": "🌟"
+      },
+      "repr": "u\"🌟\""
+    },
+    {
+      "hex": "020000000300ff01",
+      "json": {
+        "type": "(buff 3)",
+        "value": "0x00ff01"
+      },
+      "repr": "0x00ff01"
+    },
+    {
+      "hex": "09",
+      "json": {
+        "type": "(optional none)",
+        "value": null
+      },
+      "repr": "none"
+    },
+    {
+      "hex": "03",
+      "json": {
+        "type": "bool",
+        "value": true
+      },
+      "repr": "true"
+    },
+    {
+      "hex": "04",
+      "json": {
+        "type": "bool",
+        "value": false
+      },
+      "repr": "false"
+    },
+    {
+      "error": "Cannot recognize Clarity Type: 255"
+    },
+    {
+      "error": "Cannot convert 0x to a BigInt"
+    },
+    {
+      "error": "Cannot recognize Clarity Type: undefined"
+    },
+    {
+      "error": "Invalid byte sequence"
+    }
+  ]
+}
