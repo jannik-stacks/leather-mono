@@ -1,0 +1,48 @@
+[
+  {
+    "valid": true,
+    "schema": ""
+  },
+  {
+    "valid": true,
+    "schema": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+    "valid": false,
+    "schema": [
+      {
+        "code": "custom",
+        "path": [],
+        "message": "Invalid memo string"
+      }
+    ]
+  },
+  {
+    "valid": true,
+    "schema": "🌟🌟🌟🌟🌟🌟🌟🌟ab"
+  },
+  {
+    "valid": false,
+    "schema": [
+      {
+        "code": "custom",
+        "path": [],
+        "message": "Invalid memo string"
+      }
+    ]
+  },
+  {
+    "valid": true,
+    "schema": "ééééééééééééééééé"
+  },
+  {
+    "valid": false,
+    "schema": [
+      {
+        "code": "custom",
+        "path": [],
+        "message": "Invalid memo string"
+      }
+    ]
+  }
+]

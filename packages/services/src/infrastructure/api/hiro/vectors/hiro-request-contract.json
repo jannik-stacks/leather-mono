@@ -1,0 +1,72 @@
+[
+  {
+    "hex": "070100000000000000010000000000000001",
+    "json": {
+      "type": "(response uint UnknownType)",
+      "value": {
+        "type": "uint",
+        "value": "18446744073709551617"
+      },
+      "success": true
+    },
+    "transferRate": 2,
+    "post": [
+      [
+        "https://api.hiro.so/v2/contracts/call-read/ST000000000000000000002AMW42H/token/get-balance?tip=latest",
+        {
+          "sender": "ST000000000000000000002AMW42H",
+          "arguments": [
+            "0x051a0000000000000000000000000000000000000000",
+            "0x0100000000000000010000000000000001"
+          ]
+        },
+        {}
+      ],
+      [
+        "https://api.hiro.so/v2/fees/transaction",
+        {
+          "estimated_len": 345,
+          "transaction_payload": "00051a0000000000000000000000000000000000000000000000000000000001"
+        },
+        {}
+      ]
+    ],
+    "get": [["https://api.hiro.so/v2/fees/transfer", {}]],
+    "cacheKeys": [
+      [
+        "hiro-stacks-call-read-only-function",
+        "ST000000000000000000002AMW42H",
+        "token",
+        "get-balance",
+        ["0x051a0000000000000000000000000000000000000000", "0x0100000000000000010000000000000001"]
+      ],
+      ["hiro-stacks-get-transaction-fee-estimate", 345],
+      ["hiro-stacks-get-transfer-fee-rate", 1]
+    ]
+  },
+  {
+    "error": "Runtime error",
+    "post": [
+      [
+        "https://api.hiro.so/v2/contracts/call-read/ST000000000000000000002AMW42H/token/get-balance?tip=latest",
+        {
+          "sender": "ST000000000000000000002AMW42H",
+          "arguments": [
+            "0x051a0000000000000000000000000000000000000000",
+            "0x0100000000000000010000000000000001"
+          ]
+        },
+        {}
+      ]
+    ],
+    "cacheKeys": [
+      [
+        "hiro-stacks-call-read-only-function",
+        "ST000000000000000000002AMW42H",
+        "token",
+        "get-balance",
+        ["0x051a0000000000000000000000000000000000000000", "0x0100000000000000010000000000000001"]
+      ]
+    ]
+  }
+]

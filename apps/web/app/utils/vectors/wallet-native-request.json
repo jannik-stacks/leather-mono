@@ -1,0 +1,14 @@
+{
+  "requests": [
+    [
+      "stx_callContract",
+      {
+        "contract": "SP000000000000000000002Q6VF78.pox-5",
+        "functionArgs": ["09"],
+        "functionName": "stake",
+        "postConditionMode": "deny"
+      }
+    ]
+  ],
+  "result": { "transaction": "deadbeef", "txId": "abc", "txid": "abc" }
+}

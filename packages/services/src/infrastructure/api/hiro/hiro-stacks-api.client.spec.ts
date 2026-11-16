@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WalletDefaultNetworkConfigurationIds, defaultNetworksKeyedById } from '@leather.io/models';
@@ -8,6 +9,7 @@ import { createTestPrincipalMempoolTokenTransferTx } from '../../../test/transac
 import type { HttpCacheKeyArray, HttpCacheService } from '../../cache/http-cache.service';
 import { type RateLimiterService, RateLimiterType } from '../../rate-limiter/rate-limiter.service';
 import type { SettingsService } from '../../settings/settings.service';
+import * as hiroRequestContractVectorDriver from './hiro-request-contract.vectors-driver';
 import { hiroApiRequestsPriorityLevels } from './hiro-request-priorities';
 import { HiroStacksApiClient } from './hiro-stacks-api.client';
 import type {
@@ -287,5 +289,41 @@ describe(HiroStacksApiClient.name, () => {
         { skipCache: undefined }
       );
     });
+  });
+});
+
+describe('Stacks migration vectors: hiro-request-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/hiro-request-contract.json', 'utf8')
+  );
+
+  test('pins Hiro read-only and fee request bytes, response decoding and errors', async () => {
+    const input = {
+      contractAddress: 'ST000000000000000000002AMW42H',
+      contractName: 'token',
+      functionName: 'get-balance',
+      senderAddress: 'ST000000000000000000002AMW42H',
+      args: ['051a0000000000000000000000000000000000000000', '0100000000000000010000000000000001'],
+    };
+    const results = [
+      await hiroRequestContractVectorDriver.read(
+        input,
+        { okay: true, result: '0x070100000000000000010000000000000001' },
+        '00051a0000000000000000000000000000000000000000000000000000000001',
+        345
+      ),
+      await hiroRequestContractVectorDriver.read(
+        input,
+        { okay: false, cause: 'Runtime error' },
+        '00',
+        null
+      ),
+    ];
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

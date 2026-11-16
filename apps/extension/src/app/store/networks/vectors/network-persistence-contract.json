@@ -1,0 +1,37 @@
+{
+  "added": {
+    "ids": ["vector-devnet"],
+    "entities": {
+      "vector-devnet": {
+        "id": "vector-devnet",
+        "name": "Vector devnet",
+        "chainId": 256,
+        "url": "http://localhost:3999",
+        "bitcoinNetwork": "regtest",
+        "mode": "testnet",
+        "bitcoinUrl": "http://localhost:8999/api"
+      }
+    },
+    "currentNetworkId": "mainnet"
+  },
+  "selected": {
+    "ids": ["vector-devnet"],
+    "entities": {
+      "vector-devnet": {
+        "id": "vector-devnet",
+        "name": "Vector devnet",
+        "chainId": 256,
+        "url": "http://localhost:3999",
+        "bitcoinNetwork": "regtest",
+        "mode": "testnet",
+        "bitcoinUrl": "http://localhost:8999/api"
+      }
+    },
+    "currentNetworkId": "vector-devnet"
+  },
+  "removed": {
+    "ids": [],
+    "entities": {},
+    "currentNetworkId": "vector-devnet"
+  }
+}

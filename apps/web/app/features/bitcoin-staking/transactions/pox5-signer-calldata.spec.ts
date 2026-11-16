@@ -1,5 +1,13 @@
 import { poxAddressToTuple } from '@stacks/stacking';
-import { ClarityType, deserializeCV, noneCV, someCV, tupleCV, uintCV } from '@stacks/transactions';
+import {
+  ClarityType,
+  deserializeCV,
+  noneCV,
+  serializeCV,
+  someCV,
+  tupleCV,
+  uintCV,
+} from '@stacks/transactions';
 
 import { decodePayoutPreference, encodeSignerCalldata } from './pox5-signer-calldata';
 
@@ -14,6 +22,27 @@ function deserializeCalldataTuple(encoded: ReturnType<typeof encodeSignerCalldat
 const p2wpkhAddress = 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4';
 const p2trAddress = 'bc1pmfr3p9j00pfxjh0zmgp99y8zftmd3s5pmedqhyptwy6lm87hf5sspknck9';
 const p2pkhAddress = '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2';
+
+test('pins payout calldata wire bytes and decodes fixed stored BTC preferences', () => {
+  const cases = [
+    {
+      preference: { btcRewardAddress: p2wpkhAddress, maxFeeSats: 5000n, minClaimSats: 25000n },
+      hex: '0a02000000780c00000003076d61782d6665650100000000000000000000000000001388096d696e2d636c61696d01000000000000000000000000000061a808706f782d616464720c00000002096861736862797465730200000014751e76e8199196d454941c45d1b3a323f1433bd60776657273696f6e020000000104',
+    },
+    {
+      preference: { btcRewardAddress: p2trAddress, maxFeeSats: 0n },
+      hex: '0a02000000690c00000002076d61782d666565010000000000000000000000000000000008706f782d616464720c00000002096861736862797465730200000020da4710964f7852695de2da025290e24af6d8c281de5a0b902b7135fd9fd74d210776657273696f6e020000000106',
+    },
+    {
+      preference: { btcRewardAddress: p2pkhAddress, maxFeeSats: 18446744073709551616n },
+      hex: '0a020000005d0c00000002076d61782d666565010000000000000001000000000000000008706f782d616464720c0000000209686173686279746573020000001477bff20c60e522dfaa3350c39b030a5d004e839a0776657273696f6e020000000100',
+    },
+  ];
+  for (const { preference, hex } of cases) {
+    expect(serializeCV(encodeSignerCalldata(preference))).toEqual(hex);
+    expect(decodePayoutPreference(deserializeCV(hex), 'mainnet')).toEqual(preference);
+  }
+});
 
 describe(encodeSignerCalldata.name, () => {
   test('encodes undefined preference as none', () => {

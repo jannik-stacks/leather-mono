@@ -35,6 +35,9 @@
     "packages/services/src/infrastructure/api/bitflow/bitflow-bff-api.types.ts"
   ],
   "workspaces": {
+    ".": {
+      "entry": ["stacks-kit-migration/check-coverage.mjs"]
+    },
     "apps/extension": {
       "entry": [
         "vite.config.ts",

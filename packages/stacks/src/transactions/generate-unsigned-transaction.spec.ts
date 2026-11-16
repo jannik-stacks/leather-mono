@@ -7,12 +7,14 @@ import {
   deserializeTransaction,
 } from '@stacks/transactions';
 import BigNumber from 'bignumber.js';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { assert, describe, expect, it } from 'vitest';
 
 import { createMoney } from '@leather.io/utils';
 
 import { formatAssetString } from '../stacks.utils';
 import { generateStacksUnsignedTransaction, initNonce } from './generate-unsigned-transaction';
+import * as transactionContractVectorDriver from './transaction-contract.vectors-driver';
 import {
   type StacksUnsignedContractCallOptions,
   type StacksUnsignedContractDeployOptions,
@@ -193,4 +195,110 @@ describe('generateStacksUnsignedTransaction', () => {
     expect(result.auth.authType).toEqual(AuthType.Sponsored);
     expect(result.auth.spendingCondition.fee).toBe(BigInt('0'));
   });
+});
+
+describe('Stacks migration vectors: transaction-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/transaction-contract.json', 'utf8')
+  );
+
+  test('pins unsigned and signed transactions, identifiers, sizing, nonces and Clarity defaults', async () => {
+    const base = {
+      privateKeys: ['111111111111111111111111111111111111111111111111111111111111111101'],
+      recipient: 'ST000000000000000000002AMW42H',
+      amount: '9007199254740993',
+      fee: '321',
+      nonce: '9007199254740993',
+      network: 'testnet',
+    } satisfies Omit<Parameters<typeof transactionContractVectorDriver.transaction>[0], 'kind'>;
+    const results = {
+      stx: await transactionContractVectorDriver.transaction({ ...base, kind: 'stx', memo: '🌟' }),
+      mainnet: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'stx',
+        network: 'mainnet',
+        nonce: 0,
+      }),
+      custom: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'stx',
+        network: 256,
+        nonce: 42,
+      }),
+      sponsored: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'stx',
+        fee: '0',
+        sponsored: true,
+      }),
+      sip10: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'sip10',
+        memo: 'hello',
+        mode: 2,
+      }),
+      sip9: await transactionContractVectorDriver.transaction({ ...base, kind: 'sip9', mode: 1 }),
+      call: await transactionContractVectorDriver.transaction({ ...base, kind: 'call', mode: 3 }),
+      defaultDeploy: await transactionContractVectorDriver.transaction({ ...base, kind: 'deploy' }),
+      clarity2: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'deploy',
+        clarityVersion: 2,
+      }),
+      clarity6: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'deploy',
+        clarityVersion: 6,
+      }),
+      multisig: await Promise.all(
+        [false, true].flatMap(nonSequential =>
+          [1, 2].map(threshold =>
+            transactionContractVectorDriver.transaction({
+              ...base,
+              kind: 'stx',
+              privateKeys: [
+                ...base.privateKeys,
+                '222222222222222222222222222222222222222222222222222222222222222201',
+              ],
+              threshold,
+              nonSequential,
+            })
+          )
+        )
+      ),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
+  });
+});
+
+test('pins mainnet deployment bytes when network and Clarity version are omitted', async () => {
+  const input = {
+    kind: 'deploy',
+    privateKeys: ['111111111111111111111111111111111111111111111111111111111111111101'],
+    recipient: 'ST000000000000000000002AMW42H',
+    amount: '1',
+    fee: '321',
+    nonce: 0,
+  } satisfies Parameters<typeof transactionContractVectorDriver.transaction>[0];
+  const results = {
+    omitted: await transactionContractVectorDriver.transaction(input),
+    explicitMainnet: await transactionContractVectorDriver.transaction({
+      ...input,
+      network: 'mainnet',
+    }),
+  };
+  const actual: unknown = JSON.parse(
+    JSON.stringify(results, (_, value: unknown) =>
+      typeof value === 'bigint' ? value.toString() : value
+    )
+  );
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/mainnet-deploy.json', 'utf8')
+  );
+  expect(actual).toEqual(expected);
 });

@@ -1,0 +1,18 @@
+[
+  "argumentbooltrue",
+  "argumentboolfalse",
+  "argumentint-1",
+  "argumentuintu340282366920938463463374607431768211455",
+  "argument(buff 3)0x616263",
+  "argument(buff 2)0x00ff",
+  "argument(optional none)none",
+  "argument(optional uint)(some u1)",
+  "argument(response uint UnknownType)(ok u1)",
+  "argument(response UnknownType uint)(err u2)",
+  "argumentprincipalST000000000000000000002AMW42H",
+  "argumentprincipalST000000000000000000002AMW42H.pox",
+  "argument(list 2 bool)(list true u1)",
+  "argument(tuple (n (tuple (v uint))) (s (string-ascii 3)))(tuple (n (tuple (v u42))) (s \"abc\"))",
+  "argument(string-ascii 3)\"abc\"",
+  "argument(string-utf8 4)u\"🌟\""
+]

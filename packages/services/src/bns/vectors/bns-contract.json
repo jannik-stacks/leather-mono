@@ -1,0 +1,38 @@
+{
+  "primary": [
+    {
+      "name": "alice",
+      "namespace": "btc"
+    },
+    {
+      "name": "alice",
+      "namespace": "btc"
+    },
+    null,
+    {
+      "error": "u1"
+    },
+    {
+      "error": "Unexpected BNS primary name response structure"
+    },
+    {
+      "error": "Unexpected BNS primary name Clarity Value type: bool"
+    }
+  ],
+  "profiles": [
+    {},
+    {
+      "bio": "hello",
+      "name": "alice",
+      "addresses": {
+        "bitcoinPayment": "bc1payment",
+        "ethereum": "0x123"
+      }
+    },
+    {
+      "addresses": {
+        "bitcoinPayment": "legacy"
+      }
+    }
+  ]
+}

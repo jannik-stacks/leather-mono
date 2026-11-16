@@ -1,6 +1,8 @@
 import { hexToBytes } from '@stacks/common';
 import { deserializeTransaction } from '@stacks/transactions';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
+import * as nonceContractVectorDriver from './nonce-contract.vectors-driver';
 import { substituteStxNonce } from './substitute-stx-nonce';
 
 // A real proposed stx:mainnet 2-of-3 multisig STX transfer (StandardAuth,
@@ -44,5 +46,31 @@ describe(substituteStxNonce.name, () => {
   test('rejects sponsored auth', () => {
     const tampered = `${realPayload.slice(0, 10)}05${realPayload.slice(12)}`;
     expect(() => substituteStxNonce({ rawPayload: tampered, nonce: 1 })).toThrow('auth type');
+  });
+});
+
+describe('Stacks migration vectors: nonce-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/nonce-contract.json', 'utf8')
+  );
+
+  test('pins nonce substitution and malformed multisig rejection', () => {
+    const hex =
+      '00000000010405bf753763204843631823bc99674208cdc5a8734600000000000000000000000000000308000000000002030200000000000516f4b1aa40ed3e9c9990f099736006887e66cae1cc00000000003d090000000000000000000000000000000000000000000000000000000000000000000000';
+    const results = {
+      nonces: [0, 42, 123456, 9007199254740991].map(nonce =>
+        nonceContractVectorDriver.nonce(hex, nonce)
+      ),
+      badAuth: nonceContractVectorDriver.nonce('00000000010505' + hex.slice(14), 1),
+      badHash: nonceContractVectorDriver.nonce('00000000010400' + hex.slice(14), 1),
+      short: nonceContractVectorDriver.nonce('00000000010405', 1),
+      unsigned: nonceContractVectorDriver.signature(hex),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

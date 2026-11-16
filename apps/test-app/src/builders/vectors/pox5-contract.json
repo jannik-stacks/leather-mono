@@ -1,0 +1,77 @@
+{
+  "stake": {
+    "contract": "SP000000000000000000002Q6VF78.pox-5",
+    "functionName": "stake",
+    "functionArgs": [
+      "061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572",
+      "0100000000000000000000000002625a00",
+      "010000000000000000000000000000000c",
+      "01000000000000000000000000000dbba0",
+      "09"
+    ],
+    "network": "mainnet",
+    "postConditions": ["0301010000000002625a00"],
+    "postConditionMode": "deny"
+  },
+  "payout": {
+    "contract": "SP000000000000000000002Q6VF78.pox-5",
+    "functionName": "stake",
+    "functionArgs": [
+      "061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572",
+      "0100000000000000000000000002625a00",
+      "010000000000000000000000000000000c",
+      "01000000000000000000000000000dbba0",
+      "0a02000000780c00000003076d61782d66656501000000000000000000000000000009c4096d696e2d636c61696d010000000000000000000000000000271008706f782d616464720c00000002096861736862797465730200000014751e76e8199196d454941c45d1b3a323f1433bd60776657273696f6e020000000104"
+    ],
+    "network": "mainnet",
+    "postConditions": ["0301010000000002625a00"],
+    "postConditionMode": "deny"
+  },
+  "extend": {
+    "contract": "SP000000000000000000002Q6VF78.pox-5",
+    "functionName": "stake-update",
+    "functionArgs": [
+      "061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572",
+      "061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572",
+      "0100000000000000000000000000000006",
+      "0100000000000000000000000000000000",
+      "09"
+    ],
+    "network": "mainnet",
+    "postConditions": ["0301050000000002625a00"],
+    "postConditionMode": "deny"
+  },
+  "increase": {
+    "contract": "SP000000000000000000002Q6VF78.pox-5",
+    "functionName": "stake-update",
+    "functionArgs": [
+      "061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572",
+      "061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572",
+      "0100000000000000000000000000000000",
+      "0100000000000000000000000000989680",
+      "09"
+    ],
+    "network": "mainnet",
+    "postConditions": ["0301010000000002faf080"],
+    "postConditionMode": "deny"
+  },
+  "unstake": {
+    "contract": "SP000000000000000000002Q6VF78.pox-5",
+    "functionName": "unstake",
+    "functionArgs": ["061a6d78de7b0625dfbfc16c3a8a5735f6dc3dc3f2ce0e7369676e65722d6d616e61676572"],
+    "network": "mainnet",
+    "postConditions": ["040132"],
+    "postConditionMode": "deny"
+  },
+  "claim": {
+    "contract": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.signer-manager",
+    "functionName": "claim-staker-rewards",
+    "functionArgs": [
+      "0516a46ff88886c2ef9762d970b4d2c63678835bd39d",
+      "0100000000000000000000000000000003",
+      "09"
+    ],
+    "network": "mainnet",
+    "postConditionMode": "originator"
+  }
+}

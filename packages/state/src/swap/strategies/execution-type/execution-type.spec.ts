@@ -1,8 +1,16 @@
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from '@stacks/common';
 import { STACKS_MAINNET } from '@stacks/network';
-import { type StacksTransactionWire } from '@stacks/transactions';
+import {
+  BytesReader,
+  type StacksTransactionWire,
+  deserializeCV,
+  deserializePostConditionWire,
+  wireToPostCondition,
+} from '@stacks/transactions';
+import { readFileSync } from 'node:fs';
 import { describe, expect, test, vi } from 'vitest';
+import z from 'zod';
 
 import { type SwapExecutionData, type TransactionFeeQuote } from '@leather.io/models';
 import { assertExistence, createMoney } from '@leather.io/utils';
@@ -20,6 +28,7 @@ import {
   createStubSwapService,
 } from '../../tests/test-utils/services.stub';
 import { buildSbtcBridgeDepositTx } from './build-transaction/build-transaction/build-sbtc-bridge-deposit-tx';
+import { buildStacksTx } from './build-transaction/build-transaction/build-stacks-tx';
 import { getExecutionTypeStrategy } from './execution-type';
 
 vi.mock('./build-transaction/build-transaction/build-sbtc-bridge-deposit-tx', () => ({
@@ -384,5 +393,79 @@ describe('sbtcBridgeDepositStrategy', () => {
         errorMessage: 'timeout of 10000ms exceeded',
       });
     });
+  });
+});
+
+describe('Stacks migration vectors: swap transaction builder', () => {
+  const stacksSwapVector = z
+    .object({
+      input: z.object({
+        publicKey: z.string(),
+        contractAddress: z.string(),
+        contractName: z.string(),
+        functionName: z.string(),
+        functionArgs: z.array(z.string()),
+        postConditions: z.array(z.string()),
+        fee: z.string(),
+        nonce: z.number(),
+      }),
+      expected: z.unknown(),
+      invalid: z.array(
+        z.object({
+          functionArgs: z.array(z.unknown()),
+          postConditions: z.array(z.unknown()),
+          error: z.string(),
+        })
+      ),
+    })
+    .parse(JSON.parse(readFileSync(__dirname + '/vectors/stacks-swap.json', 'utf8')));
+  test('pins buildStacksTx wire bytes, ids, defaults and post-condition input forms', async () => {
+    const input = stacksSwapVector.input;
+    const executionData = {
+      ...stacksContractCallExecutionData,
+      contractAddress: input.contractAddress,
+      contractName: input.contractName,
+      functionName: input.functionName,
+      functionArgs: input.functionArgs.map(deserializeCV),
+      postConditions: input.postConditions,
+    };
+    const signer = { ...createStubStacksSigner(), publicKey: hexToBytes(input.publicKey) };
+    const outputs = [];
+    for (const format of ['hex', 'wire', 'object']) {
+      const postConditions = input.postConditions.map(hex => {
+        if (format === 'hex') return hex;
+        const wire = deserializePostConditionWire(new BytesReader(hexToBytes(hex)));
+        return format === 'wire' ? wire : wireToPostCondition(wire);
+      });
+      const tx = await buildStacksTx(
+        { ...executionData, postConditions },
+        STACKS_MAINNET,
+        signer,
+        createMoney(BigInt(input.fee), 'STX'),
+        input.nonce
+      );
+      outputs.push({ format, hex: tx.serialize(), txid: tx.txid() });
+    }
+    const defaults = await buildStacksTx(executionData, STACKS_MAINNET, signer);
+    expect({ outputs, defaults: { hex: defaults.serialize(), txid: defaults.txid() } }).toEqual(
+      stacksSwapVector.expected
+    );
+  });
+
+  test('pins buildStacksTx rejection of malformed swap arguments and post conditions', async () => {
+    const signer = createStubStacksSigner();
+    for (const vector of stacksSwapVector.invalid) {
+      await expect(
+        buildStacksTx(
+          {
+            ...stacksContractCallExecutionData,
+            functionArgs: vector.functionArgs,
+            postConditions: vector.postConditions,
+          },
+          STACKS_MAINNET,
+          signer
+        )
+      ).rejects.toThrow(vector.error);
+    }
   });
 });

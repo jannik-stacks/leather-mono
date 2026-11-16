@@ -2,11 +2,14 @@
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 
+import { Provider, createStore } from 'jotai';
 import { type WalletAddressEntry } from '~/utils/wallet-addresses';
 
 import { ChainId } from '@leather.io/models';
 
+import type * as StoredWallet from '../utils/wallet';
 import { useDetectLeatherProvider, useLeatherConnect } from './addresses';
+import type * as StoredStacksNetwork from './stacks-network';
 
 interface WalletMockState {
   selectedWalletId: string | null;
@@ -42,6 +45,12 @@ vi.mock('~/utils/analytics/analytics', () => ({
 
 vi.mock('~/utils/leather-sdk', () => ({
   leather: {},
+}));
+
+vi.mock('~/utils/wallet-addresses', () => ({
+  normalizeWalletAddresses() {
+    throw new Error('Address normalization is outside the provider-storage vector');
+  },
 }));
 
 vi.mock('~/features/toasts/use-toast', () => ({
@@ -80,6 +89,64 @@ function BtcAccountProbe() {
 
 beforeAll(() => {
   Reflect.set(globalThis, 'IS_REACT_ACT_ENVIRONMENT', true);
+});
+
+test('loads every stored Stacks network name with literal chain, version and API settings', async () => {
+  const { useStacksNetwork } =
+    await vi.importActual<typeof StoredStacksNetwork>('./stacks-network');
+  function NetworkProbe() {
+    const state = useStacksNetwork();
+    return (
+      <span>
+        {JSON.stringify({
+          name: state.networkName,
+          chainId: state.network.chainId,
+          transactionVersion: state.network.transactionVersion,
+          baseUrl: state.network.client.baseUrl,
+          mode: state.networkInstance,
+          preference: state.networkPreference?.id,
+        })}
+      </span>
+    );
+  }
+  const observed = [];
+  for (const name of ['mainnet', 'testnet', 'mocknet', 'devnet']) {
+    localStorage.setItem('network', JSON.stringify(name));
+    const container = document.createElement('div');
+    const root = createRoot(container);
+    act(() =>
+      root.render(
+        <Provider store={createStore()}>
+          <NetworkProbe />
+        </Provider>
+      )
+    );
+    observed.push(container.textContent);
+    act(() => root.unmount());
+  }
+  expect(observed).toEqual([
+    '{"name":"mainnet","chainId":1,"transactionVersion":0,"baseUrl":"https://api.mainnet.hiro.so","mode":"mainnet","preference":"mainnet"}',
+    '{"name":"testnet","chainId":2147483648,"transactionVersion":128,"baseUrl":"https://api.testnet.hiro.so","mode":"testnet","preference":"testnet"}',
+    '{"name":"mocknet","chainId":2147483648,"transactionVersion":128,"baseUrl":"http://localhost:3999","mode":"devnet","preference":"testnet"}',
+    '{"name":"devnet","chainId":2147483648,"transactionVersion":128,"baseUrl":"http://localhost:3999","mode":"devnet","preference":"devnet"}',
+  ]);
+});
+
+test('loads and clears the actual SDK selected-provider storage key', async () => {
+  vi.stubEnv('MODE', 'development');
+  try {
+    const actual = await vi.importActual<typeof StoredWallet>('~/utils/wallet');
+    localStorage.setItem('STX_PROVIDER', 'VendorProvider');
+    expect(actual.getConnectedWalletId()).toEqual('VendorProvider');
+    actual.markLeatherAsSelectedWallet();
+    expect(localStorage.getItem('STX_PROVIDER')).toEqual('LeatherProvider');
+    expect(actual.getConnectedWalletId()).toEqual('LeatherProvider');
+    actual.disconnectWallet();
+    expect(localStorage.getItem('STX_PROVIDER')).toBeNull();
+    expect(actual.getConnectedWalletId()).toBeNull();
+  } finally {
+    vi.unstubAllEnvs();
+  }
 });
 
 describe('useLeatherConnect isLeatherWallet reactivity', () => {

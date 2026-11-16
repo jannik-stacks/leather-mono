@@ -56,6 +56,19 @@ function makeAccount(network: AuthNetworkId): VaultAccount {
   };
 }
 
+test('pins ordered STX vault addresses read from stored signer keys and threshold', () => {
+  const mainnet = makeAccount('stx:mainnet');
+  expect({
+    mainnet: deriveMultisigAddress(mainnet),
+    reordered: deriveMultisigAddress({ ...mainnet, signers: [...mainnet.signers].reverse() }),
+    testnet: deriveMultisigAddress(makeAccount('stx:testnet')),
+  }).toEqual({
+    mainnet: 'SM1PG8XG6M2GHJCA11YAH9SAKRB73NC6B73Z9MJHK',
+    reordered: 'SM1PG8XG6M2GHJCA11YAH9SAKRB73NC6B73Z9MJHK',
+    testnet: 'SN1PG8XG6M2GHJCA11YAH9SAKRB73NC6B703X5EE9',
+  });
+});
+
 describe('deriveMultisigAddress (BTC)', () => {
   test('derives a bc1 mainnet address for btc:mainnet', () => {
     expect(deriveMultisigAddress(makeAccount('btc:mainnet'))).toBe(mainnetAddress);

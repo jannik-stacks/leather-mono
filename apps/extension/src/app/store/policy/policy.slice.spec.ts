@@ -1,10 +1,13 @@
 import { describe, expect, test } from 'vitest';
 
 import { makeAccountIdentifer } from '@leather.io/crypto';
+import { defaultNetworksKeyedById } from '@leather.io/models';
+import { deriveStxMultisigAddress } from '@leather.io/stacks';
 import { resetWallet } from '@leather.io/state';
 import { userRemovesWallet } from '@leather.io/state/wallet';
 
 import { type PolicyStore, makePolicyId } from './policy-store.utils';
+import { selectCurrentPolicy } from './policy.selectors';
 import { policySlice, userAddsPolicy, userRemovesPolicy } from './policy.slice';
 
 const { reducer, getInitialState } = policySlice;
@@ -137,4 +140,35 @@ describe('policySlice', () => {
 
     expect(result).toEqual(getInitialState());
   });
+});
+
+test('finds an existing stored STX policy by its ordered address and policy id', () => {
+  const publicKeys = [
+    '031b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f',
+    '024d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766',
+  ];
+  const address = deriveStxMultisigAddress({ publicKeys, threshold: 2, chainId: 1 });
+  expect(address).toEqual('SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1');
+  const id = makePolicyId('abcd1234/0', address, 'mainnet');
+  expect(id).toEqual('abcd1234/0/SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1/mainnet');
+  const state = seed({
+    id: 'abcd1234/0/SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1/mainnet',
+    parentAccountId: 'abcd1234/0',
+    networkId: 'mainnet',
+    chain: 'stacks',
+    address: 'SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1',
+    publicKeys,
+    threshold: 2,
+    role: 'signer',
+  });
+  const selected = selectCurrentPolicy.resultFunc(
+    state.entities,
+    id,
+    true,
+    {},
+    { fingerprint: 'abcd1234', accountIndex: 0 },
+    defaultNetworksKeyedById.mainnet
+  );
+  expect(selected?.id).toEqual('abcd1234/0/SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1/mainnet');
+  expect(selected?.address).toEqual('SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1');
 });

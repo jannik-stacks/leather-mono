@@ -1,4 +1,5 @@
 import { makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import { estimateStacksTransactionByteLength } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
@@ -12,6 +13,7 @@ import {
   createTokenTransferTx,
   createVersionedSmartContractTx,
 } from '../test/fees-stacks-transactions';
+import * as feeContractVectorDriver from './fee-contract.vectors-driver';
 import {
   createStacksTransactionFeeQuote,
   getStacksMinimumFeeAmount,
@@ -322,5 +324,38 @@ describe(createStacksTransactionFeeQuote.name, () => {
     const result = createStacksTransactionFeeQuote(fee, estimatedTxSize);
 
     expect(result.rate).toBe(1);
+  });
+});
+
+describe('Stacks migration vectors: fee-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/fee-contract.json', 'utf8')
+  );
+
+  test('pins fee bounds, relay minimums, fallbacks and quotes', () => {
+    const tier = {
+      low: { default: 1000, minimum: 500, maximum: 5000 },
+      standard: { default: 2000, minimum: 1000, maximum: 10000 },
+      high: { default: 5000, minimum: 2000, maximum: 20000 },
+    };
+    const config = {
+      minimumRelayFeeRate: 1.5,
+      globalMaximumFee: 100000,
+      transfers: tier,
+      contractCalls: tier,
+      contractDeployments: tier,
+      sipTokenSends: tier,
+    };
+    const hex =
+      '808000000004050e8321711b6c80b9137997b99ad33252b6d6a3cb0020000000000001000000000000014100000000000103020000000000051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000';
+    const results = [[], [100], [1, 2, 3], [800, 1600, 4000], [10000, 20000, 50000]].map(
+      estimates => feeContractVectorDriver.fees(hex, config, 345, estimates)
+    );
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

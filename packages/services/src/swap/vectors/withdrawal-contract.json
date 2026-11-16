@@ -1,0 +1,33 @@
+[
+  {
+    "contractAddress": "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4",
+    "contractName": "sbtc-withdrawal",
+    "functionName": "initiate-withdrawal-request",
+    "functionArgs": [
+      "01000000000000000000000000075bcd15",
+      "0c00000002096861736862797465730200000014751e76e8199196d454941c45d1b3a323f1433bd60776657273696f6e020000000104",
+      "01000000000000000000000000000009c4"
+    ],
+    "postConditions": [
+      "01021a000000000000000000000000000000000000000014f6decc7cfff2a413bd7cd4f53c25ad7fd1899acc0a736274632d746f6b656e0a736274632d746f6b656e0100000000075bd6d9"
+    ],
+    "postConditionMode": "deny"
+  },
+  {
+    "contractAddress": "SNGWPN3XDAQE673MXYXF81016M50NHF5X5PWWM70",
+    "contractName": "sbtc-withdrawal",
+    "functionName": "initiate-withdrawal-request",
+    "functionArgs": [
+      "0100000000000000000000000000000064",
+      "0c00000002096861736862797465730200000020da4710964f7852695de2da025290e24af6d8c281de5a0b902b7135fd9fd74d210776657273696f6e020000000106",
+      "0100000000000000000000000000000000"
+    ],
+    "postConditions": [
+      "01021a00000000000000000000000000000000000000001521cb547d6aaee31c74efbaf40401350a0ac5e5e90a736274632d746f6b656e0a736274632d746f6b656e010000000000000064"
+    ],
+    "postConditionMode": "deny"
+  },
+  {
+    "error": "Invalid address"
+  }
+]
