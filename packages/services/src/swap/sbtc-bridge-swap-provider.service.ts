@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { ClarityType } from '@stacks/transactions';
 import BigNumber from 'bignumber.js';
 import { inject, injectable } from 'inversify';
 
@@ -14,12 +13,12 @@ import {
 import { createMoney, delay, getAssetId, isSameAsset, isSameAssetId } from '@leather.io/utils';
 
 import { EmilyApiClient } from '../infrastructure/api/emily/emily-api.client';
-import type { EmilyDepositRequest } from '../infrastructure/api/emily/emily-api.types';
+import { type EmilyDepositRequest } from '../infrastructure/api/emily/emily-api.types';
 import { HiroStacksApiClient } from '../infrastructure/api/hiro/hiro-stacks-api.client';
 import { LeatherApiClient } from '../infrastructure/api/leather/leather-api.client';
-import type { ApiRequestOptions } from '../infrastructure/api/types';
+import { type ApiRequestOptions } from '../infrastructure/api/types';
 import { selectBitcoinNetworkMode } from '../infrastructure/settings/settings.selectors';
-import type { SettingsService } from '../infrastructure/settings/settings.service';
+import { type SettingsService } from '../infrastructure/settings/settings.service';
 import { Types } from '../inversify.types';
 import {
   type SbtcDepositNotificationResult,
@@ -77,7 +76,7 @@ export class SbtcBridgeSwapProviderService implements SwapProviderService {
         },
         { signal }
       );
-      if (result.type !== ClarityType.ResponseOk || result.value.type !== ClarityType.UInt) {
+      if (result.type !== 'ok' || result.value.type !== 'uint') {
         return null;
       }
       return new BigNumber(result.value.value.toString());
@@ -96,7 +95,7 @@ export class SbtcBridgeSwapProviderService implements SwapProviderService {
       },
       { signal }
     );
-    if (result.type !== ClarityType.Buffer) {
+    if (result.type !== 'buffer') {
       throw new Error('Unexpected response from sbtc-registry get-current-aggregate-pubkey');
     }
     return toXOnlyPublicKeyHex(result.value);

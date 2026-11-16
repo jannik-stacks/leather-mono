@@ -5,7 +5,6 @@ import { styled } from 'leather-styles/jsx';
 import { stxTransferStx } from '@leather.io/rpc';
 import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 import { Approver, StxAvatarIcon } from '@leather.io/ui';
-import { isString } from '@leather.io/utils';
 
 import { useConvertCryptoCurrencyToFiatAmount } from '@app/common/hooks/use-convert-to-fiat-amount';
 import { AccountStacksAddress } from '@app/components/account/account-stacks-address';
@@ -51,7 +50,7 @@ export function RpcStxTransferStx() {
 
   async function onApproveTransaction() {
     const unsignedTx = await generateStacksUnsignedTransaction(txOptionsForBroadcast);
-    if (isSponsored) unsignedTx.setFee(0);
+    if (isSponsored) unsignedTx.fee = BigInt(0);
     await signAndBroadcastTransaction(unsignedTx);
   }
   const onApprove = useStacksRpcTransactionRequestApproval(onApproveTransaction);
@@ -83,9 +82,7 @@ export function RpcStxTransferStx() {
         convertToFiatAmount={convertToFiatAmount}
         recipients={[
           {
-            address: isString(txOptionsForBroadcast.recipient)
-              ? txOptionsForBroadcast.recipient
-              : txOptionsForBroadcast.recipient.value,
+            address: txOptionsForBroadcast.recipient,
             amount: txOptionsForBroadcast.amount,
           },
         ]}

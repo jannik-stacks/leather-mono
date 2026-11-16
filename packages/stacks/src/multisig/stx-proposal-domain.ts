@@ -1,14 +1,7 @@
-import {
-  ClarityType,
-  type StringAsciiCV,
-  type TupleCV,
-  type UIntCV,
-  stringAsciiCV,
-  uintCV,
-} from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 
 import { multisigProposalDomainTag } from '@leather.io/crypto';
-import type { AuthNetworkId } from '@leather.io/models';
+import { type AuthNetworkId } from '@leather.io/models';
 
 const stxMainnetChainId = 1;
 const stxTestnetChainId = 2147483648;
@@ -22,15 +15,13 @@ export const stxChainIdByAuthNetworkId: Record<AuthNetworkId, number> = {
 };
 
 // SIP-018 domain for the STX proposal commitment
-export function buildStxProposalDomain(
-  chainId: number
-): TupleCV<{ name: StringAsciiCV; version: StringAsciiCV; 'chain-id': UIntCV }> {
+export function buildStxProposalDomain(chainId: number): Cl.Types.Tuple {
   return {
-    type: ClarityType.Tuple,
+    type: 'tuple',
     value: {
-      name: stringAsciiCV(multisigProposalDomainTag),
-      version: stringAsciiCV('1'),
-      'chain-id': uintCV(chainId),
+      name: Cl.ascii(multisigProposalDomainTag),
+      version: Cl.ascii('1'),
+      'chain-id': Cl.uint(chainId),
     },
   };
 }

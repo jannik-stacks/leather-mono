@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { stxCallContract } from '@leather.io/rpc';
 import {
-  ensurePostConditionWireFormat,
   generateStacksUnsignedTransaction,
+  getPostCondition,
   toUnsignedMultiSigStacksOptions,
 } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
@@ -92,7 +92,7 @@ export function RpcStxCallContract() {
     >
       <PostConditionsDetailsLayout
         postConditions={(txOptionsForBroadcast.postConditions ?? []).map(pc =>
-          ensurePostConditionWireFormat(pc)
+          getPostCondition(pc)
         )}
         postConditionMode={txOptionsForBroadcast.postConditionMode}
       />

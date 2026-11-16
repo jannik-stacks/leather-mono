@@ -1,23 +1,14 @@
-import {
-  type ClarityAbi,
-  ClarityType,
-  type ClarityValue,
-  type StacksTransactionWire,
-} from '@stacks/transactions';
+import { type ClarityAbiLike, type ClarityValue, type StacksTransaction } from '@jannik-stacks/kit';
 
-export function isSip9TransferContactCall(tx: StacksTransactionWire) {
-  if (tx.payload && 'functionName' in tx.payload) {
-    if (tx.payload.functionName.content === 'transfer' && tx.payload.functionArgs.length === 3) {
-      if (
-        tx.payload.functionArgs[0].type === ClarityType.UInt &&
-        tx.payload.functionArgs[1].type === ClarityType.PrincipalStandard &&
-        tx.payload.functionArgs[2].type === ClarityType.PrincipalStandard
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+export function isSip9TransferContactCall(tx: StacksTransaction) {
+  return (
+    tx.type === 'call' &&
+    tx.functionName === 'transfer' &&
+    tx.args.length === 3 &&
+    tx.args[0]?.type === 'uint' &&
+    tx.args[1]?.type === 'address' &&
+    tx.args[2]?.type === 'address'
+  );
 }
 
 export function isSip9Transfer({
@@ -25,7 +16,7 @@ export function isSip9Transfer({
   contractInterfaceData,
 }: {
   functionName: string;
-  contractInterfaceData: ClarityAbi;
+  contractInterfaceData: ClarityAbiLike;
 }) {
   if (functionName !== 'transfer') return false;
   const functionInterface = contractInterfaceData?.functions.find(f => f.name === functionName);
@@ -46,11 +37,11 @@ export function getSip9TransferRecipient({
 }: {
   functionName: string;
   functionArgs: ClarityValue[];
-  contractInterfaceData: ClarityAbi;
+  contractInterfaceData: ClarityAbiLike;
 }) {
   if (
     isSip9Transfer({ functionName, contractInterfaceData }) &&
-    functionArgs[2]?.type === ClarityType.PrincipalStandard
+    functionArgs[2]?.type === 'address'
   ) {
     return functionArgs[2].value;
   }

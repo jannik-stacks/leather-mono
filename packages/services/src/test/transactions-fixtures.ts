@@ -1,6 +1,7 @@
-import { type MempoolTokenTransferTransaction } from '@stacks/stacks-blockchain-api-types';
-
-import { type NetworkConfiguration } from '@leather.io/models';
+import {
+  type NetworkConfiguration,
+  type StacksApiMempoolTokenTransferTransaction,
+} from '@leather.io/models';
 
 import { type HiroPrincipalMempoolTransaction } from '../infrastructure/api/hiro/hiro-stacks-api.types';
 import {
@@ -41,8 +42,8 @@ export function createTestLeatherBitcoinTransactionsPage(
 }
 
 export function createTestMempoolTokenTransferTransaction(
-  overrides: Partial<MempoolTokenTransferTransaction> = {}
-): MempoolTokenTransferTransaction {
+  overrides: Partial<StacksApiMempoolTokenTransferTransaction> = {}
+): StacksApiMempoolTokenTransferTransaction {
   return {
     tx_id: '0x00',
     nonce: 0,

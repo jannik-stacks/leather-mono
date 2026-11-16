@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { getApproverFee } from '@/features/approver/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
+import { Codec, type StacksNetwork } from '@jannik-stacks/kit';
 import { bytesToHex } from '@stacks/common';
-import { type StacksNetwork } from '@stacks/network';
 
 import { type RpcRequest, type stxTransferStx } from '@leather.io/rpc';
 import { TransactionTypes, generateStacksUnsignedTransaction } from '@leather.io/stacks';
@@ -47,7 +47,7 @@ export function useTransferStxTxHex({
         network,
         sponsored: request.params.sponsored,
       });
-      return tx.serialize();
+      return Codec.Transaction.encode(tx);
     },
     [fromAccountId, request.params, nonce, fee, accountId, network]
   );

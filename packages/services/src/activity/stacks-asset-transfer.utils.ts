@@ -1,10 +1,10 @@
-import { type PostCondition } from '@stacks/stacks-blockchain-api-types';
 import BigNumber from 'bignumber.js';
 
 import {
   type CryptoAsset,
   CryptoAssetCategories,
   type CryptoAssetCategory,
+  type StacksApiPostCondition,
   type StacksTransaction,
 } from '@leather.io/models';
 import { isDefined, sumNumbers, uniqueArray } from '@leather.io/utils';
@@ -91,7 +91,7 @@ export function mapTransferFromTxEvent(
 }
 
 export function mapTransferFromPostCondition(
-  pc: PostCondition | StacksPostCondition
+  pc: StacksApiPostCondition | StacksPostCondition
 ): StacksAssetTransfer | undefined {
   if (pc.principal.type_id !== 'principal_origin') {
     if (pc.type === 'stx') {

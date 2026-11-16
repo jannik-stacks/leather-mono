@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { type ClarityValue } from '@stacks/transactions';
+import { type ClarityValue } from '@jannik-stacks/kit';
 import { Box, Divider, HStack, Stack, styled } from 'leather-styles/jsx';
 
 import { type StructuredMessageDataDomain } from '@shared/signature/signature-types';

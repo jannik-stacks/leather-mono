@@ -1,5 +1,5 @@
+import { Codec } from '@jannik-stacks/kit';
 import { hexToBytes } from '@stacks/common';
-import { deserializeTransaction } from '@stacks/transactions';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import * as nonceContractVectorDriver from './nonce-contract.vectors-driver';
@@ -17,9 +17,11 @@ const nonceEnd = 35;
 describe(substituteStxNonce.name, () => {
   test('matches deserialize/setNonce/reserialize for a real P2SHNonSequential tx', () => {
     const nonce = 42;
-    const tx = deserializeTransaction(realPayload);
-    tx.setNonce(nonce);
-    expect(substituteStxNonce({ rawPayload: realPayload, nonce })).toEqual(tx.serialize());
+    const tx = Codec.Transaction.decode(realPayload);
+    tx.nonce = BigInt(nonce);
+    expect(substituteStxNonce({ rawPayload: realPayload, nonce })).toEqual(
+      Codec.Transaction.encode(tx)
+    );
   });
 
   test('is a no-op when substituting the existing nonce', () => {

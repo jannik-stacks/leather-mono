@@ -1,11 +1,7 @@
 import { Loading } from '@/components/loading/loading';
 import { TokenCell } from '@/features/token/components/token-cell';
 import { useSip10FtMetadata } from '@/queries/assets/sip10-asset.query';
-import {
-  type FungiblePostConditionWire,
-  PostConditionPrincipalId,
-  addressToString,
-} from '@stacks/transactions';
+import { type PostCondition } from '@jannik-stacks/kit';
 
 import {
   Approver,
@@ -21,16 +17,15 @@ import { formatPostConditionMessage } from './post-conditions.utils';
 
 interface FTPostConditionProps {
   stacksAddress: string;
-  postCondition: FungiblePostConditionWire;
+  postCondition: Extract<PostCondition, { type: 'ft-postcondition' }>;
 }
 
 export function FTPostCondition({ stacksAddress, postCondition }: FTPostConditionProps) {
-  const contractAddress = addressToString(postCondition.asset.address);
-  const contractName = postCondition.asset.contractName.content;
-  const contractId = `${contractAddress}.${contractName}`;
+  const contractId = postCondition.asset.split('::')[0] ?? '';
+  const [, contractName = ''] = contractId.split('.');
   const asset = useSip10FtMetadata(contractId);
 
-  const isContractPrincipal = postCondition.principal.prefix === PostConditionPrincipalId.Contract;
+  const isContractPrincipal = postCondition.address.includes('.');
 
   const title = formatPostConditionMessage({
     stacksAddress,

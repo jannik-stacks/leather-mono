@@ -1,4 +1,4 @@
-import { ClarityType, hexToCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { isPlainObject } from 'remeda';
 import { type z } from 'zod';
 
@@ -57,8 +57,8 @@ function transformGammaAttributesData(
 const transformGammaAttributes = optionalize(transformGammaAttributesData);
 
 export function getNonFungibleTokenId(hex: string): number {
-  const clarityValue = hexToCV(hex);
-  return clarityValue.type === ClarityType.UInt ? Number(clarityValue.value) : 0;
+  const clarityValue = Cl.deserialize(hex);
+  return clarityValue.type === 'uint' ? Number(clarityValue.value) : 0;
 }
 
 function encodeIpfsPath(path: string) {

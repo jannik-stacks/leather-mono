@@ -1,7 +1,9 @@
+import { type ClarityValue, type PostCondition, type Transaction } from '@jannik-stacks/kit';
+
 import { type CryptoAssetId } from '../assets/asset-id.model';
 import { type NativeCryptoAsset, type Sip10Asset } from '../assets/asset.model';
 import { type Money } from '../money.model';
-import type { StacksProtocol } from '../protocols/stacks-protocol.model';
+import { type StacksProtocol } from '../protocols/stacks-protocol.model';
 
 export type SwappableFungibleCryptoAsset = NativeCryptoAsset | Sip10Asset;
 
@@ -109,9 +111,9 @@ export interface StacksContractCallSwapExecutionData extends BaseSwapExecutionDa
   readonly contractAddress: string;
   readonly contractName: string;
   readonly functionName: string;
-  readonly functionArgs: unknown[];
-  readonly postConditions: unknown[];
-  readonly postConditionMode?: unknown;
+  readonly functionArgs: ClarityValue[];
+  readonly postConditions: (string | PostCondition)[];
+  readonly postConditionMode?: Transaction['postConditionMode'];
 }
 export interface SbtcBridgeDepositSwapExecutionData extends BaseSwapExecutionData {
   readonly executionType: 'sbtc-bridge-deposit';

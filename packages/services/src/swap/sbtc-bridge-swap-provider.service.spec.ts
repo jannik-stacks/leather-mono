@@ -1,13 +1,13 @@
-import { ClarityType, type ClarityValue } from '@stacks/transactions';
+import { type ClarityValue } from '@jannik-stacks/kit';
 import { AxiosError, AxiosHeaders, type AxiosResponse } from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
 import { defaultNetworksKeyedById } from '@leather.io/models';
 
-import type { EmilyApiClient } from '../infrastructure/api/emily/emily-api.client';
-import type { EmilyDepositRequest } from '../infrastructure/api/emily/emily-api.types';
-import type { HiroStacksApiClient } from '../infrastructure/api/hiro/hiro-stacks-api.client';
-import type { LeatherApiClient } from '../infrastructure/api/leather/leather-api.client';
+import { type EmilyApiClient } from '../infrastructure/api/emily/emily-api.client';
+import { type EmilyDepositRequest } from '../infrastructure/api/emily/emily-api.types';
+import { type HiroStacksApiClient } from '../infrastructure/api/hiro/hiro-stacks-api.client';
+import { type LeatherApiClient } from '../infrastructure/api/leather/leather-api.client';
 import { createMock } from '../test/create-mock';
 import { createTestSettingsService } from '../test/transactions-fixtures';
 import { SbtcBridgeSwapProviderService } from './sbtc-bridge-swap-provider.service';
@@ -142,7 +142,7 @@ describe(SbtcBridgeSwapProviderService.name, () => {
   describe('getSignersPublicKey', () => {
     it('reads the compressed aggregate pubkey from sbtc-registry and returns it x-only', async () => {
       const bufferCv: ClarityValue = {
-        type: ClarityType.Buffer,
+        type: 'buffer',
         value: compressedSignersPublicKey,
       };
       const { service, callReadOnlyFunction } = makeService({
@@ -165,7 +165,7 @@ describe(SbtcBridgeSwapProviderService.name, () => {
 
     it('rejects when the contract returns a non-buffer value', async () => {
       const { service } = makeService({
-        callReadOnlyFunction: vi.fn().mockResolvedValue({ type: ClarityType.BoolTrue }),
+        callReadOnlyFunction: vi.fn().mockResolvedValue({ type: 'true' }),
       });
 
       await expect(service.getSignersPublicKey()).rejects.toThrowError(

@@ -1,6 +1,6 @@
 import { useGetContractInterface } from '@/queries/stacks/contract-interface.query';
+import { Codec } from '@jannik-stacks/kit';
 import { t } from '@lingui/core/macro';
-import { deserializeTransaction } from '@stacks/transactions';
 
 import { getSip9TransferRecipient, getSip10TransferRecipient } from '@leather.io/stacks';
 import { Approver } from '@leather.io/ui/native';
@@ -9,26 +9,24 @@ import { assertContractCallPayload, getContractAddress } from '../utils';
 import { OutcomeAddressesCard } from './outcome-addresses-card';
 
 export function SipRecipient({ txHex }: { txHex: string }) {
-  const tx = deserializeTransaction(txHex);
-  assertContractCallPayload(tx.payload);
+  const tx = Codec.Transaction.decode(txHex);
+  assertContractCallPayload(tx);
 
-  const contractAddress = getContractAddress(tx.payload);
-  const { functionArgs, functionName, contractName } = tx.payload;
+  const contractAddress = getContractAddress(tx);
+  const { args: functionArgs = [], functionName } = tx;
+  const contractName = tx.contract.split('.')[1] ?? '';
 
-  const { data: contractInterfaceData } = useGetContractInterface(
-    contractAddress,
-    contractName.content
-  );
+  const { data: contractInterfaceData } = useGetContractInterface(contractAddress, contractName);
 
   if (!contractInterfaceData) return null;
 
   const sip9recipient = getSip9TransferRecipient({
-    functionName: functionName.content,
+    functionName,
     functionArgs,
     contractInterfaceData,
   });
   const sip10recipient = getSip10TransferRecipient({
-    functionName: functionName.content,
+    functionName,
     functionArgs,
     contractInterfaceData,
   });

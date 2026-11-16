@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { getErrorMessages } from '@/features/send/error-messages';
 import { type CalculateStxMaxSpend } from '@/features/send/hooks/use-calculate-stx-max-spend';
 import { addressComplianceValidator } from '@/features/send/utils';
-import { type ChainId } from '@stacks/network';
 import * as z from 'zod';
 
 import { STX_DECIMALS } from '@leather.io/constants';
@@ -62,7 +61,7 @@ function createStxSendFormSchema({
   });
 }
 
-function stxAddressNetworkValidator(chainId: ChainId) {
+function stxAddressNetworkValidator(chainId: number) {
   return (address: string) => isValidAddressChain(address, chainId);
 }
 

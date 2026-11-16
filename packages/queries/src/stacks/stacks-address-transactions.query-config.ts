@@ -1,6 +1,6 @@
-import type { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
-import type { QueryFunctionContext, UseQueryOptions } from '@tanstack/react-query';
+import { type QueryFunctionContext, type UseQueryOptions } from '@tanstack/react-query';
 
+import { type StacksApiAddressTransactionWithTransfers } from '@leather.io/models';
 import { type UserSettings, getHiroStacksApiClient } from '@leather.io/services';
 import { oneMinInMs, secondsInMs } from '@leather.io/utils';
 
@@ -32,5 +32,5 @@ export function createStacksAddressTransactionsQueryConfig(
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: true,
-  } satisfies UseQueryOptions<AddressTransactionWithTransfers[]>;
+  } satisfies UseQueryOptions<StacksApiAddressTransactionWithTransfers[]>;
 }

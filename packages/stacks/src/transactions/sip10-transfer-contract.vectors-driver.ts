@@ -1,6 +1,6 @@
-import { hexToBytes } from '@stacks/common';
-import type { StacksNetwork } from '@stacks/network';
-import { PostConditionMode, deserializeTransaction } from '@stacks/transactions';
+import { Codec, type StacksNetwork } from '@jannik-stacks/kit';
+import { sha512_256 } from '@noble/hashes/sha512';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 
 import { createMoney } from '@leather.io/utils';
 
@@ -25,13 +25,13 @@ export async function transfer(input: {
     signer: { publicKey: hexToBytes(input.publicKey), address: input.address },
     fee: createMoney(input.fee, 'STX'),
   });
-  const tx = deserializeTransaction(hex);
+  const tx = Codec.Transaction.decode(hex);
   const verified = getVerifiedSip10TransferDetails(tx);
-  tx.postConditionMode = PostConditionMode.Allow;
+  tx.postConditionMode = 'allow';
   const tampered = getVerifiedSip10TransferDetails(tx);
   return {
     hex,
-    txid: deserializeTransaction(hex).txid(),
+    txid: bytesToHex(sha512_256(hexToBytes(hex))),
     decoded: decodeStxTransactionPayload(hex),
     verified,
     tampered,

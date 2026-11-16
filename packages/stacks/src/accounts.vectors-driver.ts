@@ -1,11 +1,6 @@
+import { privateKeyToPublicKey, publicKeyToAddress } from '@jannik-stacks/kit';
+import { bytesToHex } from '@noble/hashes/utils';
 import { HDKey } from '@scure/bip32';
-import { bytesToHex } from '@stacks/common';
-import {
-  privateKeyToPublic,
-  publicKeyToAddressSingleSig,
-  publicKeyToHex,
-} from '@stacks/transactions';
-import crypto from 'node:crypto';
 import { vi } from 'vitest';
 import { z } from 'zod';
 
@@ -20,18 +15,10 @@ import {
 } from './stacks.utils';
 
 export function randomAddress() {
-  const entropy = vi
-    .spyOn(crypto, 'randomBytes')
-    .mockImplementation(
-      (size: number, callback?: (error: Error | null, buffer: Buffer) => void) => {
-        const bytes = Buffer.alloc(size, 1);
-        if (callback) {
-          callback(null, bytes);
-          return;
-        }
-        return bytes;
-      }
-    );
+  const entropy = vi.spyOn(globalThis.crypto, 'getRandomValues').mockImplementation(array => {
+    if (array instanceof Uint8Array) array.fill(1);
+    return array;
+  });
   try {
     return generateRandomStacksAddress();
   } finally {
@@ -73,9 +60,9 @@ export function account(seed: number[], index: number, type: 'stacks' | 'ledgerL
     leatherPrivateKey: deriveStxPrivateKey({ keychain, index }),
     leatherPublicKey: deriveStxPublicKey({ keychain, index }),
     descriptor: stacksRootKeychainToAccountDescriptorV2(keychain, index),
-    mainnet: publicKeyToAddressSingleSig(child.publicKey, 'mainnet'),
-    testnet: publicKeyToAddressSingleSig(child.publicKey, 'testnet'),
-    compressed: publicKeyToHex(privateKeyToPublic(bytesToHex(child.privateKey) + '01')),
+    mainnet: publicKeyToAddress(bytesToHex(child.publicKey), { network: 'mainnet' }),
+    testnet: publicKeyToAddress(bytesToHex(child.publicKey), { network: 'testnet' }),
+    compressed: privateKeyToPublicKey(bytesToHex(child.privateKey) + '01'),
   };
 }
 export function multisig(publicKeys: string[], threshold: number, chainId: number) {

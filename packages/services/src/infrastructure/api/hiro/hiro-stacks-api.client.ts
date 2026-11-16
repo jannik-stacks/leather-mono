@@ -1,17 +1,20 @@
-import { GetRawTransactionResult } from '@stacks/stacks-blockchain-api-types';
-import { ClarityAbi, ClarityValue, cvToHex, hexToCV } from '@stacks/transactions';
+import { Cl, type ClarityAbiLike, type ClarityValue } from '@jannik-stacks/kit';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { inject, injectable } from 'inversify';
 
 import { DEFAULT_LIST_LIMIT } from '@leather.io/constants';
-import type { StacksAccountNonces, StacksTransaction } from '@leather.io/models';
+import {
+  type StacksAccountNonces,
+  type StacksApiGetRawTransactionResult,
+  type StacksTransaction,
+} from '@leather.io/models';
 import { generateRandomStacksAddress } from '@leather.io/stacks';
 
 import { Types } from '../../../inversify.types';
 import { HttpCacheService } from '../../cache/http-cache.service';
 import { RateLimiterService, RateLimiterType } from '../../rate-limiter/rate-limiter.service';
 import { selectStacksApiUrl, selectStacksChainId } from '../../settings/settings.selectors';
-import type { SettingsService } from '../../settings/settings.service';
+import { type SettingsService } from '../../settings/settings.service';
 import { ApiRequestOptions } from '../types';
 import { HiroMultiPageRequest, fetchHiroCursorPages, fetchHiroPages } from './hiro-multi-page';
 import { hiroApiRequestsPriorityLevels } from './hiro-request-priorities';
@@ -536,7 +539,7 @@ export class HiroStacksApiClient {
   ): Promise<ClarityValue> {
     const body = {
       sender: senderAddress ?? this._randomStacksAddress,
-      arguments: functionArgs.map(arg => cvToHex(arg)),
+      arguments: functionArgs.map(arg => '0x' + Cl.serialize(arg)),
     };
     const fetchFn = async () => {
       const res = await this.limiter.add(
@@ -556,7 +559,7 @@ export class HiroStacksApiClient {
       if (!res.data.okay) {
         throw new Error(res.data.cause);
       }
-      return hexToCV(res.data.result);
+      return Cl.deserialize(res.data.result);
     };
 
     return await this.cache.fetchWithCache(
@@ -766,12 +769,12 @@ export class HiroStacksApiClient {
   public async getRawTransactionById(
     txid: string,
     { signal, skipCache }: ApiRequestOptions = {}
-  ): Promise<GetRawTransactionResult> {
+  ): Promise<StacksApiGetRawTransactionResult> {
     const fetchFn = async () => {
       const res = await this.limiter.add(
         RateLimiterType.HiroStacks,
         () =>
-          this._axios.get<GetRawTransactionResult>(
+          this._axios.get<StacksApiGetRawTransactionResult>(
             `${selectStacksApiUrl(this.settings.getSettings())}/extended/v1/tx/${txid}/raw`,
             { signal }
           ),
@@ -798,12 +801,12 @@ export class HiroStacksApiClient {
     contractAddress: string,
     contractName: string,
     { signal, skipCache }: ApiRequestOptions = {}
-  ): Promise<ClarityAbi> {
+  ): Promise<ClarityAbiLike> {
     const fetchFn = async () => {
       const res = await this.limiter.add(
         RateLimiterType.HiroStacks,
         () =>
-          this._axios.get<ClarityAbi>(
+          this._axios.get<ClarityAbiLike>(
             `${selectStacksApiUrl(this.settings.getSettings())}/v2/contracts/interface/${contractAddress}/${contractName}`,
             { signal }
           ),

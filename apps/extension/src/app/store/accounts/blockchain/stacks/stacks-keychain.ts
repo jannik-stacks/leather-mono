@@ -1,5 +1,6 @@
+import { privateKeyToPublicKey } from '@jannik-stacks/kit';
 import { type HDKey } from '@scure/bip32';
-import { type AddressVersion, privateKeyToPublic, publicKeyToAddress } from '@stacks/transactions';
+import { type AddressVersion, publicKeyToAddress } from '@stacks/transactions';
 
 import { deriveStxPrivateKey } from '@leather.io/stacks';
 
@@ -10,7 +11,7 @@ export function getStacksAddressByIndex(rootKeychain: HDKey, addressVersion: Add
       index,
     });
 
-    const pubKey = privateKeyToPublic(accountPrivateKey);
+    const pubKey = privateKeyToPublicKey(accountPrivateKey);
     return publicKeyToAddress(addressVersion, pubKey);
   };
 }

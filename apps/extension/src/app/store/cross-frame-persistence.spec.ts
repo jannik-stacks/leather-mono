@@ -7,7 +7,6 @@ import {
   configureStore,
   isAction,
 } from '@reduxjs/toolkit';
-import { ChainId } from '@stacks/network';
 import {
   FLUSH,
   PAUSE,
@@ -19,10 +18,12 @@ import {
   persistReducer,
   persistStore,
 } from 'redux-persist';
-import type { PersistPartial } from 'redux-persist/es/persistReducer';
+import { type PersistPartial } from 'redux-persist/es/persistReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { isPlainObject } from 'remeda';
 import { describe, expect, test } from 'vitest';
+
+import { ChainId } from '@leather.io/models';
 
 import { createDirtySliceTracker } from '@shared/storage/dirty-slice-tracker';
 import { createMergePersistStorage } from '@shared/storage/merge-persist-storage';

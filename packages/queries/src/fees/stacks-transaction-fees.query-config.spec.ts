@@ -1,9 +1,10 @@
-import { makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
 
 import { defaultNetworksKeyedById } from '@leather.io/models';
-import type { UserSettings } from '@leather.io/services';
+import { type UserSettings } from '@leather.io/services';
+import { TransactionTypes, generateStacksUnsignedTransaction } from '@leather.io/stacks';
+import { createMoney } from '@leather.io/utils';
 
 import * as feeQueryContractVectorDriver from './fee-query-contract.vectors-driver';
 import { createStacksTransactionFeesQueryKey } from './stacks-transaction-fees.query-config';
@@ -15,7 +16,8 @@ const settings: UserSettings = {
 };
 
 async function makeTransaction(numSignatures: number) {
-  return makeUnsignedSTXTokenTransfer({
+  return generateStacksUnsignedTransaction({
+    txType: TransactionTypes.StxTokenTransfer,
     publicKeys: [
       '0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352',
       '03774ae7f858a9411e5ef4246b70c65aac5649980be5c17891bbec17895da008cb',
@@ -23,8 +25,8 @@ async function makeTransaction(numSignatures: number) {
     numSignatures,
     useNonSequentialMultiSig: true,
     recipient: 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG',
-    amount: 1,
-    fee: 0,
+    amount: createMoney(1, 'STX'),
+    fee: createMoney(0, 'STX'),
     nonce: 0,
     network: 'testnet',
   });

@@ -1,8 +1,4 @@
-import {
-  type NonFungiblePostConditionWire,
-  type STXPostConditionWire,
-  type StakingPostConditionWire,
-} from '@stacks/transactions';
+import { type PostCondition } from '@jannik-stacks/kit';
 import { PostConditionSelectors } from '@tests/selectors/requests.selectors';
 import { Box, Stack, styled } from 'leather-styles/jsx';
 
@@ -19,7 +15,7 @@ interface PostConditionItemProps {
   context?: PostConditionVerb;
   isContractPrincipal: boolean;
   isLast: boolean;
-  postCondition: STXPostConditionWire | NonFungiblePostConditionWire | StakingPostConditionWire;
+  postCondition: Exclude<PostCondition, { type: 'pox-postcondition' | 'ft-postcondition' }>;
 }
 export function PostConditionItem({
   context,

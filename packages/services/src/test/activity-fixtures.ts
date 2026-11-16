@@ -1,28 +1,25 @@
-import type {
-  BaseTransaction,
-  ContractCallTransaction,
-  MempoolTokenTransferTransaction,
-  PostConditionFungible,
-  PostConditionNonFungible,
-  PostConditionStx,
-  SmartContractTransaction,
-  TokenTransferTransaction,
-  TransactionEventFungibleAsset,
-  TransactionEventNonFungibleAsset,
-  TransactionEventSmartContractLog,
-  TransactionEventStxAsset,
-} from '@stacks/stacks-blockchain-api-types';
-
-import type {
-  BitcoinTransaction,
-  BlockchainActivity,
-  BlockchainActivityBalanceChange,
-  GeneralActivity,
-  Sip10Asset,
+import {
+  type BitcoinTransaction,
+  type BlockchainActivity,
+  type BlockchainActivityBalanceChange,
+  type GeneralActivity,
+  type Sip10Asset,
+  type StacksApiBaseTransaction,
+  type StacksApiContractCallTransaction,
+  type StacksApiMempoolTokenTransferTransaction,
+  type StacksApiPostConditionFungible,
+  type StacksApiPostConditionNonFungible,
+  type StacksApiPostConditionStx,
+  type StacksApiSmartContractTransaction,
+  type StacksApiTokenTransferTransaction,
+  type StacksApiTransactionEventFungibleAsset,
+  type StacksApiTransactionEventNonFungibleAsset,
+  type StacksApiTransactionEventSmartContractLog,
+  type StacksApiTransactionEventStxAsset,
 } from '@leather.io/models';
 import { createMoney } from '@leather.io/utils';
 
-import type { HiroStacksTransaction } from '../infrastructure/api/hiro/hiro-stacks-api.types';
+import { type HiroStacksTransaction } from '../infrastructure/api/hiro/hiro-stacks-api.types';
 
 export function createActivitySip10Asset(overrides: Partial<Sip10Asset> = {}): Sip10Asset {
   return {
@@ -89,7 +86,7 @@ export function createActivityBitcoinTx(
   };
 }
 
-function createBaseFields(): BaseTransaction {
+function createBaseFields(): StacksApiBaseTransaction {
   return {
     tx_id: '',
     nonce: 0,
@@ -143,8 +140,8 @@ function createMempoolFields() {
 }
 
 export function createActivityTokenTransferTx(
-  overrides: Partial<TokenTransferTransaction> = {}
-): TokenTransferTransaction {
+  overrides: Partial<StacksApiTokenTransferTransaction> = {}
+): StacksApiTokenTransferTransaction {
   return {
     ...createAnchoredFields(),
     tx_type: 'token_transfer',
@@ -154,8 +151,8 @@ export function createActivityTokenTransferTx(
 }
 
 export function createActivityContractCallTx(
-  overrides: Partial<ContractCallTransaction> = {}
-): ContractCallTransaction {
+  overrides: Partial<StacksApiContractCallTransaction> = {}
+): StacksApiContractCallTransaction {
   return {
     ...createAnchoredFields(),
     tx_type: 'contract_call',
@@ -165,8 +162,8 @@ export function createActivityContractCallTx(
 }
 
 export function createActivitySmartContractTx(
-  overrides: Partial<SmartContractTransaction> = {}
-): SmartContractTransaction {
+  overrides: Partial<StacksApiSmartContractTransaction> = {}
+): StacksApiSmartContractTransaction {
   return {
     ...createAnchoredFields(),
     tx_type: 'smart_contract',
@@ -176,8 +173,8 @@ export function createActivitySmartContractTx(
 }
 
 export function createActivityMempoolTokenTransferTx(
-  overrides: Partial<MempoolTokenTransferTransaction> = {}
-): MempoolTokenTransferTransaction {
+  overrides: Partial<StacksApiMempoolTokenTransferTransaction> = {}
+): StacksApiMempoolTokenTransferTransaction {
   return {
     ...createMempoolFields(),
     tx_type: 'token_transfer',
@@ -195,8 +192,8 @@ export function removeActivityBlockTimes<T extends HiroStacksTransaction>(
 }
 
 export function createActivityStxAssetEvent(
-  overrides: Partial<TransactionEventStxAsset> = {}
-): TransactionEventStxAsset {
+  overrides: Partial<StacksApiTransactionEventStxAsset> = {}
+): StacksApiTransactionEventStxAsset {
   return {
     event_index: 0,
     event_type: 'stx_asset',
@@ -207,9 +204,9 @@ export function createActivityStxAssetEvent(
 }
 
 export function createActivityFtAssetEvent(
-  asset: Partial<TransactionEventFungibleAsset['asset']> = {},
-  overrides: Partial<TransactionEventFungibleAsset> = {}
-): TransactionEventFungibleAsset {
+  asset: Partial<StacksApiTransactionEventFungibleAsset['asset']> = {},
+  overrides: Partial<StacksApiTransactionEventFungibleAsset> = {}
+): StacksApiTransactionEventFungibleAsset {
   return {
     event_index: 0,
     event_type: 'fungible_token_asset',
@@ -227,9 +224,9 @@ export function createActivityFtAssetEvent(
 }
 
 export function createActivityNftAssetEvent(
-  asset: Partial<TransactionEventNonFungibleAsset['asset']> = {},
-  overrides: Partial<TransactionEventNonFungibleAsset> = {}
-): TransactionEventNonFungibleAsset {
+  asset: Partial<StacksApiTransactionEventNonFungibleAsset['asset']> = {},
+  overrides: Partial<StacksApiTransactionEventNonFungibleAsset> = {}
+): StacksApiTransactionEventNonFungibleAsset {
   return {
     event_index: 0,
     event_type: 'non_fungible_token_asset',
@@ -247,8 +244,8 @@ export function createActivityNftAssetEvent(
 }
 
 export function createActivitySmartContractLogEvent(
-  overrides: Partial<TransactionEventSmartContractLog> = {}
-): TransactionEventSmartContractLog {
+  overrides: Partial<StacksApiTransactionEventSmartContractLog> = {}
+): StacksApiTransactionEventSmartContractLog {
   return {
     event_index: 0,
     event_type: 'smart_contract_log',
@@ -259,8 +256,8 @@ export function createActivitySmartContractLogEvent(
 }
 
 export function createActivityStxPostCondition(
-  overrides: Partial<PostConditionStx> = {}
-): PostConditionStx {
+  overrides: Partial<StacksApiPostConditionStx> = {}
+): StacksApiPostConditionStx {
   return {
     type: 'stx',
     principal: { type_id: 'principal_origin' },
@@ -271,8 +268,8 @@ export function createActivityStxPostCondition(
 }
 
 export function createActivityFtPostCondition(
-  overrides: Partial<PostConditionFungible> = {}
-): PostConditionFungible {
+  overrides: Partial<StacksApiPostConditionFungible> = {}
+): StacksApiPostConditionFungible {
   return {
     type: 'fungible',
     principal: { type_id: 'principal_origin' },
@@ -284,8 +281,8 @@ export function createActivityFtPostCondition(
 }
 
 export function createActivityNftPostCondition(
-  overrides: Partial<PostConditionNonFungible> = {}
-): PostConditionNonFungible {
+  overrides: Partial<StacksApiPostConditionNonFungible> = {}
+): StacksApiPostConditionNonFungible {
   return {
     type: 'non_fungible',
     principal: { type_id: 'principal_origin' },

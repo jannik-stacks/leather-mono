@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { Cl } from '@jannik-stacks/kit';
 import { signatureVrsToRsv } from '@stacks/common';
-import { serializeCV } from '@stacks/transactions';
 import { LedgerError } from '@zondax/ledger-stacks';
 
 import { delay } from '@leather.io/utils';
@@ -17,7 +17,7 @@ import { useLedgerDmk } from '@app/features/ledger/dmk/ledger-dmk.context';
 import { closeLedgerSession } from '@app/features/ledger/dmk/ledger-session';
 import { LedgerFlowSheet } from '@app/features/ledger/flow/ledger-flow-sheet';
 import { useLedgerFlow, useLedgerSteps } from '@app/features/ledger/flow/ledger-flow.context';
-import type { ActiveLedgerSigningRequest } from '@app/features/ledger/flow/ledger-flow.types';
+import { type ActiveLedgerSigningRequest } from '@app/features/ledger/flow/ledger-flow.types';
 import { useSignerActionController } from '@app/features/ledger/utils/bitcoin-signer-kit-utils';
 import {
   isCancellableConnectionInteraction,
@@ -122,8 +122,8 @@ function LedgerSignStacksMsg({ account, request }: LedgerSignMsgProps) {
         },
         async structured(domain, msg) {
           return signLedgerStacksStructuredMessage(stacksApp)(
-            serializeCV(domain),
-            serializeCV(msg),
+            Cl.serialize(domain),
+            Cl.serialize(msg),
             account.derivationPath
           );
         },

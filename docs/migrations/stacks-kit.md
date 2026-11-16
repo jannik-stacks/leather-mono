@@ -130,3 +130,21 @@ S225 calls buildStacksTx directly from [execution-type.spec.ts](../../packages/s
 The reference audit also replaces unrelated shared transaction/post-condition proofs with existing owner tests for wallet UTXO matching, pending PoX transactions, the DAO wrapper, pool-fee decoding, multisig SIP-10 construction and transaction-hex construction. Shared protocol proofs elsewhere still pin their underlying wire formats; the checker checks reference existence, not semantic reachability, so reviewers must follow each proof to its production owner when changing those entries.
 
 Baseline comparison resolves AGENTGRAPH_BASE to a commit before reading its inventory. Invalid revisions, Git failures, malformed JSON and invalid inventory shapes fail the check. An unset AGENTGRAPH_BASE prints that comparison is unavailable; a valid baseline commit without an inventory prints its revision and explains that the inventory is being introduced. Neither case silently swallows an unexpected error.
+
+## Kit gaps
+
+- SIP-018 verification: Kit 0.1.0 signs structured messages but has no public structured-signature verifier or digest-recovery API. Use Kit Clarity serialization and direct Noble secp256k1 recovery in the existing `verifySip018Signature` implementation. Replace it with the Kit verifier when a release ships [jannik-stacks/stacks-kit#230](https://github.com/jannik-stacks/stacks-kit/issues/230).
+
+- Clarity JSON and type/display strings: Kit 0.1.0 does not provide the legacy formatting contract. `packages/stacks/src/clarity-format.ts` formats Kit values directly; unchanged vectors pin nested type strings, JSON, Unicode and principal display. Replace this formatter when Kit releases equivalent formatting ([#201](https://github.com/jannik-stacks/stacks-kit/issues/201), [#202](https://github.com/jannik-stacks/stacks-kit/issues/202)).
+- Extended v1 API models: Leather owns the endpoint interfaces in `packages/models/src/transactions/stacks-api.model.ts`; overlapping v3 transaction and fee types derive from Kit public client types. Fee aliases retain optional cost-scalar and estimate fields, and transaction aliases retain ISO timestamp fields, matching the existing JSON contracts. Replace the v1 interfaces when Kit publishes those endpoints.
+
+## Retained vendor boundaries
+
+| Owner | Reason | Normalization |
+| --- | --- | --- |
+| `packages/services/src/infrastructure/api/alex/alex-sdk.client.ts` | ALEX SDK requires stacks.js transaction values and has no Kit replacement. | Decode vendor Clarity and post-condition wire hex with Kit before returning swap parameters. |
+| `packages/services/src/infrastructure/api/velar/velar-sdk.client.ts` | Velar SDK requires stacks.js transaction values and has no Kit replacement. | Decode vendor Clarity and post-condition wire hex with Kit before returning swap parameters. |
+| `packages/services/src/infrastructure/api/bitflow/bitflow-sdk.client.ts` | Bitflow SDK requires stacks.js transaction values and has no Kit replacement. | Decode vendor Clarity and post-condition wire hex with Kit before returning swap parameters. |
+| `packages/state/src/swap/strategies/execution-type/build-transaction/build-transaction/build-sbtc-bridge-deposit-tx.ts` | `sbtc@0.3.2` builds Bitcoin deposits; no corresponding Kit integration exists. | Existing deposit boundary returns Bitcoin bytes; no stacks.js transaction escapes it. |
+
+Keep `@stacks/common`, `@stacks/network`, `@stacks/transactions` and their transitive dependencies wherever these vendors require peers until vendor cleanup.

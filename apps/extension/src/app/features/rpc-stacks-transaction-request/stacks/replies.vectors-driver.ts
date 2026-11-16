@@ -1,5 +1,4 @@
-import { STACKS_TESTNET } from '@stacks/network';
-import { type StacksTransactionWire, deserializeTransaction } from '@stacks/transactions';
+import { Codec, STACKS_TESTNET, type StacksTransaction } from '@jannik-stacks/kit';
 import { act, renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 import { z } from 'zod';
@@ -22,7 +21,7 @@ import { useSignAndBroadcastStacksTransaction } from './use-sign-and-broadcast-s
 
 const bridge = vi.hoisted(() => ({
   messages: vi.fn(),
-  transport: vi.fn(),
+  transport: vi.fn<typeof fetch>(),
   navigate: vi.fn(),
   status: vi.fn(),
 }));
@@ -107,7 +106,7 @@ vi.mock('@app/store/networks/networks.hooks', () => ({
 }));
 vi.mock('@app/store/transactions/transaction.hooks', () => ({
   useSignStacksTransaction() {
-    return (tx: StacksTransactionWire) =>
+    return (tx: StacksTransaction) =>
       Promise.resolve(
         signStacksTransaction(
           tx,
@@ -135,10 +134,22 @@ export async function approve(hex: string, status: number, body: string) {
   bridge.transport.mockImplementation(() => Promise.resolve(new Response(body, { status })));
   const hook = renderHook(() => useSignAndBroadcastStacksTransaction('stx_transferStx'));
   try {
-    await hook.result.current(deserializeTransaction(hex));
+    await hook.result.current(Codec.Transaction.decode(hex));
     return {
       messages: bridge.messages.mock.calls,
-      requests: bridge.transport.mock.calls,
+      requests: await Promise.all(
+        bridge.transport.mock.calls.map(async ([input]) => {
+          const request = new Request(input);
+          return [
+            request.url,
+            {
+              body: await request.text(),
+              headers: { 'Content-Type': request.headers.get('Content-Type') },
+              method: request.method,
+            },
+          ];
+        })
+      ),
       navigations: bridge.navigate.mock.calls,
       statuses: bridge.status.mock.calls,
     };

@@ -1,8 +1,12 @@
-import { stringAsciiCV, tupleCV, uintCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import * as messageContractVectorDriver from './message-contract.vectors-driver';
-import { signStructuredDataMessage, verifySip018Signature } from './message-signing';
+import {
+  decodeStructuredMessage,
+  signStructuredDataMessage,
+  verifySip018Signature,
+} from './message-signing';
 
 // Mirrors the multisig proposal commitment: a SIP-018 structured signature over
 // the proposal hash, wrapped in the proposal domain. Proves verify accepts what
@@ -12,12 +16,36 @@ const privateKey = '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3b
 // A valid compressed pubkey that is not the signer, for the wrong-signer case.
 const otherPublicKey = '02f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9';
 
-const domain = tupleCV({
-  name: stringAsciiCV('leather-multisig-proposal-v1'),
-  version: stringAsciiCV('1'),
-  'chain-id': uintCV(1),
+const domain = Cl.tuple({
+  name: Cl.ascii('leather-multisig-proposal-v1'),
+  version: Cl.ascii('1'),
+  'chain-id': Cl.uint(1),
 });
-const message = stringAsciiCV('2a5f997755408a0a7f063923c830b3ae2fd3a26d8c19ab736ee523c3daf29a86');
+const message = Cl.ascii('2a5f997755408a0a7f063923c830b3ae2fd3a26d8c19ab736ee523c3daf29a86');
+
+describe('structured message validation', () => {
+  test('decodes a valid message and SIP-018 domain', () => {
+    expect(decodeStructuredMessage(Cl.serialize(message), Cl.serialize(domain))).toEqual({
+      message,
+      domain,
+    });
+  });
+
+  test.each([
+    Cl.uint(1),
+    Cl.tuple({}),
+    Cl.tuple({ name: Cl.ascii('app'), version: Cl.ascii('1') }),
+    Cl.tuple({ name: Cl.uint(1), version: Cl.ascii('1'), 'chain-id': Cl.uint(1) }),
+    Cl.tuple({ name: Cl.ascii('app'), version: Cl.ascii('1'), 'chain-id': Cl.ascii('1') }),
+  ])('rejects invalid domains without throwing', invalidDomain => {
+    expect(decodeStructuredMessage(Cl.serialize(message), Cl.serialize(invalidDomain))).toBeNull();
+  });
+
+  test('rejects malformed message and domain encodings without throwing', () => {
+    expect(decodeStructuredMessage('garbage', Cl.serialize(domain))).toBeNull();
+    expect(decodeStructuredMessage(Cl.serialize(message), 'garbage')).toBeNull();
+  });
+});
 
 describe(verifySip018Signature.name, () => {
   const { signature, publicKey } = signStructuredDataMessage(message, domain, privateKey);
@@ -33,17 +61,15 @@ describe(verifySip018Signature.name, () => {
   });
 
   test('rejects a tampered message', () => {
-    const tampered = stringAsciiCV(
-      '0000000000000000000000000000000000000000000000000000000000000000'
-    );
+    const tampered = Cl.ascii('0000000000000000000000000000000000000000000000000000000000000000');
     expect(verifySip018Signature({ message: tampered, domain, signature, publicKey })).toBe(false);
   });
 
   test('rejects a tampered domain (different chain-id)', () => {
-    const otherDomain = tupleCV({
-      name: stringAsciiCV('leather-multisig-proposal-v1'),
-      version: stringAsciiCV('1'),
-      'chain-id': uintCV(2147483648),
+    const otherDomain = Cl.tuple({
+      name: Cl.ascii('leather-multisig-proposal-v1'),
+      version: Cl.ascii('1'),
+      'chain-id': Cl.uint(2147483648),
     });
     expect(verifySip018Signature({ message, domain: otherDomain, signature, publicKey })).toBe(
       false

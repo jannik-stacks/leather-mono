@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
+import { Codec, type StacksNetwork } from '@jannik-stacks/kit';
 import { bytesToHex } from '@stacks/common';
-import { type StacksNetwork } from '@stacks/network';
 
 import { type RpcRequest, type stxCallContract } from '@leather.io/rpc';
 import {
@@ -48,7 +48,7 @@ export function useCallContractTxHex({
         functionArgs: request.params.functionArgs ?? [],
         publicKey: bytesToHex(signer.publicKey),
       });
-      return tx.serialize();
+      return Codec.Transaction.encode(tx);
     },
     [
       signer,

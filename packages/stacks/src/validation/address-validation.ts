@@ -1,4 +1,4 @@
-import { c32addressDecode } from 'c32check';
+import { Codec } from '@jannik-stacks/kit';
 import { z } from 'zod';
 
 import { ChainId } from '@leather.io/models';
@@ -10,7 +10,7 @@ export function isValidStacksAddress(address: string) {
     return false;
   }
   try {
-    c32addressDecode(address);
+    Codec.Raw.Address.decode(address);
     return true;
   } catch {
     return false;

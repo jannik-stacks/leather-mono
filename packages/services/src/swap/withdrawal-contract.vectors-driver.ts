@@ -1,4 +1,4 @@
-import { postConditionToHex, serializeCV } from '@stacks/transactions';
+import { Cl, Codec } from '@jannik-stacks/kit';
 
 import { createMoney } from '@leather.io/utils';
 
@@ -21,8 +21,8 @@ export function withdrawal(
     });
     return {
       ...result,
-      functionArgs: result.functionArgs.map(serializeCV),
-      postConditions: result.postConditions.map(postConditionToHex),
+      functionArgs: result.functionArgs.map(Cl.serialize),
+      postConditions: result.postConditions.map(Codec.Raw.PostCondition.encode),
     };
   } catch (error) {
     if (!(error instanceof Error)) throw error;

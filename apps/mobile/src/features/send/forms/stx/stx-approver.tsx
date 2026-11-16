@@ -8,8 +8,8 @@ import { useAccounts } from '@/store/accounts/accounts.read';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
 import { useNetworkPreferenceStacksNetwork } from '@/store/settings/settings';
+import { Codec } from '@jannik-stacks/kit';
 import { t } from '@lingui/core/macro';
-import { deserializeTransaction } from '@stacks/transactions';
 
 interface StxApproverProps {
   txHex: string;
@@ -33,7 +33,7 @@ export function StxApprover({ txHex: _txHex, onEdit, accountId, closeApprover }:
 
   async function onApprove() {
     assertStacksSigner(signer);
-    const tx = deserializeTransaction(txHex);
+    const tx = Codec.Transaction.decode(txHex);
 
     const signedTx = await signer?.sign(tx);
 

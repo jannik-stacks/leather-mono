@@ -1,19 +1,19 @@
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { Approver, Box, Text } from '@leather.io/ui/native';
 
 import { assertContractDeployPayload } from './utils';
 
 export function ContractDeploySummarySection({ txHex }: { txHex: string }) {
-  const tx = deserializeTransaction(txHex);
-  assertContractDeployPayload(tx.payload);
+  const tx = Codec.Transaction.decode(txHex);
+  assertContractDeployPayload(tx);
 
-  const { contractName } = tx.payload;
+  const { name: contractName } = tx;
 
   return (
     <Approver.Section>
       <Box gap="4">
-        <Text variant="label01">{contractName.content}</Text>
+        <Text variant="label01">{contractName}</Text>
       </Box>
     </Approver.Section>
   );

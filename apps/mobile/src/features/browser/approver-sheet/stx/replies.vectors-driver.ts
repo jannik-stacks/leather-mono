@@ -1,10 +1,10 @@
-import { createElement } from 'react';
+import { Fragment, type ReactNode, createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { STACKS_TESTNET } from '@stacks/network';
+import { STACKS_TESTNET } from '@jannik-stacks/kit';
 import { vi } from 'vitest';
 
-import { stxSignMessage, stxSignTransaction } from '@leather.io/rpc';
+import { stxSignMessage, stxSignStructuredMessage, stxSignTransaction } from '@leather.io/rpc';
 import {
   initalizeStacksSigner,
   signMessage,
@@ -13,6 +13,7 @@ import {
 } from '@leather.io/stacks';
 
 import { StxSignMessageApprover } from './sign-message/sign-message';
+import { StxSignStructuredMessageApprover } from './sign-structured-message/sign-structured-message';
 import { SignTransactionApprover } from './sign-transaction/sign-transaction';
 
 const approval = vi.hoisted(() => {
@@ -25,8 +26,18 @@ vi.mock('@/features/approver/layouts/base-stx-tx-approver.layout', () => ({
     return null;
   },
 }));
-vi.mock('@/features/approver/layouts/base-stx-message-approver.layout', () => ({
-  BaseStxMessageApproverLayout({ onApprove }: { onApprove(): Promise<unknown> }) {
+vi.mock('@/features/approver/components/approver-account-card', () => ({
+  ApproverAccountCard() {
+    return null;
+  },
+}));
+vi.mock('@/components/divider', () => ({
+  Divider() {
+    return null;
+  },
+}));
+vi.mock('@/features/approver/components/approver-buttons', () => ({
+  ApproverButtons({ onApprove }: { onApprove(): Promise<unknown> }) {
     approval.handlers.push(onApprove);
     return null;
   },
@@ -56,20 +67,43 @@ vi.mock('@lingui/core/macro', () => ({
     return String.raw(strings, ...values);
   },
 }));
-vi.mock('@leather.io/ui/native', () => ({
-  AnimalChameleonIcon() {
-    return null;
-  },
-  AnimalEagleIcon() {
-    return null;
-  },
-  AnimalRabbitIcon() {
-    return null;
-  },
-  AnimalSnailIcon() {
-    return null;
-  },
-}));
+vi.mock('@leather.io/ui/native', () => {
+  function Children({ children }: { children: ReactNode }) {
+    return createElement(Fragment, null, children);
+  }
+  return {
+    Approver: Object.assign(Children, {
+      Container: Children,
+      Section: Children,
+      Footer: Children,
+      Header() {
+        return null;
+      },
+    }),
+    Cell: { Root: Children, Content: Children, Label: Children },
+    Box: Children,
+    Text: Children,
+    useTheme() {
+      return { spacing: { '3': 3 } };
+    },
+    Button({ onPress }: { onPress(): void }) {
+      approval.handlers.push(() => Promise.resolve(onPress()));
+      return null;
+    },
+    AnimalChameleonIcon() {
+      return null;
+    },
+    AnimalEagleIcon() {
+      return null;
+    },
+    AnimalRabbitIcon() {
+      return null;
+    },
+    AnimalSnailIcon() {
+      return null;
+    },
+  };
+});
 
 function signer() {
   const key = '111111111111111111111111111111111111111111111111111111111111111101';
@@ -134,6 +168,31 @@ export async function messageReply(message: string, domain?: string) {
         params: domain
           ? { messageType: 'structured', message, domain }
           : { messageType: 'utf8', message },
+      }),
+      sendResult(response) {
+        replies.push(response);
+      },
+      closeApprover: vi.fn(),
+      accountId: app.accountId,
+    })
+  );
+  const approve = approval.handlers[0];
+  if (!approve) throw new Error('Approval was not rendered');
+  await approve();
+  return replies;
+}
+
+export async function invalidStructuredMessageReply(domain: string) {
+  const replies: unknown[] = [];
+  approval.handlers.length = 0;
+  renderToStaticMarkup(
+    createElement(StxSignStructuredMessageApprover, {
+      app,
+      request: stxSignStructuredMessage.request.parse({
+        jsonrpc: '2.0',
+        id: 'vector-request',
+        method: 'stx_signStructuredMessage',
+        params: { message: '03', domain },
       }),
       sendResult(response) {
         replies.push(response);

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createFetchFn } from '@stacks/common';
-import { ChainId } from '@stacks/network';
 import { z } from 'zod';
 
 import {
   type BitcoinNetwork,
+  ChainId,
   bitcoinNetworkToNetworkMode,
   networkConfigurationSchema,
 } from '@leather.io/models';
@@ -19,7 +19,7 @@ import { useRouteState } from '@app/common/hooks/use-route-state';
 import { removeTrailingSlash } from '@app/common/url-join';
 import { useNetworksActions } from '@app/store/networks/networks.hooks';
 import { useNetworks } from '@app/store/networks/networks.selectors';
-import type { PersistedNetworkConfiguration } from '@app/store/networks/networks.slice';
+import { type PersistedNetworkConfiguration } from '@app/store/networks/networks.slice';
 
 /**
  * The **peer** network ID.

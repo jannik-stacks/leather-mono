@@ -1,4 +1,6 @@
-import { ChainId, STACKS_MAINNET, STACKS_TESTNET } from '@stacks/network';
+import { STACKS_MAINNET, STACKS_TESTNET } from '@jannik-stacks/kit';
+
+import { ChainId } from '@leather.io/models';
 
 import { getStacksNetworkFromChainId } from '@app/store/networks/networks.hooks';
 

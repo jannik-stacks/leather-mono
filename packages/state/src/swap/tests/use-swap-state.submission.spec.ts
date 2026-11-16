@@ -1,4 +1,4 @@
-import { STACKS_MAINNET } from '@stacks/network';
+import { STACKS_MAINNET } from '@jannik-stacks/kit';
 import { act, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 

@@ -132,7 +132,8 @@
     "redux-persist": "6.0.0",
     "remeda": "2.21.2",
     "use-debounce": "10.0.5",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "@jannik-stacks/kit": "0.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.27.1",

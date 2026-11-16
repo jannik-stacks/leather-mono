@@ -1,8 +1,8 @@
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 
-import type { MarketData, Money } from '@leather.io/models';
+import { type MarketData, type Money } from '@leather.io/models';
 
-import type { HasChildren } from '@app/common/has-children';
+import { type HasChildren } from '@app/common/has-children';
 
 import { FeeEditorProvider } from '../fee-editor.provider';
 import { StacksFeesLoader } from './stacks-fees-loader';
@@ -11,7 +11,7 @@ interface StacksFeeEditorProviderProps extends HasChildren {
   availableBalance: Money;
   marketData: MarketData;
   onGoBack(): void;
-  unsignedTx: StacksTransactionWire;
+  unsignedTx: StacksTransaction;
 }
 export function StacksFeeEditorProvider({
   availableBalance,

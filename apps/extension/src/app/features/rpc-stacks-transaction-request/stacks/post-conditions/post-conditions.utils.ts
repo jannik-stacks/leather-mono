@@ -1,7 +1,4 @@
-import { PostConditionPrincipalId, addressToString } from '@stacks/transactions';
-
-import type { Sip10Asset } from '@leather.io/models';
-import { formatContractId } from '@leather.io/stacks';
+import { type Sip10Asset } from '@leather.io/models';
 import {
   convertAmountToBaseUnit,
   initBigNumber,
@@ -19,7 +16,7 @@ import {
   getPostConditionTitle,
   getSymbolFromPostCondition,
 } from '@app/common/transactions/stacks/post-condition.utils';
-import type { StacksAccount } from '@app/store/accounts/blockchain/stacks/stacks-account.models';
+import { type StacksAccount } from '@app/store/accounts/blockchain/stacks/stacks-account.models';
 
 function ftDecimals(value: number | string, decimals: number) {
   return convertAmountToBaseUnit(initBigNumber(value), decimals)
@@ -47,21 +44,18 @@ export function formatPostConditionMessage({
   const pcAmount = getAmountFromPostCondition(pc);
   const pcName = getNameFromPostCondition(pc);
 
-  const contractName = 'contractName' in pc.principal && pc.principal.contractName.content;
-  const address = 'address' in pc.principal ? addressToString(pc.principal.address) : '';
-  const isOriginPrincipal = pc.principal.prefix === PostConditionPrincipalId.Origin;
+  const contractName = pc.address.split('.')[1];
+  const address = pc.address === 'origin' ? '' : (pc.address.split('.')[0] ?? '');
+  const isOriginPrincipal = pc.address === 'origin';
   const isSending = isOriginPrincipal || address === account?.address;
 
-  const contractId =
-    'asset' in pc
-      ? formatContractId(addressToString(pc.asset.address), pc.asset.contractName.content)
-      : '';
+  const contractId = 'asset' in pc ? (pc.asset.split('::')[0] ?? '') : '';
   const amount =
     asset?.decimals && isDefined(pcAmount) ? ftDecimals(pcAmount, asset.decimals) : pcAmount;
   const ticker = asset?.symbol || pcTicker;
 
-  const message = pc.conditionCode
-    ? `${[getPostConditionCodeMessage(pc.conditionCode, isSending, context), amount, ticker].join(' ')} or the transaction will abort.`
+  const message = pc.condition
+    ? `${[getPostConditionCodeMessage(pc.condition, isSending, context), amount, ticker].join(' ')} or the transaction will abort.`
     : undefined;
 
   function getPrincipalPrefix() {

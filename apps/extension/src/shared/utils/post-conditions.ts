@@ -1,4 +1,4 @@
-import { type PostCondition, deserializeCV } from '@stacks/transactions';
+import { Cl, type PostCondition } from '@jannik-stacks/kit';
 import BN from 'bn.js';
 
 import { formatAssetString } from '@leather.io/stacks';
@@ -17,7 +17,7 @@ export function makeFtPostCondition(options: FtPostConditionsOptions): PostCondi
     type: 'ft-postcondition',
     address: stxAddress,
     condition: 'eq',
-    amount: new BN(amount, 10).toString(),
+    amount: BigInt(new BN(amount, 10).toString()),
     asset: formatAssetString({ contractAddress, contractName, assetName: contractAssetName }),
   };
 }
@@ -37,6 +37,6 @@ export function makeNftPostCondition(options: NftPostConditionsOptions): PostCon
     address: stxAddress,
     condition: 'sent',
     asset: formatAssetString({ contractAddress, contractName, assetName: contractAssetName }),
-    assetId: deserializeCV(assetId),
+    assetId: Cl.deserialize(assetId),
   };
 }

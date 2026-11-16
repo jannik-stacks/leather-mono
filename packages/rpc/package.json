@@ -25,10 +25,10 @@
     }
   },
   "dependencies": {
+    "@jannik-stacks/kit": "0.1.0",
     "@leather.io/models": "workspace:*",
     "@leather.io/stacks": "workspace:*",
     "@leather.io/utils": "workspace:*",
-    "@stacks/transactions": "7.5.0",
     "remeda": "2.21.2",
     "zod": "4.6.7"
   },

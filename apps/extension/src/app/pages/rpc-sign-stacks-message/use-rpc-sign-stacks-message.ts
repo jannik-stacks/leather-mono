@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { networkFromName } from '@stacks/network';
-import { deserializeCV } from '@stacks/transactions';
+import { parseNetwork } from '@jannik-stacks/kit';
 
 import {
   RpcErrorCode,
@@ -9,6 +8,7 @@ import {
   createRpcSuccessResponse,
   stxSignMessageTypeSchema,
 } from '@leather.io/rpc';
+import { decodeStructuredMessage, invalidStructuredMessageError } from '@leather.io/stacks';
 
 import { sendMessageToOriginatingFrame } from '@shared/messaging/send-message-to-originating-frame';
 import {
@@ -34,7 +34,7 @@ function getNetwork(networkName: string | null) {
     networkName === 'devnet' ||
     networkName === 'mocknet'
   ) {
-    return networkFromName(networkName);
+    return parseNetwork(networkName === 'mocknet' ? 'devnet' : networkName);
   }
   return;
 }
@@ -53,11 +53,12 @@ export function useRpcStacksMessagePayload() {
 
   if (isStructuredMessageType(messageType)) {
     if (!domain) return null;
+    const payload = decodeStructuredMessage(message, domain);
+    if (!payload) return null;
 
     return {
       messageType: 'structured' as const,
-      message: deserializeCV(message),
-      domain: deserializeCV(domain),
+      ...payload,
       network: getNetwork(network),
       appName,
     } satisfies StructuredPayload;
@@ -133,5 +134,16 @@ export function useRpcSignStacksMessage() {
     closeWindow();
   }
 
-  return { isLoading, signMessage, onCancelMessageSigning };
+  function onInvalidMessage() {
+    void sendMessageToOriginatingFrame(
+      { frameId, tabId },
+      createRpcErrorResponse('stx_signMessage', {
+        id: requestId,
+        error: { code: RpcErrorCode.INVALID_PARAMS, message: invalidStructuredMessageError },
+      })
+    );
+    closeWindow();
+  }
+
+  return { isLoading, signMessage, onCancelMessageSigning, onInvalidMessage };
 }

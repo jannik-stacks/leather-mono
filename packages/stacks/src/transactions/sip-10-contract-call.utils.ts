@@ -1,35 +1,17 @@
-import { bytesToUtf8, hexToBytes } from '@stacks/common';
-import {
-  type ClarityAbi,
-  ClarityType,
-  type ClarityValue,
-  FungibleConditionCode,
-  PayloadType,
-  PostConditionMode,
-  PostConditionPrincipalId,
-  PostConditionType,
-  type StacksTransactionWire,
-  addressToString,
-} from '@stacks/transactions';
+import { type ClarityAbiLike, type ClarityValue, type StacksTransaction } from '@jannik-stacks/kit';
+import { hexToBytes } from '@noble/hashes/utils';
 
 import { cleanHex } from '../stacks.utils';
 
-export function isSip10TransferContactCall(tx: StacksTransactionWire) {
-  if (tx.payload && 'functionName' in tx.payload) {
-    if (
-      tx.payload.functionName.content === 'transfer' &&
-      (tx.payload.functionArgs.length === 3 || tx.payload.functionArgs.length === 4)
-    ) {
-      if (
-        tx.payload.functionArgs[0].type === ClarityType.UInt &&
-        tx.payload.functionArgs[1].type === ClarityType.PrincipalStandard &&
-        tx.payload.functionArgs[2].type === ClarityType.PrincipalStandard
-      ) {
-        return true;
-      }
-    }
-  }
-  return false;
+export function isSip10TransferContactCall(tx: StacksTransaction) {
+  return (
+    tx.type === 'call' &&
+    tx.functionName === 'transfer' &&
+    (tx.args.length === 3 || tx.args.length === 4) &&
+    tx.args[0]?.type === 'uint' &&
+    tx.args[1]?.type === 'address' &&
+    tx.args[2]?.type === 'address'
+  );
 }
 
 export interface Sip10TransferDetails {
@@ -42,42 +24,39 @@ export interface Sip10TransferDetails {
 }
 
 function getMemoString(arg: ClarityValue | undefined): string | undefined {
-  if (!arg || arg.type !== ClarityType.OptionalSome) return undefined;
-  if (arg.value.type !== ClarityType.Buffer) return undefined;
-  return bytesToUtf8(hexToBytes(cleanHex(arg.value.value)));
+  if (!arg || arg.type !== 'some') return undefined;
+  if (arg.value.type !== 'buffer') return undefined;
+  return new TextDecoder().decode(hexToBytes(cleanHex(arg.value.value)));
 }
 
 export function getVerifiedSip10TransferDetails(
-  tx: StacksTransactionWire
+  tx: StacksTransaction
 ): Sip10TransferDetails | null {
-  if (!isSip10TransferContactCall(tx)) return null;
-  if (tx.payload.payloadType !== PayloadType.ContractCall) return null;
-  if (tx.postConditionMode !== PostConditionMode.Deny) return null;
-  if (tx.postConditions.values.length !== 1) return null;
-
-  const postCondition = tx.postConditions.values[0];
-  if (postCondition.conditionType !== PostConditionType.Fungible) return null;
-  if (postCondition.conditionCode !== FungibleConditionCode.Equal) return null;
-  if (postCondition.principal.prefix !== PostConditionPrincipalId.Standard) return null;
-
-  const [amountArg, senderArg, recipientArg, memoArg] = tx.payload.functionArgs;
-  if (amountArg.type !== ClarityType.UInt) return null;
-  if (senderArg.type !== ClarityType.PrincipalStandard) return null;
-  if (recipientArg.type !== ClarityType.PrincipalStandard) return null;
-
-  const amount = BigInt(amountArg.value);
-  if (postCondition.amount !== amount) return null;
-
-  const contractId = `${addressToString(tx.payload.contractAddress)}.${tx.payload.contractName.content}`;
-  const postConditionContractId = `${addressToString(postCondition.asset.address)}.${postCondition.asset.contractName.content}`;
-  if (postConditionContractId !== contractId) return null;
-
-  if (addressToString(postCondition.principal.address) !== senderArg.value) return null;
-
+  if (!isSip10TransferContactCall(tx) || tx.type !== 'call') return null;
+  if (tx.postConditionMode !== undefined && tx.postConditionMode !== 'deny') return null;
+  if (tx.postConditions?.length !== 1) return null;
+  const pc = tx.postConditions[0];
+  if (
+    pc.type !== 'ft-postcondition' ||
+    pc.condition !== 'eq' ||
+    pc.address.includes('.') ||
+    pc.address === 'origin'
+  )
+    return null;
+  const [amountArg, senderArg, recipientArg, memoArg] = tx.args;
+  if (
+    amountArg?.type !== 'uint' ||
+    senderArg?.type !== 'address' ||
+    recipientArg?.type !== 'address'
+  )
+    return null;
+  if (pc.amount !== amountArg.value || pc.address !== senderArg.value) return null;
+  const [contractId, assetName] = pc.asset.split('::');
+  if (contractId !== tx.contract) return null;
   return {
     contractId,
-    assetName: postCondition.asset.assetName.content,
-    amount,
+    assetName,
+    amount: amountArg.value,
     sender: senderArg.value,
     recipient: recipientArg.value,
     memo: getMemoString(memoArg),
@@ -89,7 +68,7 @@ export function isSip10Transfer({
   contractInterfaceData,
 }: {
   functionName: string;
-  contractInterfaceData: ClarityAbi;
+  contractInterfaceData: ClarityAbiLike;
 }) {
   if (functionName !== 'transfer') return false;
   const functionInterface = contractInterfaceData?.functions.find(f => f.name === functionName);
@@ -111,11 +90,11 @@ export function getSip10TransferAmount({
 }: {
   functionName: string;
   functionArgs: ClarityValue[];
-  contractInterfaceData: ClarityAbi;
+  contractInterfaceData: ClarityAbiLike;
 }) {
   if (
     isSip10Transfer({ functionName, contractInterfaceData }) &&
-    functionArgs[0]?.type === ClarityType.UInt
+    functionArgs[0]?.type === 'uint'
   ) {
     return Number(functionArgs[0].value);
   }
@@ -129,11 +108,11 @@ export function getSip10TransferRecipient({
 }: {
   functionName: string;
   functionArgs: ClarityValue[];
-  contractInterfaceData: ClarityAbi;
+  contractInterfaceData: ClarityAbiLike;
 }) {
   if (
     isSip10Transfer({ functionName, contractInterfaceData }) &&
-    functionArgs[2]?.type === ClarityType.PrincipalStandard
+    functionArgs[2]?.type === 'address'
   ) {
     return functionArgs[2].value;
   }

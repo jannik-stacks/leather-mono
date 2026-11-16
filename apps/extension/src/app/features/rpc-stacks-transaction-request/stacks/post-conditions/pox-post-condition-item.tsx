@@ -1,8 +1,4 @@
-import {
-  PostConditionPrincipalId,
-  type PoxPostConditionWire,
-  addressToString,
-} from '@stacks/transactions';
+import { type PostCondition } from '@jannik-stacks/kit';
 import { PostConditionSelectors } from '@tests/selectors/requests.selectors';
 import { Box, Stack, styled } from 'leather-styles/jsx';
 
@@ -18,7 +14,7 @@ import { useCurrentStacksAccount } from '@app/store/accounts/blockchain/stacks/s
 interface PoxPostConditionItemProps {
   isContractPrincipal: boolean;
   isLast: boolean;
-  postCondition: PoxPostConditionWire;
+  postCondition: Extract<PostCondition, { type: 'pox-postcondition' }>;
 }
 export function PoxPostConditionItem({
   isContractPrincipal,
@@ -27,9 +23,9 @@ export function PoxPostConditionItem({
 }: PoxPostConditionItemProps) {
   const currentAccount = useCurrentStacksAccount();
 
-  const address = 'address' in pc.principal ? addressToString(pc.principal.address) : '';
-  const contractName = 'contractName' in pc.principal ? pc.principal.contractName.content : '';
-  const isOriginPrincipal = pc.principal.prefix === PostConditionPrincipalId.Origin;
+  const address = pc.address === 'origin' ? '' : (pc.address.split('.')[0] ?? '');
+  const contractName = pc.address.split('.')[1] ?? '';
+  const isOriginPrincipal = pc.address === 'origin';
   const isSending = isOriginPrincipal || address === currentAccount?.address;
 
   function getPrincipalPrefix() {
@@ -38,9 +34,9 @@ export function PoxPostConditionItem({
     return 'Another address ';
   }
 
-  const title = [getPrincipalPrefix(), getPoxConditionTitle(pc.conditionCode)].join(' ');
+  const title = [getPrincipalPrefix(), getPoxConditionTitle(pc.condition)].join(' ');
   const message = `${getPoxConditionCodeMessage(
-    pc.conditionCode,
+    pc.condition,
     isSending
   )} or the transaction will abort.`;
   const contract = `${truncateMiddle(address, 4)}${contractName ? `.${contractName}` : ''}`;

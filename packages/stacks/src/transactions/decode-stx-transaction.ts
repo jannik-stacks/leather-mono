@@ -1,9 +1,4 @@
-import {
-  PayloadType,
-  addressToString,
-  cvToString,
-  deserializeTransaction,
-} from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { getVerifiedSip10TransferDetails } from './sip-10-contract-call.utils';
 
@@ -47,33 +42,32 @@ export type StxTransactionPayloadDetails =
   | StxContractDeployPayloadDetails;
 
 export function decodeStxTransactionPayload(rawTx: string): StxTransactionPayloadDetails | null {
-  const tx = deserializeTransaction(rawTx);
-  const fee = tx.auth.spendingCondition.fee;
-  switch (tx.payload.payloadType) {
-    case PayloadType.TokenTransfer:
+  const tx = Codec.Transaction.decode(rawTx);
+  const fee = tx.fee ?? 0n;
+  switch (tx.type) {
+    case 'transfer':
       return {
         type: 'stxTransfer',
-        recipient: cvToString(tx.payload.recipient),
-        amount: tx.payload.amount,
-        memo: tx.payload.memo.content,
+        recipient: tx.recipient,
+        amount: tx.amount,
+        memo: tx.memo ?? '',
         fee,
       };
-    case PayloadType.ContractCall: {
+    case 'call': {
       const sip10Transfer = getVerifiedSip10TransferDetails(tx);
       if (sip10Transfer) return { type: 'sip10Transfer', ...sip10Transfer, fee };
       return {
         type: 'contractCall',
-        contractAddress: addressToString(tx.payload.contractAddress),
-        contractName: tx.payload.contractName.content,
-        functionName: tx.payload.functionName.content,
+        contractAddress: tx.contract.split('.')[0],
+        contractName: tx.contract.split('.')[1],
+        functionName: tx.functionName,
         fee,
       };
     }
-    case PayloadType.SmartContract:
-    case PayloadType.VersionedSmartContract:
+    case 'deploy':
       return {
         type: 'contractDeploy',
-        contractName: tx.payload.contractName.content,
+        contractName: tx.name,
         fee,
       };
     default:

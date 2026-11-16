@@ -1,21 +1,14 @@
-import {
-  type NonFungiblePostCondition,
-  type PostCondition,
-  deserializeCV,
-  postConditionToHex,
-  postConditionToWire,
-  serializePostConditionWire,
-} from '@stacks/transactions';
+import { Cl, Codec, type PostCondition } from '@jannik-stacks/kit';
 
-import { ensurePostConditionWireFormat, getPostConditionFromString } from './post-condition.utils';
+import { getPostCondition, getPostConditionFromString } from './post-condition.utils';
 
 export function condition(input: PostCondition) {
-  const hex = postConditionToHex(input);
+  const hex = Codec.Raw.PostCondition.encode(input);
   return {
     hex,
-    fromObject: serializePostConditionWire(ensurePostConditionWireFormat(input)),
-    fromHex: serializePostConditionWire(getPostConditionFromString(hex)),
-    fromWire: serializePostConditionWire(ensurePostConditionWireFormat(postConditionToWire(input))),
+    fromObject: Codec.Raw.PostCondition.encode(getPostCondition(input)),
+    fromHex: Codec.Raw.PostCondition.encode(getPostConditionFromString(hex)),
+    fromWire: Codec.Raw.PostCondition.encode(getPostCondition(input)),
   };
 }
 export function malformed(hex: string) {
@@ -27,6 +20,10 @@ export function malformed(hex: string) {
   }
 }
 
-export function nft(input: Omit<NonFungiblePostCondition, 'assetId'> & { assetId: string }) {
-  return condition({ ...input, assetId: deserializeCV(input.assetId) });
+export function nft(
+  input: Omit<Extract<PostCondition, { type: 'nft-postcondition' }>, 'assetId'> & {
+    assetId: string;
+  }
+) {
+  return condition({ ...input, assetId: Cl.deserialize(input.assetId) });
 }

@@ -1,11 +1,11 @@
-import type { StacksNetwork } from '@stacks/network';
+import { type StacksNetwork } from '@jannik-stacks/kit';
 
-import type { Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 import { createRequestEncoder, stxCallContract } from '@leather.io/rpc';
 import {
   type StacksUnsignedContractCallOptions,
   TransactionTypes,
-  ensurePostConditionWireFormat,
+  getPostCondition,
   getPostConditions,
   getStacksContractName,
 } from '@leather.io/stacks';
@@ -13,7 +13,7 @@ import { createMoney } from '@leather.io/utils';
 
 import { initialSearchParams } from '@app/common/initial-search-params';
 import { rpcPostConditionModeToEnum } from '@app/common/transactions/stacks/post-condition.utils';
-import type { Nonce } from '@app/features/nonce-editor/nonce-editor.context';
+import { type Nonce } from '@app/features/nonce-editor/nonce-editor.context';
 
 export function getDecodedRpcStxCallContractRequest() {
   const { decode } = createRequestEncoder(stxCallContract.request);
@@ -35,7 +35,7 @@ function getTransactionOptionsFromRpcRequest() {
     functionName: decodedRpcRequest.params.functionName,
     nonce: decodedRpcRequest.params.nonce,
     postConditions: getPostConditions(
-      decodedRpcRequest.params.postConditions?.map(pc => ensurePostConditionWireFormat(pc))
+      decodedRpcRequest.params.postConditions?.map(pc => getPostCondition(pc))
     ),
     postConditionMode: rpcPostConditionModeToEnum(decodedRpcRequest.params.postConditionMode),
     sponsored: decodedRpcRequest.params.sponsored,

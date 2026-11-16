@@ -1,13 +1,7 @@
-import { hexToBytes } from '@stacks/common';
-import {
-  type ClarityAbiFunction,
-  cvToString,
-  deserializeCV,
-  getCVTypeString,
-} from '@stacks/transactions';
+import { Cl, type ClarityAbiFunction } from '@jannik-stacks/kit';
 import { Stack } from 'leather-styles/jsx';
 
-import { cleanHex } from '@leather.io/stacks';
+import { cleanHex, formatClarityType, formatClarityValue } from '@leather.io/stacks';
 import { Caption } from '@leather.io/ui';
 
 import { FunctionArgumentItem } from './function-argument-item';
@@ -20,13 +14,13 @@ export function FunctionArgumentList({ fn, fnArgs }: FunctionArgumentListProps) 
   return fnArgs.length > 0 ? (
     <Stack gap="space.04">
       {fnArgs
-        .map(arg => deserializeCV(hexToBytes(cleanHex(arg))))
+        .map(arg => Cl.deserialize(cleanHex(arg)))
         .map((arg, i) => (
           <FunctionArgumentItem
             key={i}
             name={fn.args[i].name}
-            type={getCVTypeString(arg)}
-            value={cvToString(arg)}
+            type={formatClarityType(arg)}
+            value={formatClarityValue(arg)}
           />
         ))}
     </Stack>

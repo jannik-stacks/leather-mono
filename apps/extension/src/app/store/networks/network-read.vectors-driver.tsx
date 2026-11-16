@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
 import { renderHook } from '@testing-library/react';
@@ -20,7 +20,7 @@ export function readStoredNetwork(record: PersistedNetworkConfiguration) {
     const network = hook.result.current;
     return {
       chainId: network.chainId,
-      transactionVersion: network.transactionVersion,
+      transactionVersion: network.version === 'mainnet' ? 0 : 128,
       baseUrl: network.client.baseUrl,
       bnsLookupUrl: z.object({ bnsLookupUrl: z.string() }).parse(network).bnsLookupUrl,
     };

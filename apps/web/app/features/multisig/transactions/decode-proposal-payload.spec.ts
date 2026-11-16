@@ -1,18 +1,7 @@
-import {
-  AddressHashMode,
-  AddressVersion,
-  Pc,
-  PostConditionMode,
-  addressFromPublicKeys,
-  addressToString,
-  createStacksPublicKey,
-  makeUnsignedContractCall,
-  noneCV,
-  principalCV,
-  uintCV,
-} from '@stacks/transactions';
+import { Cl, Codec, Pc, publicKeysToAddress } from '@jannik-stacks/kit';
 
-import type { VaultAccount, VaultAccountSigner } from '@leather.io/models';
+import { type VaultAccount, type VaultAccountSigner } from '@leather.io/models';
+import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
 import { buildUnsignedMultisigSip10Transfer } from './build-sip10-transfer';
@@ -29,14 +18,7 @@ const assetId = 'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT.sbtc-token::sbtc-toke
 const contractId = 'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT.sbtc-token';
 
 function deriveTestnetAddress(threshold: number, keys: string[]) {
-  return addressToString(
-    addressFromPublicKeys(
-      AddressVersion.TestnetMultiSig,
-      AddressHashMode.P2SHNonSequential,
-      threshold,
-      keys.map(createStacksPublicKey)
-    )
-  );
+  return publicKeysToAddress({ publicKeys: keys, threshold }, { network: 'testnet' });
 }
 
 function makeSigner(signerIndex: number, signingPubkey: string): VaultAccountSigner {
@@ -80,32 +62,38 @@ async function buildProposalPayload() {
     amount: createMoney(2_500_000, 'sBTC', 8),
     fee: createMoney(3000, 'STX'),
   });
-  return { account, rawPayload: tx.serialize() };
+  return { account, rawPayload: Codec.Transaction.encode(tx) };
 }
 
 describe(decodeProposalPayload.name, () => {
   test('degrades to a contract call when the sender is not the vault', async () => {
     const account = makeAccount();
     const otherSender = 'ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH';
-    const tx = await makeUnsignedContractCall({
+    const tx = await generateStacksUnsignedTransaction({
       contractAddress: 'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT',
       contractName: 'sbtc-token',
       functionName: 'transfer',
-      functionArgs: [uintCV(2_500_000), principalCV(otherSender), principalCV(recipient), noneCV()],
+      functionArgs: [
+        Cl.uint(2_500_000),
+        Cl.principal(otherSender),
+        Cl.principal(recipient),
+        Cl.none(),
+      ].map(Cl.serialize),
       publicKey: publicKeys[0],
-      fee: 3000,
+      fee: createMoney(3000, 'STX'),
       nonce: 0,
       network: 'testnet',
-      postConditionMode: PostConditionMode.Deny,
+      postConditionMode: 'deny',
       postConditions: [
-        Pc.principal(otherSender).willSendEq(2_500_000).ft(contractId, 'sbtc-token'),
+        Pc.principal(otherSender).willSendEq(2_500_000).ft(`${contractId}::${'sbtc-token'}`),
       ],
+      txType: 'contract_call',
     });
 
     expect(
       decodeProposalPayload(
         { network: account.network, multisigAddress: account.multisigAddress },
-        tx.serialize()
+        Codec.Transaction.encode(tx)
       )
     ).toEqual({
       type: 'contractCall',

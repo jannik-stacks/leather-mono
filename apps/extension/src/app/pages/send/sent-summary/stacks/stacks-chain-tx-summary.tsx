@@ -1,4 +1,4 @@
-import { type StacksTransactionWire, isTokenTransferPayload } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 
 import { baseCurrencyAmountInQuote, createMoney, isNumber, sumMoney } from '@leather.io/utils';
 
@@ -27,31 +27,31 @@ import {
 interface StacksChainSummaryProps {
   txid: string;
   symbol: string;
-  tx: StacksTransactionWire;
+  tx: StacksTransaction;
 }
 export function StxSentSummary({ txid, tx }: StacksChainSummaryProps) {
   const tokenMarketData = useCryptoCurrencyMarketData('STX');
 
-  if (!isTokenTransferPayload(tx.payload))
+  if (tx.type !== 'transfer')
     throw new Error('Impossible state, STX transfers are always of type `token_transfer`');
 
-  const amount = getTokenTransferAmount(tx.payload);
+  const amount = getTokenTransferAmount(tx);
   const fiatAmount = baseCurrencyAmountInQuote(amount, tokenMarketData);
   const fee = getStacksTransactionFee(tx);
   const total = sumMoney([amount, fee]);
-  const memo = getTokenTransferMemoDisplayText(tx.payload) || '—';
+  const memo = getTokenTransferMemoDisplayText(tx) || '—';
 
   return (
     <StacksChainTxSummaryLayout
       value={amount}
       txFiatValue={formatCurrency(fiatAmount)}
-      recipient={safeAddressToString(tx.payload.recipient.value) ?? undefined}
+      recipient={safeAddressToString(tx.recipient) ?? undefined}
       token="STX"
       txid={txid}
       metadata={[
         ['Status', <TxStatusBadge key={txid} txid={txid} />],
         ['Total spend', formatCurrency(total)],
-        ['Sending', formatCurrency(createMoney(Number(tx.payload.amount), 'STX'))],
+        ['Sending', formatCurrency(createMoney(Number(tx.amount), 'STX'))],
         ['Fee', formatCurrency(fee)],
         ['Memo', memo],
         ['Nonce', getNonceFromStacksTransaction(tx)],

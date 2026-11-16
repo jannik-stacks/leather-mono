@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
-import { AuthType, type StacksTransactionWire } from '@stacks/transactions';
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 
 import {
   RpcErrorCode,
@@ -38,7 +38,7 @@ export function useSignAndBroadcastStacksTransaction(method: RpcMethodNames) {
   const { trackIfNonceError } = useAnalyticsOnlyStacksNonceTracker();
 
   return useCallback(
-    async (unsignedTx: StacksTransactionWire) => {
+    async (unsignedTx: StacksTransaction) => {
       const signedTx = await signStacksTransaction(unsignedTx);
       if (signedTx === null) {
         onSetTransactionStatus('idle');
@@ -63,14 +63,14 @@ export function useSignAndBroadcastStacksTransaction(method: RpcMethodNames) {
       }
 
       // If the transaction is sponsored, we do not broadcast it
-      const isSponsored = signedTx.auth?.authType === AuthType.Sponsored;
+      const isSponsored = signedTx.sponsor !== undefined;
       if (isSponsored) {
         void sendMessageToOriginatingFrame(
           { frameId, tabId },
           createRpcSuccessResponse(method, {
             id: requestId,
             result: {
-              transaction: signedTx.serialize(),
+              transaction: Codec.Transaction.encode(signedTx),
             },
           })
         );
@@ -85,7 +85,7 @@ export function useSignAndBroadcastStacksTransaction(method: RpcMethodNames) {
         void navigate(RouteUrls.BroadcastError, { state: { message } });
       }
 
-      function onSuccess(txid: string, transaction: StacksTransactionWire) {
+      function onSuccess(txid: string, transaction: StacksTransaction) {
         onSetTransactionStatus('submitted');
 
         void sendMessageToOriginatingFrame(
@@ -94,7 +94,7 @@ export function useSignAndBroadcastStacksTransaction(method: RpcMethodNames) {
             id: requestId,
             result: {
               txid,
-              transaction: transaction.serialize(),
+              transaction: Codec.Transaction.encode(transaction),
             },
           })
         );

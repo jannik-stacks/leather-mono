@@ -1,4 +1,4 @@
-import { hexToCV, standardPrincipalCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { injectable } from 'inversify';
 
 import { stxAsset } from '@leather.io/constants';
@@ -12,9 +12,9 @@ import { baseCurrencyAmountInQuote, createMoney } from '@leather.io/utils';
 
 import { FungibleAssetService } from '../../../assets/fungible-asset.service';
 import { HiroStacksApiClient } from '../../../infrastructure/api/hiro/hiro-stacks-api.client';
-import type {
-  HiroAddressFtBalancesResponse,
-  HiroPrincipalNftBalance,
+import {
+  type HiroAddressFtBalancesResponse,
+  type HiroPrincipalNftBalance,
 } from '../../../infrastructure/api/hiro/hiro-stacks-api.types';
 import { LeatherApiClient } from '../../../infrastructure/api/leather/leather-api.client';
 import { MarketDataService } from '../../../market/market-data.service';
@@ -56,7 +56,7 @@ export class StackingDaoLstService {
           contractAddress: stackingDaoProductionAddress,
           contractName: 'ststxbtc-tracking-v2',
           functionName: 'get-pending-rewards',
-          functionArgs: [standardPrincipalCV(address), standardPrincipalCV(address)],
+          functionArgs: [Cl.address(address), Cl.address(address)],
         },
         { signal }
       ),
@@ -115,7 +115,7 @@ export class StackingDaoLstService {
   ): Promise<StackingDaoLstWithdrawal[]> {
     const withdrawalNftIds = nftHoldings
       .filter(nft => nft.asset_identifier === lstWithdrawalNftIdentifierMap[lst])
-      .map(nft => hexToCV(nft.value.hex));
+      .map(nft => Cl.deserialize(nft.value.hex));
     if (withdrawalNftIds.length === 0) {
       return [];
     }

@@ -1,9 +1,10 @@
-import type { StacksNetwork } from '@stacks/network';
 import {
-  type StacksTransactionWire,
-  type TxBroadcastResultRejected,
-  broadcastTransaction,
-} from '@stacks/transactions';
+  Codec,
+  type StacksNetwork,
+  type StacksTransaction,
+  createClient,
+} from '@jannik-stacks/kit';
+import { z } from 'zod';
 
 import { delay, flattenObject, isError } from '@leather.io/utils';
 
@@ -15,9 +16,9 @@ import { hiroFetchWrapper } from '@app/query/stacks/stacks-client';
 
 interface StacksBroadcastTransactionArgs {
   network: StacksNetwork;
-  signedTx: StacksTransactionWire;
-  onSuccess(txid: string, transaction: StacksTransactionWire): void;
-  onError(error: Error | string, reason?: TxBroadcastResultRejected['reason']): void;
+  signedTx: StacksTransaction;
+  onSuccess(txid: string, transaction: StacksTransaction): void;
+  onError(error: Error | string, reason?: string): void;
 }
 
 function runSuccessHandler(handleSuccess: () => void) {
@@ -40,20 +41,36 @@ export async function stacksBroadcastTransaction({
       attemptId,
     });
 
-    const response = await broadcastTransaction({
-      transaction: signedTx,
+    const { data, error } = await createClient({
       network,
-      client: { fetch: hiroFetchWrapper },
+      fetch: hiroFetchWrapper,
+    }).api.POST('/v2/transactions', {
+      body: Codec.Transaction.encode(signedTx),
+      bodySerializer(tx) {
+        return JSON.stringify({ tx });
+      },
+      headers: { 'Content-Type': 'application/json' },
+      parseAs: 'text',
     });
+    const txid = typeof data === 'string' ? data.replace(/["]+/g, '') : undefined;
+    if (typeof data === 'string' && (txid === undefined || !/^(?:0x)?[a-f0-9]{64}$/i.test(txid)))
+      throw new Error(data);
+    const response = z
+      .object({
+        txid: z.string().optional(),
+        error: z.string().optional(),
+        reason: z.string().optional(),
+      })
+      .parse(error ?? { txid });
 
     await delay(500);
 
-    if ('error' in response) {
+    if (response.error !== undefined) {
       logger.error('Transaction failed to broadcast', response);
       const error = createError({
-        ...flattenObject(response),
-        name: response.reason,
-        message: response.error,
+        ...flattenObject({ error: response.error ?? '', reason: response.reason ?? '' }),
+        name: response.reason ?? '',
+        message: response.error ?? '',
       });
       throw error;
     }
@@ -74,7 +91,8 @@ export async function stacksBroadcastTransaction({
 
     await delay(500);
 
-    runSuccessHandler(() => onSuccess(response.txid, signedTx));
+    const broadcastTxid = response.txid;
+    runSuccessHandler(() => onSuccess(broadcastTxid, signedTx));
     return;
   } catch (error) {
     logger.error('Transaction error', { error });

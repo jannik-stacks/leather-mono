@@ -1,11 +1,12 @@
-import { STACKS_TESTNET } from '@stacks/network';
 import {
-  type ClarityVersion,
-  type PostConditionMode,
-  TransactionSigner,
-  privateKeyToPublic,
-  serializeCV,
-} from '@stacks/transactions';
+  Cl,
+  Codec,
+  STACKS_TESTNET,
+  privateKeyToPublicKey,
+  signMultisigInPlace,
+} from '@jannik-stacks/kit';
+import { sha512_256 } from '@noble/hashes/sha512';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 import BigNumber from 'bignumber.js';
 
 import { createMoney } from '@leather.io/utils';
@@ -33,12 +34,12 @@ interface TransactionInput {
   threshold?: number;
   nonSequential?: boolean;
   sponsored?: boolean;
-  clarityVersion?: ClarityVersion;
-  mode?: PostConditionMode;
+  clarityVersion?: number;
+  mode?: 'allow' | 'deny' | 'originator';
 }
 export async function transaction(input: TransactionInput) {
   const { privateKeys, threshold, nonSequential, network } = input;
-  const publicKeys = privateKeys.map(privateKeyToPublic);
+  const publicKeys = privateKeys.map(privateKeyToPublicKey);
   const auth =
     threshold === undefined
       ? { publicKey: publicKeys[0] }
@@ -93,22 +94,27 @@ export async function transaction(input: TransactionInput) {
       functionArgs:
         input.kind === 'call'
           ? ['0a0100000000000000010000000000000000']
-          : transferArgs.map(serializeCV),
+          : transferArgs.map(Cl.serialize),
       postConditionMode: input.mode,
       postConditions: [],
     });
   }
   const tx = await buildTransaction();
-  const unsigned = tx.serialize();
-  const unsignedId = tx.txid();
+  const unsigned = Codec.Transaction.encode(tx);
+  const unsignedId = bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(tx))));
   const byteLength = getEstimatedUnsignedStacksTxByteLength(tx);
   const payload = getSerializedUnsignedStacksTxPayload(tx);
   const estimated = estimateStacksTransactionByteLength(tx, privateKeys.length);
   if (threshold === undefined) signStacksTransaction(tx, privateKeys[0]);
   else {
-    const signer = new TransactionSigner(tx);
-    privateKeys.slice(0, threshold).forEach(key => signer.signOrigin(key));
-    privateKeys.slice(threshold).forEach(key => signer.appendOrigin(privateKeyToPublic(key)));
+    privateKeys.slice(0, threshold).forEach(key => signMultisigInPlace(tx, key));
+    privateKeys.slice(threshold).forEach(key =>
+      tx.signatures?.push({
+        type: 'public-key',
+        encoding: 'compressed',
+        value: privateKeyToPublicKey(key),
+      })
+    );
   }
   return {
     unsigned,
@@ -116,12 +122,12 @@ export async function transaction(input: TransactionInput) {
     byteLength,
     payload,
     estimated,
-    signed: tx.serialize(),
-    txid: tx.txid(),
-    decoded: decodeStxTransactionPayload(tx.serialize()),
-    fee: tx.auth.spendingCondition.fee,
-    nonce: tx.auth.spendingCondition.nonce,
-    mode: tx.postConditionMode,
+    signed: Codec.Transaction.encode(tx),
+    txid: bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(tx)))),
+    decoded: decodeStxTransactionPayload(Codec.Transaction.encode(tx)),
+    fee: tx.fee ?? 0n,
+    nonce: tx.nonce ?? 0n,
+    mode: { allow: 1, deny: 2, originator: 3 }[tx.postConditionMode ?? 'deny'],
     signedEstimate: estimateStacksTransactionByteLength(tx, privateKeys.length),
   };
 }

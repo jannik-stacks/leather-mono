@@ -1,19 +1,21 @@
 import { useGetContractInterface } from '@/queries/stacks/contract-interface.query';
+import { Codec } from '@jannik-stacks/kit';
 import { t } from '@lingui/core/macro';
-import { cvToString, deserializeTransaction } from '@stacks/transactions';
 
+import { formatClarityValue } from '@leather.io/stacks';
 import { Approver, Box, Text } from '@leather.io/ui/native';
 
 import { assertContractCallPayload, getContractAddress } from './utils';
 
 export function ContractCallArgsSection({ txHex }: { txHex: string }) {
-  const tx = deserializeTransaction(txHex);
-  assertContractCallPayload(tx.payload);
+  const tx = Codec.Transaction.decode(txHex);
+  assertContractCallPayload(tx);
 
-  const contractAddress = getContractAddress(tx.payload);
-  const { functionArgs, functionName, contractName } = tx.payload;
+  const contractAddress = getContractAddress(tx);
+  const { args: functionArgs = [], functionName } = tx;
+  const contractName = tx.contract.split('.')[1] ?? '';
 
-  const { data } = useGetContractInterface(contractAddress, contractName.content);
+  const { data } = useGetContractInterface(contractAddress, contractName);
 
   return (
     <Approver.Section>
@@ -22,8 +24,8 @@ export function ContractCallArgsSection({ txHex }: { txHex: string }) {
       </Box>
       <Box>
         {functionArgs.map((fa, index) => {
-          const strValue = cvToString(fa);
-          const func = data?.functions.find(fn => fn.name === functionName.content);
+          const strValue = formatClarityValue(fa);
+          const func = data?.functions.find(fn => fn.name === functionName);
           const argumentNumber = index + 1;
           return (
             <Box key={strValue}>

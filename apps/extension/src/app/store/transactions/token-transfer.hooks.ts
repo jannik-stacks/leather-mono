@@ -1,24 +1,17 @@
 import { useCallback } from 'react';
 import { useAsync } from 'react-async-hook';
 
-import type { StacksNetwork } from '@stacks/network';
 import {
+  Cl,
   type ClarityValue,
-  PostConditionMode,
-  bufferCVFromString,
-  contractPrincipalCV,
-  createEmptyAddress,
-  fetchNonce,
-  getAddressFromPublicKey,
-  noneCV,
-  serializeCV,
-  someCV,
-  standardPrincipalCV,
-  standardPrincipalCVFromAddress,
-  uintCV,
-} from '@stacks/transactions';
+  type StacksNetwork,
+  createClient,
+  getNextNonce,
+  publicKeyToAddress,
+} from '@jannik-stacks/kit';
+import { z } from 'zod';
 
-import type { Sip10Asset } from '@leather.io/models';
+import { type Sip10Asset } from '@leather.io/models';
 import {
   TransactionTypes,
   generateStacksUnsignedTransaction,
@@ -28,7 +21,10 @@ import {
 import { createMoney, stxToMicroStx, unitToFractionalUnit } from '@leather.io/utils';
 
 import { logger } from '@shared/logger';
-import type { StacksSendFormValues, StacksTransactionFormValues } from '@shared/models/form.model';
+import {
+  type StacksSendFormValues,
+  type StacksTransactionFormValues,
+} from '@shared/models/form.model';
 import { makeFtPostCondition } from '@shared/utils/post-conditions';
 
 import {
@@ -49,10 +45,10 @@ function createPrincipalCV(principal: string) {
 
   if (principalType === 'contract') {
     const [address, contractName] = principal.split('.');
-    return contractPrincipalCV(address, contractName);
+    return Cl.contract(`${address}.${contractName}`);
   }
 
-  if (principalType === 'standard') return standardPrincipalCV(principal);
+  if (principalType === 'standard') return Cl.address(principal);
 
   throw new Error(`Invalid principal: ${principal}`);
 }
@@ -68,9 +64,18 @@ async function generateWithResolvedNonce<T>(
   generate: (nonce: number | string) => Promise<T>
 ) {
   if (nonce !== undefined) return generate(nonce);
-  const fetchedNonce = await fetchNonce({
-    address: getAddressFromPublicKey(publicKey, network),
-    network,
+  const client = createClient({ network });
+  const address = publicKeyToAddress(publicKey, { network });
+  const fetchedNonce = await getNextNonce(client, { address }).catch(async () => {
+    const url = `${client.baseUrl}/v2/accounts/${address}?proof=0`;
+    const response = await client.fetch(url);
+    if (!response.ok) {
+      const message = await response.text().catch(() => undefined);
+      throw new Error(
+        `Error fetching nonce. Response ${response.status}: ${response.statusText}. Attempted to fetch ${url} and failed with the message: "${message ?? ''}"`
+      );
+    }
+    return z.object({ nonce: z.coerce.bigint() }).parse(await response.json()).nonce;
   });
   return generate(fetchedNonce.toString());
 }
@@ -185,12 +190,12 @@ export function useGenerateFtTokenTransferUnsignedTx(info: Sip10Asset) {
         const recipientAddressClarityValue =
           values && 'recipient' in values
             ? createPrincipalCV(values.recipient)
-            : standardPrincipalCVFromAddress(createEmptyAddress());
+            : Cl.address('SP000000000000000000002Q6VF78');
         const amount = values && 'amount' in values ? values.amount : 0;
         const memo =
           values && 'memo' in values && values.memo
-            ? someCV(bufferCVFromString(values.memo))
-            : noneCV();
+            ? Cl.some(Cl.buffer(new TextEncoder().encode(values.memo)))
+            : Cl.none();
 
         const amountAsFractionalUnit = unitToFractionalUnit(info.decimals)(amount).toString(10);
         const postConditionOptions = {
@@ -204,7 +209,7 @@ export function useGenerateFtTokenTransferUnsignedTx(info: Sip10Asset) {
         const postConditions = [makeFtPostCondition(postConditionOptions)];
 
         const functionArgs: ClarityValue[] = [
-          uintCV(amountAsFractionalUnit),
+          Cl.uint(amountAsFractionalUnit),
           createPrincipalCV(account.address),
           recipientAddressClarityValue,
         ];
@@ -223,9 +228,9 @@ export function useGenerateFtTokenTransferUnsignedTx(info: Sip10Asset) {
               contractAddress,
               contractName,
               functionName,
-              functionArgs: functionArgs.map(arg => serializeCV(arg)),
+              functionArgs: functionArgs.map(arg => Cl.serialize(arg)),
               postConditions,
-              postConditionMode: PostConditionMode.Deny,
+              postConditionMode: 'deny',
               network,
               publicKey: account.stxPublicKey,
               fee: formValueToStxMoney(values?.fee) ?? createMoney(0, 'STX'),

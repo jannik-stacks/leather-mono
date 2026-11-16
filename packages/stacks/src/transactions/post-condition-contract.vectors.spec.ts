@@ -16,7 +16,7 @@ test('pins every post-condition family, principal form and condition code', () =
       driver.condition({
         type: 'stx-postcondition',
         address,
-        amount: '9007199254740993',
+        amount: BigInt('9007199254740993'),
         condition,
       })
     ),
@@ -25,7 +25,7 @@ test('pins every post-condition family, principal form and condition code', () =
         type: 'ft-postcondition',
         address: address + '.vault',
         asset,
-        amount: '100',
+        amount: BigInt('100'),
         condition,
       })
     ),
@@ -40,7 +40,12 @@ test('pins every post-condition family, principal form and condition code', () =
         })
     ),
     staking: fungible.map(condition =>
-      driver.condition({ type: 'staking-postcondition', address, amount: '40000000', condition })
+      driver.condition({
+        type: 'staking-postcondition',
+        address,
+        amount: BigInt('40000000'),
+        condition,
+      })
     ),
     pox: [
       driver.condition({ type: 'pox-postcondition', address: 'origin', condition: 'may-perform' }),

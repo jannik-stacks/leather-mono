@@ -1,10 +1,11 @@
+import { Cl, Codec } from '@jannik-stacks/kit';
 import { describe, expect, it, vi } from 'vitest';
 
 import { createMock } from '../../../test/create-mock';
 import { type HttpCacheService } from '../../cache/http-cache.service';
 import { AlexSdkClient } from './alex-sdk.client';
 
-const { getRoute } = vi.hoisted(() => ({ getRoute: vi.fn() }));
+const { getRoute, runSwap } = vi.hoisted(() => ({ getRoute: vi.fn(), runSwap: vi.fn() }));
 
 vi.mock('alex-sdk', () => ({
   AlexSDK: class {
@@ -12,6 +13,7 @@ vi.mock('alex-sdk', () => ({
       return Promise.resolve([{ id: 'token-wstx' }, { id: 'token-alex' }]);
     }
     getRoute = getRoute;
+    runSwap = runSwap;
   },
 }));
 
@@ -30,5 +32,35 @@ describe(AlexSdkClient.name, () => {
     await expect(client.getRoute('token-wstx', 'token-unknown')).rejects.toThrow(
       'Unknown ALEX currency: token-unknown'
     );
+  });
+  it('normalizes vendor arguments and post conditions without changing their wire bytes', async () => {
+    runSwap.mockResolvedValue({
+      functionArgs: [{ type: 'uint', value: 9007199254740993n }],
+      postConditions: [
+        {
+          type: 'stx-postcondition',
+          address: 'origin',
+          condition: 'eq',
+          amount: '9007199254740993',
+        },
+      ],
+    });
+    const tx = await client.getSwapTx(
+      'ST000000000000000000002AMW42H',
+      'token-wstx',
+      'token-alex',
+      1n,
+      0n
+    );
+    expect(tx.functionArgs.map(Cl.serialize)).toEqual(['0100000000000000000020000000000001']);
+    expect(tx.postConditions.map(Codec.Raw.PostCondition.encode)).toEqual([
+      '0001010020000000000001',
+    ]);
+    expect(tx.postConditions[0]).toEqual({
+      type: 'stx-postcondition',
+      address: 'origin',
+      condition: 'eq',
+      amount: 9007199254740993n,
+    });
   });
 });

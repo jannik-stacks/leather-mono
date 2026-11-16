@@ -1,6 +1,5 @@
-import { hexToBytes } from '@stacks/common';
-import { STACKS_TESTNET } from '@stacks/network';
-import { AuthType, deserializeTransaction } from '@stacks/transactions';
+import { Codec, STACKS_TESTNET } from '@jannik-stacks/kit';
+import { hexToBytes } from '@noble/hashes/utils';
 import BigNumber from 'bignumber.js';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -13,7 +12,7 @@ import * as sip10TransferContractVectorDriver from './sip10-transfer-contract.ve
 
 const signer = {
   address: 'SP2BM6AQSMQ04CX8KDE62QBFVZTDZ2ZX80GZJSBZ4',
-  publicKey: hexToBytes('8721c6a5237f5e8d361161a7855aa56885a3e19e2ea6ee268fb14eabc5e2ed9001'),
+  publicKey: hexToBytes('0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352'),
 };
 
 const transfer = {
@@ -31,9 +30,9 @@ describe(createTransferSip10TxHex.name, () => {
       fee: createMoney(new BigNumber(3000), 'STX'),
     });
 
-    const tx = deserializeTransaction(txHex);
-    expect(tx.auth.authType).toEqual(AuthType.Standard);
-    expect(tx.auth.spendingCondition.fee).toBe(BigInt('3000'));
+    const tx = Codec.Transaction.decode(txHex);
+    expect(tx.sponsor === undefined ? 'standard' : 'sponsored').toEqual('standard');
+    expect(tx.fee).toBe(BigInt('3000'));
   });
 
   it('builds a sponsored transaction with a zero origin fee when sponsored', async () => {
@@ -43,9 +42,9 @@ describe(createTransferSip10TxHex.name, () => {
       sponsored: true,
     });
 
-    const tx = deserializeTransaction(txHex);
-    expect(tx.auth.authType).toEqual(AuthType.Sponsored);
-    expect(tx.auth.spendingCondition.fee).toBe(BigInt('0'));
+    const tx = Codec.Transaction.decode(txHex);
+    expect(tx.sponsor === undefined ? 'standard' : 'sponsored').toEqual('sponsored');
+    expect(tx.fee).toBe(BigInt('0'));
   });
 });
 

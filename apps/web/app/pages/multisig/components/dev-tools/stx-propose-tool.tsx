@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Codec } from '@jannik-stacks/kit';
 import { Flex, styled } from 'leather-styles/jsx';
 import { buildUnsignedMultisigStxTransfer } from '~/features/multisig/transactions/build-stx-transfer';
 import { useProposeTransaction } from '~/features/multisig/transactions/use-propose-transaction';
@@ -7,7 +8,7 @@ import { useVaultStxTransactionFees } from '~/features/multisig/transactions/use
 import { useVaultAccount } from '~/features/multisig/vaults/use-vault-accounts';
 import { useToast } from '~/features/toasts/use-toast';
 
-import type { AuthNetworkId, Money, TransactionFeeTier } from '@leather.io/models';
+import { type AuthNetworkId, type Money, type TransactionFeeTier } from '@leather.io/models';
 import { Button } from '@leather.io/ui';
 import { createMoney, microStxToStx, stxToMicroStx } from '@leather.io/utils';
 
@@ -58,7 +59,7 @@ export function StxProposeTool() {
         fee,
       });
       propose.mutate(
-        { multisigAddress: account.multisigAddress, rawPayload: tx.serialize() },
+        { multisigAddress: account.multisigAddress, rawPayload: Codec.Transaction.encode(tx) },
         {
           onSuccess(result) {
             success(`Proposed ${result.id}`);

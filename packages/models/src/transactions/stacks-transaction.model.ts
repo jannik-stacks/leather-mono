@@ -1,10 +1,13 @@
-import type { OperationResponse } from '@stacks/blockchain-api-client';
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import {
+  type StacksApiMempoolTransaction,
+  type StacksApiTransaction,
+  type StacksApiTransactionResponse,
+} from './stacks-api.model';
 
-export type StacksTx = MempoolTransaction | Transaction;
+export type StacksTx = StacksApiMempoolTransaction | StacksApiTransaction;
 export type StacksTxStatus = 'failed' | 'pending' | 'success';
 
-export type StacksTransaction = OperationResponse['get_transaction'];
+export type StacksTransaction = StacksApiTransactionResponse;
 export type StacksMempoolTransaction = Extract<StacksTransaction, { receipt_time: number }>;
 export type StacksConfirmedTransaction = Exclude<StacksTransaction, StacksMempoolTransaction>;
 export type StacksMempoolTransactionStatus = StacksMempoolTransaction['status'];

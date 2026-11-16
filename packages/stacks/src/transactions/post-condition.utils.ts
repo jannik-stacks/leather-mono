@@ -1,41 +1,17 @@
-import { hexToBytes } from '@noble/hashes/utils';
-import {
-  BytesReader,
-  type PostCondition,
-  type PostConditionWire,
-  deserializePostConditionWire,
-  postConditionToWire,
-} from '@stacks/transactions';
+import { Codec, type PostCondition } from '@jannik-stacks/kit';
 
 import { isString } from '@leather.io/utils';
 
-export function getPostConditionFromString(postCondition: string): PostConditionWire {
+export function getPostConditionFromString(postCondition: string): PostCondition {
   try {
-    const reader = new BytesReader(hexToBytes(postCondition));
-    return deserializePostConditionWire(reader);
+    return Codec.Raw.PostCondition.decode(postCondition);
   } catch {
     throw new Error('Not a serialized post condition');
   }
 }
-
-export function ensurePostConditionWireFormat(
-  postCondition: string | PostCondition | PostConditionWire
-) {
-  if (isString(postCondition)) return getPostConditionFromString(postCondition);
-  if ('conditionType' in postCondition) return postCondition;
-  return postConditionToWire(postCondition);
+export function getPostCondition(postCondition: string | PostCondition): PostCondition {
+  return isString(postCondition) ? getPostConditionFromString(postCondition) : postCondition;
 }
-
-export function getPostCondition(
-  postCondition: string | PostCondition | PostConditionWire
-): PostConditionWire {
-  return isString(postCondition)
-    ? getPostConditionFromString(postCondition)
-    : ensurePostConditionWireFormat(postCondition);
-}
-
-export function getPostConditions(
-  postConditions?: (string | PostCondition | PostConditionWire)[]
-): PostConditionWire[] | undefined {
+export function getPostConditions(postConditions?: (string | PostCondition)[]) {
   return postConditions?.map(getPostCondition);
 }

@@ -3,7 +3,8 @@ import { type Account } from '@/store/accounts/accounts';
 import { t } from '@lingui/core/macro';
 
 import { makeAccountIdentifer } from '@leather.io/crypto';
-import { Approver, Cell, Text } from '@leather.io/ui/native';
+import { decodeStructuredMessage } from '@leather.io/stacks';
+import { Approver, Button, Cell, Text } from '@leather.io/ui/native';
 
 import { ApproverButtons } from '../components/approver-buttons';
 import { StructuredMessageSection } from '../structured-message.section';
@@ -12,6 +13,7 @@ interface BaseStxMessageApproverLayoutProps {
   origin: string;
   onApprove(): Promise<void>;
   onCloseApprover(): void;
+  onInvalidMessage(): void;
   accountId: string | null;
   accounts: Account[];
   messageToSign:
@@ -33,7 +35,12 @@ export function BaseStxMessageApproverLayout({
   accountId,
   accounts,
   messageToSign,
+  onInvalidMessage,
 }: BaseStxMessageApproverLayoutProps) {
+  const structuredMessage =
+    messageToSign.messageType === 'structured'
+      ? decodeStructuredMessage(messageToSign.message, messageToSign.domain)
+      : undefined;
   return (
     <Approver requester={origin}>
       <Approver.Container>
@@ -55,12 +62,23 @@ export function BaseStxMessageApproverLayout({
             </Cell.Root>
           </Approver.Section>
         )}
-        {messageToSign.messageType === 'structured' && (
-          <StructuredMessageSection messageToSign={messageToSign} />
+        {structuredMessage === null && (
+          <Approver.Section>
+            <Text>{t`Invalid structured message`}</Text>
+          </Approver.Section>
         )}
+        {structuredMessage && <StructuredMessageSection {...structuredMessage} />}
       </Approver.Container>
       <Approver.Footer>
-        <ApproverButtons onBack={onCloseApprover} onClose={onCloseApprover} onApprove={onApprove} />
+        {structuredMessage === null ? (
+          <Button onPress={onInvalidMessage}>{t`Close`}</Button>
+        ) : (
+          <ApproverButtons
+            onBack={onCloseApprover}
+            onClose={onCloseApprover}
+            onApprove={onApprove}
+          />
+        )}
       </Approver.Footer>
     </Approver>
   );

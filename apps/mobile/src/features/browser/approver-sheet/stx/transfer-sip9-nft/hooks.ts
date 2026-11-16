@@ -3,9 +3,8 @@ import { useCallback } from 'react';
 import { getApproverFee } from '@/features/approver/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
+import { Cl, Codec, Pc, type StacksNetwork } from '@jannik-stacks/kit';
 import { bytesToHex } from '@stacks/common';
-import { type StacksNetwork } from '@stacks/network';
-import { Pc, hexToCV, serializeCV } from '@stacks/transactions';
 
 import { type RpcRequest, type stxTransferSip9Nft } from '@leather.io/rpc';
 import {
@@ -57,7 +56,7 @@ export function useTransferSip9NftTxHex({
         publicKey: bytesToHex(signer.publicKey),
         contractAddress,
         contractName,
-        functionArgs: fnArgs.map(arg => serializeCV(arg)),
+        functionArgs: fnArgs.map(arg => Cl.serialize(arg)),
         functionName: 'transfer',
         nonce,
         fee,
@@ -72,11 +71,11 @@ export function useTransferSip9NftTxHex({
                 contractAddress,
                 assetName: contractAssetName,
               }),
-              hexToCV(request.params.assetId)
+              Cl.deserialize(request.params.assetId)
             ),
         ],
       });
-      const txHex = tx.serialize();
+      const txHex = Codec.Transaction.encode(tx);
       return txHex;
     },
     [

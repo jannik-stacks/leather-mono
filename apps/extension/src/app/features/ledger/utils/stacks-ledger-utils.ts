@@ -1,13 +1,6 @@
-import type { DeviceManagementKit } from '@ledgerhq/device-management-kit';
-import { ChainId } from '@stacks/network';
-import {
-  AddressVersion,
-  PubKeyEncoding,
-  createMessageSignature,
-  createTransactionAuthField,
-  deserializeTransaction,
-  isSingleSig,
-} from '@stacks/transactions';
+import { Codec, addressVersionFor } from '@jannik-stacks/kit';
+import { type DeviceManagementKit } from '@ledgerhq/device-management-kit';
+import { AddressVersion } from '@stacks/transactions';
 import StacksApp, {
   DMKTransport,
   LedgerError,
@@ -18,6 +11,7 @@ import StacksApp, {
 import { compare } from 'compare-versions';
 import { z } from 'zod';
 
+import { ChainId } from '@leather.io/models';
 import { whenStacksChainId } from '@leather.io/stacks';
 
 import { isPopupMode } from '@app/common/utils';
@@ -33,7 +27,7 @@ import {
   prepareLedgerDeviceForAppFn,
   versionObjectToVersionString,
 } from './generic-ledger-utils';
-import type { LedgerStacksApp } from './ledger-app';
+import { type LedgerStacksApp } from './ledger-app';
 
 export function requestPublicKeyForStxAccount({ app }: LedgerStacksApp) {
   return async (derivationPath: string) =>
@@ -41,19 +35,19 @@ export function requestPublicKeyForStxAccount({ app }: LedgerStacksApp) {
       derivationPath,
       // We pass mainnet as it expects something, however this is so it can return a formatted address
       // We only need the public key, and can derive the address later in any network format
-      AddressVersion.MainnetSingleSig
+      addressVersionFor('mainnet', 'single')
     );
 }
 
 export function showStxAddressOnDevice({ app }: LedgerStacksApp) {
-  return async (derivationPath: string, version: AddressVersion): Promise<ResponseAddress> =>
+  return async (derivationPath: string, version: number): Promise<ResponseAddress> =>
     app.showAddressAndPubKey(derivationPath, version);
 }
 
-export function stacksChainIdToSingleSigAddressVersion(chainId: number): AddressVersion {
+export function stacksChainIdToSingleSigAddressVersion(chainId: number): number {
   return whenStacksChainId(chainId)({
     [ChainId.Mainnet]: AddressVersion.MainnetSingleSig,
-    [ChainId.Testnet]: AddressVersion.TestnetSingleSig,
+    [ChainId.Testnet]: addressVersionFor('testnet', 'single'),
   });
 }
 
@@ -137,17 +131,17 @@ export function signLedgerStacksStructuredMessage({ app }: LedgerStacksApp) {
 }
 
 export function signStacksTransactionWithSignature(transaction: string, signatureVRS: Buffer) {
-  const deserializedTx = deserializeTransaction(transaction);
-  const signature = createMessageSignature(signatureVRS.toString('hex'));
-  const spendingCondition = deserializedTx.auth.spendingCondition;
-
-  if (isSingleSig(spendingCondition)) {
-    spendingCondition.signature = signature;
-    return deserializedTx;
+  const tx = Codec.Transaction.decode(transaction);
+  if (tx.signaturesRequired === undefined) {
+    tx.signature = signatureVRS.toString('hex');
+  } else {
+    (tx.signatures ??= []).push({
+      type: 'signature',
+      encoding: 'compressed',
+      value: signatureVRS.toString('hex'),
+    });
   }
-
-  spendingCondition.fields.push(createTransactionAuthField(PubKeyEncoding.Compressed, signature));
-  return deserializedTx;
+  return tx;
 }
 
 // Minimum version required to read master key fingerprint

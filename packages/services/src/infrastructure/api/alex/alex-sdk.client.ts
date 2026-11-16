@@ -1,3 +1,5 @@
+import { Cl, type ClarityValue, Codec, type PostCondition } from '@jannik-stacks/kit';
+import { postConditionToHex, serializeCV } from '@stacks/transactions';
 import { AlexSDK, Currency, TokenInfo } from 'alex-sdk';
 import { TxToBroadCast } from 'alex-sdk/dist/helpers/SwapHelper';
 import { AMMRoute } from 'alex-sdk/dist/utils/ammRouteResolver';
@@ -9,7 +11,10 @@ import { HttpCacheService } from '../../cache/http-cache.service';
 export type AlexSdkTokenInfo = TokenInfo;
 type AlexSdkCurrency = Currency;
 export type AlexSdkLatestPrices = Partial<Record<AlexSdkCurrency, number>>;
-type AlexSdkTxToBroadCast = TxToBroadCast;
+type AlexSdkTxToBroadCast = Omit<TxToBroadCast, 'functionArgs' | 'postConditions'> & {
+  functionArgs: ClarityValue[];
+  postConditions: PostCondition[];
+};
 export type AlexSdkAMMRoute = AMMRoute;
 
 @injectable()
@@ -67,12 +72,19 @@ export class AlexSdkClient {
     fromAmount: bigint,
     minToAmount: bigint
   ): Promise<AlexSdkTxToBroadCast> {
-    return await this.alex.runSwap(
+    const tx = await this.alex.runSwap(
       stxAddress,
       await this.toCurrency(from),
       await this.toCurrency(to),
       fromAmount,
       minToAmount
     );
+    return {
+      ...tx,
+      functionArgs: tx.functionArgs.map(arg => Cl.deserialize(serializeCV(arg))),
+      postConditions: tx.postConditions.map(pc =>
+        Codec.Raw.PostCondition.decode(postConditionToHex(pc))
+      ),
+    };
   }
 }

@@ -1,5 +1,4 @@
-import { STACKS_TESTNET } from '@stacks/network';
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec, STACKS_TESTNET } from '@jannik-stacks/kit';
 import { vi } from 'vitest';
 
 import type * as LeatherUtils from '@leather.io/utils';
@@ -35,9 +34,9 @@ async function httpResult(hex: string, status: number, body: string) {
   const errors: unknown[] = [];
   await stacksBroadcastTransaction({
     network: STACKS_TESTNET,
-    signedTx: deserializeTransaction(hex),
+    signedTx: Codec.Transaction.decode(hex),
     onSuccess(txid, tx) {
-      success.push({ txid, hex: tx.serialize() });
+      success.push({ txid, hex: Codec.Transaction.encode(tx) });
     },
     onError(error, reason) {
       errors.push({

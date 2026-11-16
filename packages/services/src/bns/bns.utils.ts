@@ -1,10 +1,11 @@
-import { ClarityType, type ClarityValue, cvToString, getCVTypeString } from '@stacks/transactions';
+import { type ClarityValue } from '@jannik-stacks/kit';
 
 import {
   type BnsName,
   type BnsProfileData,
   type BnsProfileDataAddresses,
 } from '@leather.io/models';
+import { formatClarityType, formatClarityValue } from '@leather.io/stacks';
 
 import {
   type BnsV2ApiAddressName,
@@ -83,7 +84,7 @@ export function mapBnsProfileDataAddresses(
 }
 
 function decodeBnsBufferCV(cv: ClarityValue | undefined) {
-  if (cv?.type !== ClarityType.Buffer) {
+  if (cv?.type !== 'buffer') {
     throw new Error('Unexpected BNS primary name response structure');
   }
   return Buffer.from(cv.value, 'hex').toString();
@@ -92,15 +93,15 @@ function decodeBnsBufferCV(cv: ClarityValue | undefined) {
 export function parseBnsContractGetPrimaryResponseCV(
   res: ClarityValue
 ): { name: string; namespace: string } | null {
-  if (res.type === ClarityType.ResponseOk) {
-    if (res.value.type === ClarityType.Tuple) {
+  if (res.type === 'ok') {
+    if (res.value.type === 'tuple') {
       return {
         name: decodeBnsBufferCV(res.value.value['name']),
         namespace: decodeBnsBufferCV(res.value.value['namespace']),
       };
-    } else if (res.value.type === ClarityType.OptionalSome) {
+    } else if (res.value.type === 'some') {
       const innerValue = res.value.value;
-      if (innerValue.type === ClarityType.Tuple) {
+      if (innerValue.type === 'tuple') {
         return {
           name: decodeBnsBufferCV(innerValue.value['name']),
           namespace: decodeBnsBufferCV(innerValue.value['namespace']),
@@ -108,12 +109,12 @@ export function parseBnsContractGetPrimaryResponseCV(
       }
     }
     throw new Error('Unexpected BNS primary name response structure');
-  } else if (res.type === ClarityType.ResponseErr) {
-    if (cvToString(res.value) === 'u131') {
+  } else if (res.type === 'err') {
+    if (formatClarityValue(res.value) === 'u131') {
       return null;
     }
-    throw new Error(cvToString(res.value));
+    throw new Error(formatClarityValue(res.value));
   } else {
-    throw new Error(`Unexpected BNS primary name Clarity Value type: ${getCVTypeString(res)}`);
+    throw new Error(`Unexpected BNS primary name Clarity Value type: ${formatClarityType(res)}`);
   }
 }

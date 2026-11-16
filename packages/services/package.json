@@ -34,6 +34,7 @@
   "dependencies": {
     "@bitflowlabs/core-sdk": "4.2.0",
     "@hirosystems/token-metadata-api-client": "1.2.0",
+    "@jannik-stacks/kit": "0.1.0",
     "@leather.io/bitcoin": "workspace:*",
     "@leather.io/constants": "workspace:*",
     "@leather.io/crypto": "workspace:*",
@@ -41,9 +42,7 @@
     "@leather.io/stacks": "workspace:*",
     "@leather.io/test-config": "workspace:*",
     "@leather.io/utils": "workspace:*",
-    "@stacks/common": "7.0.2",
     "@stacks/network": "7.0.2",
-    "@stacks/stacks-blockchain-api-types": "7.14.1",
     "@stacks/transactions": "7.5.0",
     "@velarprotocol/velar-sdk": "0.7.6",
     "alex-sdk": "3.1.0",
@@ -55,7 +54,8 @@
     "reflect-metadata": "0.2.2",
     "remeda": "2.21.2",
     "uuid": "11.1.0",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "@noble/hashes": "1.5.0"
   },
   "devDependencies": {
     "@leather.io/prettier-config": "workspace:*",

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import type * as StacksTransactions from '@stacks/transactions';
+import type * as Kit from '@jannik-stacks/kit';
 import { act, render } from '@testing-library/react';
 import { LedgerError } from '@zondax/ledger-stacks';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -7,8 +7,8 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type * as LeatherUtils from '@leather.io/utils';
 
 import { makeFakeDmk } from '@app/features/ledger/dmk/ledger-dmk.mocks';
-import type { LedgerSigningOutcome } from '@app/features/ledger/flow/ledger-flow.types';
-import type { LedgerTxSigningContext } from '@app/features/ledger/generic-flows/tx-signing/ledger-sign-tx.context';
+import { type LedgerSigningOutcome } from '@app/features/ledger/flow/ledger-flow.types';
+import { type LedgerTxSigningContext } from '@app/features/ledger/generic-flows/tx-signing/ledger-sign-tx.context';
 import type * as GenericLedgerUtils from '@app/features/ledger/utils/generic-ledger-utils';
 import {
   fakeLedgerSessionId,
@@ -38,9 +38,12 @@ const mocks = vi.hoisted(() => ({
   captureContext: vi.fn<(value: LedgerTxSigningContext) => void>(),
 }));
 
-vi.mock('@stacks/transactions', async importOriginal => {
-  const actual = await importOriginal<typeof StacksTransactions>();
-  return { ...actual, deserializeTransaction: () => null };
+vi.mock('@jannik-stacks/kit', async importOriginal => {
+  const actual = await importOriginal<typeof Kit>();
+  return {
+    ...actual,
+    Codec: { ...actual.Codec, Transaction: { ...actual.Codec.Transaction, decode: () => null } },
+  };
 });
 
 vi.mock('@app/features/ledger/dmk/ledger-dmk.context', () => ({

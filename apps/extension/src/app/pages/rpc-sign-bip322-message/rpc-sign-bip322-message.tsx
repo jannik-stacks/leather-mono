@@ -1,5 +1,4 @@
-import { ChainId } from '@stacks/network';
-
+import { ChainId } from '@leather.io/models';
 import { truncateMiddle } from '@leather.io/utils';
 
 import { closeWindow } from '@shared/utils';

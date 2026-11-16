@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 import { AxiosError } from 'axios';
 import { z } from 'zod';
 
@@ -10,7 +10,7 @@ import { RouteUrls } from '@shared/route-urls';
 interface ConfirmationRouteStacksSip10Args {
   decimals?: number;
   name?: string;
-  tx: StacksTransactionWire;
+  tx: StacksTransaction;
 }
 
 const ownedUtxoSchema = z.object({
@@ -101,10 +101,10 @@ export function useSendFormNavigate() {
           state: { ...args, mode: 'propose' } satisfies BtcProposalConfirmationRouteState,
         });
       },
-      toConfirmAndSignStxTransaction(tx: StacksTransactionWire, showFeeChangeWarning: boolean) {
+      toConfirmAndSignStxTransaction(tx: StacksTransaction, showFeeChangeWarning: boolean) {
         return navigate(RouteUrls.SendStxConfirmation, {
           state: {
-            tx: tx.serialize(),
+            tx: Codec.Transaction.encode(tx),
             showFeeChangeWarning,
           } satisfies StacksConfirmationRouteState,
         });
@@ -118,7 +118,7 @@ export function useSendFormNavigate() {
           state: {
             decimals,
             token: name,
-            tx: tx.serialize(),
+            tx: Codec.Transaction.encode(tx),
           } satisfies StacksConfirmationRouteState,
         });
       },

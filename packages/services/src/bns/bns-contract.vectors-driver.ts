@@ -1,10 +1,10 @@
-import { deserializeCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 
 import { parseBnsContractGetPrimaryResponseCV } from './bns.utils';
 
 export function primary(hex: string) {
   try {
-    return parseBnsContractGetPrimaryResponseCV(deserializeCV(hex));
+    return parseBnsContractGetPrimaryResponseCV(Cl.deserialize(hex));
   } catch (error) {
     if (!(error instanceof Error)) throw error;
     return { error: error.message };

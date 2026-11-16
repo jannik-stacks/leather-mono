@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
 
+import { type StacksTransaction } from '@jannik-stacks/kit';
 import type * as btc from '@scure/btc-signer';
-import { type StacksTransactionWire } from '@stacks/transactions';
 
-import type { SupportedBlockchains } from '@leather.io/models';
+import { type SupportedBlockchains } from '@leather.io/models';
 
 import { type BaseLedgerOperationContext } from '../../utils/generic-ledger-utils';
 
@@ -20,7 +20,7 @@ interface BitcoinLedgerSigningContext extends BaseLedgerTxSigningContext {
 
 interface StacksLedgerSigningContext extends BaseLedgerTxSigningContext {
   chain: 'stacks';
-  transaction: StacksTransactionWire | null;
+  transaction: StacksTransaction | null;
 }
 
 export type LedgerTxSigningContext = BitcoinLedgerSigningContext | StacksLedgerSigningContext;

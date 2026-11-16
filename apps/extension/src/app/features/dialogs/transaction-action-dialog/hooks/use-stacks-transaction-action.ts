@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-import { AuthType } from '@stacks/transactions';
 import { z } from 'zod';
 
 import {
@@ -70,13 +69,13 @@ export function useStacksTransactionAction({ actionType, txid }: UseStacksTransa
   const onSubmitIncreaseFeeTx = useCallback(
     async (fee: number) => {
       if (!tx || !rawTx) return;
-      if (rawTx.auth.authType === AuthType.Sponsored) {
+      if (rawTx.sponsor !== undefined) {
         toast.error(
           'The fee of a sponsored transaction is paid by its sponsor and cannot be increased'
         );
         return;
       }
-      rawTx.setFee(stxToMicroStx(fee).toString());
+      rawTx.fee = BigInt(stxToMicroStx(fee).toString());
       await refreshAccountData();
       await stacksBroadcastTransaction(rawTx);
     },

@@ -4,7 +4,11 @@ import { createRoot } from 'react-dom/client';
 
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
+import { RpcErrorCode } from '@leather.io/rpc';
+
 import type { UnsignedMessage } from '@shared/signature/signature-types';
+
+import { RpcStacksMessageSigning } from '@app/pages/rpc-sign-stacks-message/rpc-sign-stacks-message';
 
 import { useSignStacksMessage } from './use-sign-stacks-message';
 
@@ -12,6 +16,46 @@ Reflect.set(globalThis, 'IS_REACT_ACT_ENVIRONMENT', true);
 
 const h = vi.hoisted(() => ({
   sign: vi.fn(),
+  sendMessage: vi.fn(),
+  closeWindow: vi.fn(),
+  searchParams: new URLSearchParams({
+    requestId: 'invalid-request',
+    messageType: 'structured',
+    message: '03',
+    domain: '03',
+  }),
+}));
+
+vi.mock('@app/common/initial-search-params', () => ({ initialSearchParams: h.searchParams }));
+vi.mock('@app/common/hooks/use-default-request-search-params', () => ({
+  useDefaultRequestParams() {
+    return { frameId: 2, tabId: 7, origin: 'https://app.example' };
+  },
+}));
+vi.mock('@shared/messaging/send-message-to-originating-frame', () => ({
+  sendMessageToOriginatingFrame: h.sendMessage,
+}));
+vi.mock('@shared/utils', () => ({ closeWindow: h.closeWindow }));
+vi.mock('@app/features/container/headers/popup.header', () => ({
+  PopupHeader() {
+    return null;
+  },
+}));
+vi.mock('@app/features/stacks-message-signer/stacks-message-signing', () => ({
+  StacksMessageSigning() {
+    return createElement('button', null, 'Approve');
+  },
+}));
+vi.mock('@app/components/generic-error/generic-error', () => ({
+  GenericError({ title, body, onClose }: { title: string; body: string; onClose(): void }) {
+    return createElement(
+      'div',
+      null,
+      title,
+      body,
+      createElement('button', { onClick: onClose }, 'Close')
+    );
+  },
 }));
 
 vi.mock('@shared/utils/analytics', () => ({ analytics: { track: vi.fn() } }));
@@ -104,4 +148,32 @@ describe(useSignStacksMessage.name, () => {
     expect(rendered.onSignMessageCancelled).not.toHaveBeenCalled();
     expect(rendered.onSignMessageCompleted).not.toHaveBeenCalled();
   });
+});
+
+describe('invalid structured message requests', () => {
+  test.each(['03', '0c00000000', 'garbage'])(
+    'shows a validation error and returns INVALID_PARAMS for domain %s',
+    domain => {
+      vi.clearAllMocks();
+      h.searchParams.set('domain', domain);
+      const container = document.createElement('div');
+      const root = createRoot(container);
+      act(() => root.render(createElement(RpcStacksMessageSigning)));
+      expect(container.textContent).toContain('Invalid structured message');
+      expect(container.textContent).not.toContain('Approve');
+      const close = container.querySelector('button');
+      if (!close) throw new Error('Missing error close button');
+      act(() => close.click());
+      expect(h.sendMessage).toHaveBeenCalledWith(
+        { frameId: 2, tabId: 7 },
+        expect.objectContaining({
+          id: 'invalid-request',
+          error: { code: RpcErrorCode.INVALID_PARAMS, message: 'Invalid structured message' },
+        })
+      );
+      expect(h.sign).not.toHaveBeenCalled();
+      expect(h.closeWindow).toHaveBeenCalledOnce();
+      act(() => root.unmount());
+    }
+  );
 });

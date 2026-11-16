@@ -1,8 +1,4 @@
-import {
-  type NonFungiblePostConditionWire,
-  PostConditionPrincipalId,
-  addressToString,
-} from '@stacks/transactions';
+import { type PostCondition } from '@jannik-stacks/kit';
 
 import { Approver, Box, Cell, CircledFunctionIcon, Sip10AvatarIcon } from '@leather.io/ui/native';
 import { truncateMiddle } from '@leather.io/utils';
@@ -11,16 +7,15 @@ import { formatPostConditionMessage } from './post-conditions.utils';
 
 interface NFTPostConditionProps {
   stacksAddress: string;
-  postCondition: NonFungiblePostConditionWire;
+  postCondition: Extract<PostCondition, { type: 'nft-postcondition' }>;
 }
 
 export function NFTPostCondition({ stacksAddress, postCondition }: NFTPostConditionProps) {
-  const contractAddress = addressToString(postCondition.asset.address);
-  const contractName = postCondition.asset.contractName.content;
-  const contractId = `${contractAddress}.${contractName}`;
-  const assetName = postCondition.asset.assetName.content;
+  const contractId = postCondition.asset.split('::')[0] ?? '';
+  const [contractAddress = '', contractName = ''] = contractId.split('.');
+  const assetName = postCondition.asset.split('::')[1] ?? '';
   const visibleAssetId = `${truncateMiddle(contractAddress, 4)}.${contractName}::${assetName}`;
-  const isContractPrincipal = postCondition.principal.prefix === PostConditionPrincipalId.Contract;
+  const isContractPrincipal = postCondition.address.includes('.');
   const title = formatPostConditionMessage({
     stacksAddress,
     isContractPrincipal,

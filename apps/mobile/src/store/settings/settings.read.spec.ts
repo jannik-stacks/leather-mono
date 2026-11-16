@@ -1,7 +1,7 @@
-import { ChainId, TransactionVersion } from '@stacks/network';
+import { TransactionVersion } from '@stacks/network';
 import { describe, expect, test } from 'vitest';
 
-import { type NetworkConfiguration, defaultNetworksKeyedById } from '@leather.io/models';
+import { ChainId, type NetworkConfiguration, defaultNetworksKeyedById } from '@leather.io/models';
 
 import { getStacksNetworkFromNetworkConfig } from './settings.read';
 
@@ -27,20 +27,20 @@ describe(getStacksNetworkFromNetworkConfig.name, () => {
   test('that it returns a mainnet network for the mainnet configuration', () => {
     const network = getStacksNetworkFromNetworkConfig(defaultNetworksKeyedById.mainnet);
     expect(network.chainId).toEqual(ChainId.Mainnet);
-    expect(network.transactionVersion).toEqual(TransactionVersion.Mainnet);
+    expect(network.version === 'mainnet' ? 0 : 128).toEqual(TransactionVersion.Mainnet);
   });
 
   test('that it returns a testnet network for the testnet configuration', () => {
     const network = getStacksNetworkFromNetworkConfig(defaultNetworksKeyedById.testnet);
     expect(network.chainId).toEqual(ChainId.Testnet);
-    expect(network.transactionVersion).toEqual(TransactionVersion.Testnet);
+    expect(network.version === 'mainnet' ? 0 : 128).toEqual(TransactionVersion.Testnet);
   });
 
   test('that it preserves an unknown custom chain id and falls back to testnet behavior instead of throwing', () => {
     expect(() => getStacksNetworkFromNetworkConfig(customChainIdNetwork)).not.toThrow();
     const network = getStacksNetworkFromNetworkConfig(customChainIdNetwork);
     expect(network.chainId).toEqual(256);
-    expect(network.transactionVersion).toEqual(TransactionVersion.Testnet);
+    expect(network.version === 'mainnet' ? 0 : 128).toEqual(TransactionVersion.Testnet);
     expect(network.client.baseUrl).toEqual('https://api.private-1.hiro.so');
   });
 });
@@ -59,7 +59,10 @@ test('loads persisted numeric chain IDs and subnets without changing the parent 
         stacks: { ...customChainIdNetwork.chain.stacks, ...chain },
       },
     });
-    return { chainId: network.chainId, transactionVersion: network.transactionVersion };
+    return {
+      chainId: network.chainId,
+      transactionVersion: network.version === 'mainnet' ? 0 : 128,
+    };
   });
   expect(observed).toEqual([
     { chainId: 1, transactionVersion: 0 },

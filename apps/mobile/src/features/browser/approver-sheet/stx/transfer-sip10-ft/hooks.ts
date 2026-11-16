@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { getTransferSip10TxHex } from '@/features/approver/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
-import { type StacksNetwork } from '@stacks/network';
+import { type StacksNetwork } from '@jannik-stacks/kit';
 
 import { useOnMount } from '@leather.io/ui/native';
 

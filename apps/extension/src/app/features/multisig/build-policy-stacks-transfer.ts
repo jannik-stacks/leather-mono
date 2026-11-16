@@ -1,12 +1,6 @@
-import type { StacksNetwork } from '@stacks/network';
-import {
-  Pc,
-  PostConditionMode,
-  type StacksTransactionWire,
-  serializeCV,
-} from '@stacks/transactions';
+import { Cl, Pc, type StacksNetwork, type StacksTransaction } from '@jannik-stacks/kit';
 
-import type { Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 import {
   TransactionTypes,
   createSip10FnArgs,
@@ -16,7 +10,7 @@ import {
 } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
-import type { PolicyStore } from '@app/store/policy/policy-store.utils';
+import { type PolicyStore } from '@app/store/policy/policy-store.utils';
 
 // Proposals commit to a canonical nonce 0; the coordinator assigns the real
 // nonce when promoting the proposal to pending before broadcast.
@@ -40,7 +34,7 @@ export async function buildUnsignedPolicyStxTransfer({
   amount = createMoney(0, 'STX'),
   fee = createMoney(0, 'STX'),
   memo,
-}: BuildUnsignedPolicyStxTransferArgs): Promise<StacksTransactionWire> {
+}: BuildUnsignedPolicyStxTransferArgs): Promise<StacksTransaction> {
   return generateStacksUnsignedTransaction({
     txType: TransactionTypes.StxTokenTransfer,
     recipient,
@@ -73,7 +67,7 @@ export async function buildUnsignedPolicySip10Transfer({
   baseUnitAmount = '0',
   fee = createMoney(0, 'STX'),
   memo,
-}: BuildUnsignedPolicySip10TransferArgs): Promise<StacksTransactionWire> {
+}: BuildUnsignedPolicySip10TransferArgs): Promise<StacksTransaction> {
   const { contractAddress, contractAssetName, contractName } = getStacksAssetStringParts(assetId);
 
   const functionArgs = createSip10FnArgs({
@@ -88,13 +82,13 @@ export async function buildUnsignedPolicySip10Transfer({
     contractAddress,
     contractName,
     functionName: 'transfer',
-    functionArgs: functionArgs.map(arg => serializeCV(arg)),
+    functionArgs: functionArgs.map(arg => Cl.serialize(arg)),
     postConditions: [
       Pc.principal(policy.address)
         .willSendEq(baseUnitAmount)
-        .ft(formatContractIdString({ contractAddress, contractName }), contractAssetName),
+        .ft(`${formatContractIdString({ contractAddress, contractName })}::${contractAssetName}`),
     ],
-    postConditionMode: PostConditionMode.Deny,
+    postConditionMode: 'deny',
     fee,
     nonce: placeholderNonce,
     network,

@@ -1,4 +1,6 @@
-import { deserializeCV, deserializeTransaction, serializeCV } from '@stacks/transactions';
+import { Cl, Codec } from '@jannik-stacks/kit';
+import { sha512_256 } from '@noble/hashes/sha512';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 import { dehydrate } from '@tanstack/react-query';
 import type * as Persistence from '@tanstack/react-query-persist-client';
 import { BigNumber } from 'bignumber.js';
@@ -56,7 +58,7 @@ export async function persistAndRestore(existing: string, rawTx: string, cvHex: 
     initial[0]();
     queryClient.setQueryData(['stacks-vector-cache'], {
       rawTx,
-      cv: deserializeCV(cvHex),
+      cv: Cl.deserialize(cvHex),
       balance: 9007199254740993n,
       amount: new BigNumber('9007199254740993.125'),
       poxAddress: Uint8Array.of(0, 7, 255),
@@ -77,13 +79,13 @@ export async function persistAndRestore(existing: string, rawTx: string, cvHex: 
     await restored[1];
     restored[0]();
     const loaded = loadedSchema.parse(queryClient.getQueryData(['stacks-vector-cache']));
-    const transaction = deserializeTransaction(loaded.rawTx);
+    const transaction = Codec.Transaction.decode(loaded.rawTx);
     return {
       written: z.string().parse(written.REACT_QUERY_OFFLINE_CACHE),
       loaded: {
-        rawTx: transaction.serialize(),
-        txid: transaction.txid(),
-        clarity: serializeCV(loaded.cv),
+        rawTx: Codec.Transaction.encode(transaction),
+        txid: bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(transaction)))),
+        clarity: Cl.serialize(loaded.cv),
         balance: loaded.balance.toString(),
         amount: loaded.amount.toString(),
         poxAddress: Buffer.from(loaded.poxAddress).toString('hex'),

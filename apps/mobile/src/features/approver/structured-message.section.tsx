@@ -1,48 +1,37 @@
 import { Divider } from '@/components/divider';
 import { ClarityValueListDisplayer } from '@/features/approver/clarity-value.section';
+import { type ClarityValue } from '@jannik-stacks/kit';
 import { t } from '@lingui/core/macro';
-import { ChainId } from '@stacks/network';
-import {
-  ClarityType,
-  type ClarityValue,
-  type StringAsciiCV,
-  type TupleCV,
-  type UIntCV,
-  cvToString,
-  deserializeCV,
-} from '@stacks/transactions';
 
-import { stacksChainIdToCoreNetworkMode } from '@leather.io/stacks';
+import { ChainId } from '@leather.io/models';
+import {
+  type StructuredMessageDomain,
+  formatClarityValue,
+  stacksChainIdToCoreNetworkMode,
+} from '@leather.io/stacks';
 import { Approver, Box, Text } from '@leather.io/ui/native';
 import { capitalize } from '@leather.io/utils';
 
 function cvToDisplay(cv: ClarityValue): string {
-  return cvToString(cv).replaceAll('"', '');
+  return formatClarityValue(cv).replaceAll('"', '');
 }
 function chainIdToDisplay(chainIdCv: ClarityValue): string | undefined {
-  if (chainIdCv.type !== ClarityType.UInt) return undefined;
-  const chainIdString = cvToString(chainIdCv);
+  if (chainIdCv.type !== 'uint') return undefined;
+  const chainIdString = formatClarityValue(chainIdCv);
   const chainId = parseInt(chainIdString.replace('u', ''), 10);
-  if (!Object.values(ChainId).includes(chainId)) return undefined;
+  if (chainId !== ChainId.Mainnet && chainId !== ChainId.Testnet) return undefined;
   return capitalize(stacksChainIdToCoreNetworkMode(chainId));
 }
 
-type StructuredMessageDataDomain = TupleCV<{
-  name: StringAsciiCV;
-  version: StringAsciiCV;
-  'chain-id': UIntCV;
-}>;
-
 interface StructuredMessageSectionProps {
-  messageToSign: { messageType: 'structured'; message: string; domain: string };
+  message: ClarityValue;
+  domain: StructuredMessageDomain;
 }
 
-export function StructuredMessageSection({ messageToSign }: StructuredMessageSectionProps) {
-  const dom: StructuredMessageDataDomain = deserializeCV(messageToSign.domain);
-
-  const domainName = cvToDisplay(dom.value.name);
-  const domainVersion = cvToDisplay(dom.value.version);
-  const domainChainName = chainIdToDisplay(dom.value['chain-id']);
+export function StructuredMessageSection({ message, domain }: StructuredMessageSectionProps) {
+  const domainName = cvToDisplay(domain.value.name);
+  const domainVersion = cvToDisplay(domain.value.version);
+  const domainChainName = chainIdToDisplay(domain.value['chain-id']);
   return (
     <Approver.Section>
       <Text variant="label01">{t`Message`}</Text>
@@ -54,7 +43,7 @@ export function StructuredMessageSection({ messageToSign }: StructuredMessageSec
           </Text>
         </Box>
         <Divider />
-        <ClarityValueListDisplayer val={deserializeCV(messageToSign.message)} />
+        <ClarityValueListDisplayer val={message} />
       </Box>
     </Approver.Section>
   );

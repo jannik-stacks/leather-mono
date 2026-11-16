@@ -1,5 +1,6 @@
 import { useSettings } from '@/store/settings/settings';
-import { ChainId } from '@stacks/network';
+
+import { ChainId } from '@leather.io/models';
 
 const stacksMainnetChainId: number = ChainId.Mainnet;
 

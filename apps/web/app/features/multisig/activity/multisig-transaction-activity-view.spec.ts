@@ -1,13 +1,5 @@
-import {
-  Pc,
-  PostConditionMode,
-  noneCV,
-  principalCV,
-  privateKeyToPublic,
-  publicKeyToHex,
-  serializeCV,
-  uintCV,
-} from '@stacks/transactions';
+import { Cl, Codec, Pc, privateKeyToPublicKey } from '@jannik-stacks/kit';
+import { publicKeyToHex } from '@stacks/transactions';
 import { activityCounterpartyOffset } from '~/queries/activity/blockchain-activity.query';
 
 import {
@@ -24,7 +16,7 @@ import { createMoney, truncateMiddle } from '@leather.io/utils';
 import { createMultisigTransactionActivityView } from './multisig-transaction-activity-view';
 
 const privateKeys = ['11'.repeat(32) + '01', '22'.repeat(32) + '01'];
-const publicKeys = privateKeys.map(key => publicKeyToHex(privateKeyToPublic(key)));
+const publicKeys = privateKeys.map(key => publicKeyToHex(privateKeyToPublicKey(key)));
 const recipient = 'ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH';
 
 const stxContext = {
@@ -48,7 +40,7 @@ async function generateStxTransferPayload() {
     numSignatures: 2,
     useNonSequentialMultiSig: true,
   });
-  return tx.serialize();
+  return Codec.Transaction.encode(tx);
 }
 
 async function generateContractCallPayload() {
@@ -62,7 +54,7 @@ async function generateContractCallPayload() {
     nonce: 0,
     publicKey: publicKeys[0],
   });
-  return tx.serialize();
+  return Codec.Transaction.encode(tx);
 }
 
 const tokenContractId = 'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT.sbtc-token';
@@ -83,28 +75,28 @@ const sbtcAsset: Sip10Asset = {
 
 async function generateSip10TransferPayload() {
   const functionArgs = [
-    uintCV(2_500_000),
-    principalCV(stxContext.multisigAddress),
-    principalCV(recipient),
-    noneCV(),
+    Cl.uint(2_500_000),
+    Cl.principal(stxContext.multisigAddress),
+    Cl.principal(recipient),
+    Cl.none(),
   ];
   const tx = await generateStacksUnsignedTransaction({
     txType: TransactionTypes.ContractCall,
     contractAddress: 'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT',
     contractName: 'sbtc-token',
     functionName: 'transfer',
-    functionArgs: functionArgs.map(arg => serializeCV(arg)),
-    postConditionMode: PostConditionMode.Deny,
+    functionArgs: functionArgs.map(arg => Cl.serialize(arg)),
+    postConditionMode: 'deny',
     postConditions: [
       Pc.principal(stxContext.multisigAddress)
         .willSendEq(2_500_000)
-        .ft(tokenContractId, 'sbtc-token'),
+        .ft(`${tokenContractId}::${'sbtc-token'}`),
     ],
     fee: createMoney(250, 'STX'),
     nonce: 0,
     publicKey: publicKeys[0],
   });
-  return tx.serialize();
+  return Codec.Transaction.encode(tx);
 }
 
 async function generateContractDeployPayload() {
@@ -116,7 +108,7 @@ async function generateContractDeployPayload() {
     nonce: 0,
     publicKey: publicKeys[0],
   });
-  return tx.serialize();
+  return Codec.Transaction.encode(tx);
 }
 
 function makeTransaction(

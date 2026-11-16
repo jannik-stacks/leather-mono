@@ -1,20 +1,21 @@
-import type {
-  AbstractTransaction,
-  AddressTransactionWithTransfers,
-  ContractCallTransaction,
-  SmartContractTransaction,
-  TokenTransferTransaction,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+
+import {
+  type StacksApiAbstractTransaction,
+  type StacksApiAddressTransactionWithTransfers,
+  type StacksApiContractCallTransaction,
+  type StacksApiSmartContractTransaction,
+  type StacksApiTokenTransferTransaction,
+  type StacksApiTransaction,
+} from '@leather.io/models';
 
 import * as hiroMappingContractVectorDriver from './hiro-mapping-contract.vectors-driver';
 import { filterVerboseUnusedTransactionWithTransfersData } from './hiro-stacks-api.utils';
 
 function createMockAbstractTransaction(
-  overrides: Partial<AbstractTransaction> = {}
-): AbstractTransaction {
+  overrides: Partial<StacksApiAbstractTransaction> = {}
+): StacksApiAbstractTransaction {
   return {
     tx_id: '0x0',
     nonce: 0,
@@ -54,8 +55,8 @@ function createMockAbstractTransaction(
 }
 
 function createMockTokenTransferTransaction(
-  overrides: Partial<AbstractTransaction> = {}
-): TokenTransferTransaction {
+  overrides: Partial<StacksApiAbstractTransaction> = {}
+): StacksApiTokenTransferTransaction {
   return {
     ...createMockAbstractTransaction(overrides),
     tx_type: 'token_transfer',
@@ -63,20 +64,22 @@ function createMockTokenTransferTransaction(
   };
 }
 
-function createMockTransactionWithTransfers(tx: Transaction): AddressTransactionWithTransfers {
+function createMockTransactionWithTransfers(
+  tx: StacksApiTransaction
+): StacksApiAddressTransactionWithTransfers {
   return { tx, stx_sent: '0', stx_received: '0', stx_transfers: [] };
 }
 
-function assertTxType<T extends Transaction['tx_type']>(
-  tx: Transaction,
+function assertTxType<T extends StacksApiTransaction['tx_type']>(
+  tx: StacksApiTransaction,
   txType: T
-): asserts tx is Extract<Transaction, { tx_type: T }> {
+): asserts tx is Extract<StacksApiTransaction, { tx_type: T }> {
   if (tx.tx_type !== txType) throw new Error(`Expected ${txType}, received ${tx.tx_type}`);
 }
 
 describe('filterVerboseUnusedTransactionWithTransfersData', () => {
   it('should redact the source_code for smart_contract transactions', () => {
-    const smartContractTx: SmartContractTransaction = {
+    const smartContractTx: StacksApiSmartContractTransaction = {
       ...createMockAbstractTransaction(),
       tx_type: 'smart_contract',
       smart_contract: {
@@ -93,7 +96,7 @@ describe('filterVerboseUnusedTransactionWithTransfersData', () => {
   });
 
   it('should redact function_args and tx_result for contract_call transactions', () => {
-    const contractCallTx: ContractCallTransaction = {
+    const contractCallTx: StacksApiContractCallTransaction = {
       ...createMockAbstractTransaction({ tx_result: { hex: '0xresult', repr: 'result_repr' } }),
       tx_type: 'contract_call',
       contract_call: {
@@ -120,7 +123,7 @@ describe('filterVerboseUnusedTransactionWithTransfersData', () => {
   });
 
   it('should handle contract_call transactions without function_args', () => {
-    const contractCallTx: ContractCallTransaction = {
+    const contractCallTx: StacksApiContractCallTransaction = {
       ...createMockAbstractTransaction({ tx_result: { hex: '0xresult', repr: 'result_repr' } }),
       tx_type: 'contract_call',
       contract_call: {

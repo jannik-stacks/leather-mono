@@ -3,14 +3,16 @@ import { useAccounts } from '@/store/accounts/accounts.read';
 import { type App } from '@/store/apps/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
-import { deserializeCV } from '@stacks/transactions';
 
 import {
+  RpcErrorCode,
   type RpcRequest,
   type RpcResponse,
+  createRpcErrorResponse,
   createRpcSuccessResponse,
   type stxSignStructuredMessage,
 } from '@leather.io/rpc';
+import { decodeStructuredMessage, invalidStructuredMessageError } from '@leather.io/stacks';
 
 interface StxSignStructuredMessageApproverProps {
   app: App;
@@ -31,13 +33,21 @@ export function StxSignStructuredMessageApprover({
   const signer = useStacksSigners().fromAccountId(accountId)[0];
   assertStacksSigner(signer);
 
+  function onInvalidMessage() {
+    sendResult(
+      createRpcErrorResponse('stx_signStructuredMessage', {
+        id: request.id,
+        error: { code: RpcErrorCode.INVALID_PARAMS, message: invalidStructuredMessageError },
+      })
+    );
+  }
+
   async function onApprove() {
     assertStacksSigner(signer);
 
-    const signatureData = await signer.signStructuredMessage(
-      deserializeCV(request.params.message),
-      deserializeCV(request.params.domain)
-    );
+    const payload = decodeStructuredMessage(request.params.message, request.params.domain);
+    if (!payload) return onInvalidMessage();
+    const signatureData = await signer.signStructuredMessage(payload.message, payload.domain);
     const response = createRpcSuccessResponse('stx_signStructuredMessage', {
       id: request.id,
       result: signatureData,
@@ -52,6 +62,7 @@ export function StxSignStructuredMessageApprover({
       messageToSign={{ ...request.params, messageType: 'structured' }}
       onApprove={onApprove}
       onCloseApprover={closeApprover}
+      onInvalidMessage={onInvalidMessage}
       origin={app.origin}
     />
   );

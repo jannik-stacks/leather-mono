@@ -1,17 +1,8 @@
-import {
-  type ClarityValue,
-  type StringAsciiCV,
-  type TupleCV,
-  type UIntCV,
-} from '@stacks/transactions';
+import { type Cl, type ClarityValue } from '@jannik-stacks/kit';
 
 export type SignedMessageType = 'utf8' | 'structured';
 
-export type StructuredMessageDataDomain = TupleCV<{
-  name: StringAsciiCV;
-  version: StringAsciiCV;
-  'chain-id': UIntCV;
-}>;
+export type StructuredMessageDataDomain = Cl.Types.Tuple;
 
 interface AbstractUnsignedMessage {
   messageType: SignedMessageType;

@@ -8,14 +8,14 @@ describe('getNonFungibleTokenId', () => {
   it('should return 0 for a non-uint clarity value', () => {
     // 0x02 is a Clarity buffer type, not a uint (which is 0x01)
     // Example: buffer with one byte 0x00
-    expect(getNonFungibleTokenId('0200000001')).toBe(0);
+    expect(getNonFungibleTokenId('020000000100')).toBe(0);
   });
   it('should return the correct number for a uint clarity value', () => {
     // The number 1234 in clarity uint: 0x000004d2
     // In Clarity: UInt(1234) is encoded as: 0x00 00 00 00 00 00 04 d2
     // But since we don't actually call hexToCV, this is just for demonstration.
     // This test will succeed only if hexToCV returns { type: 'uint', value: 1234}
-    expect(typeof getNonFungibleTokenId('00000000000004d2')).toBe('number');
+    expect(getNonFungibleTokenId('01000000000000000000000000000004d2')).toBe(1234);
   });
 });
 

@@ -1,10 +1,15 @@
-import { bytesToHex, hexToBytes } from '@stacks/common';
-import { Cl, Pc } from '@stacks/transactions';
+import { Cl, Pc, type PostCondition, type Transaction } from '@jannik-stacks/kit';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 import axios from 'axios';
 import BigNumber from 'bignumber.js';
 
 import { deconstructBtcAddress, ecdsaPublicKeyToSchnorr } from '@leather.io/bitcoin';
-import type { ExecutionConstraint, Money, NetworkModes } from '@leather.io/models';
+import {
+  type ExecutionConstraint,
+  type Money,
+  type NetworkModes,
+  type StacksContractCallSwapExecutionData,
+} from '@leather.io/models';
 import { cleanHex } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
@@ -94,12 +99,15 @@ export function getSbtcWithdrawalContractCallData({
   quoteAmount,
   withdrawalSweepTxFee,
   network,
-}: getSbtcWithdrawalContractCallDataArgs) {
+}: getSbtcWithdrawalContractCallDataArgs): Omit<
+  StacksContractCallSwapExecutionData,
+  'executionType' | 'providerId' | 'quote' | 'postConditions'
+> & { postConditions: PostCondition[] } {
   const quoteAmountSats = quoteAmount.amount.toNumber();
   const { type, hashbytes } = deconstructBtcAddress(withdrawalBtcAddress);
 
   const recipient = {
-    version: Cl.bufferFromHex(type),
+    version: Cl.buffer(type),
     hashbytes: Cl.buffer(hashbytes),
   };
 
@@ -107,7 +115,7 @@ export function getSbtcWithdrawalContractCallData({
 
   const sbtcPostCondition = Pc.principal(stxAddress)
     .willSendEq(quoteAmountSats + withdrawalSweepTxFee)
-    .ft(`${sbtcAddress}.sbtc-token`, 'sbtc-token');
+    .ft(`${`${sbtcAddress}.sbtc-token`}::${'sbtc-token'}`);
 
   return {
     contractAddress: sbtcAddress,
@@ -115,7 +123,7 @@ export function getSbtcWithdrawalContractCallData({
     functionName: 'initiate-withdrawal-request',
     functionArgs: [Cl.uint(quoteAmountSats), Cl.tuple(recipient), Cl.uint(withdrawalSweepTxFee)],
     postConditions: [sbtcPostCondition],
-    postConditionMode: 'deny',
+    postConditionMode: 'deny' satisfies Transaction['postConditionMode'],
   };
 }
 

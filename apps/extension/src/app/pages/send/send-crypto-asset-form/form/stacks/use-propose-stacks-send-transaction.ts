@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router';
 
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 
 import { getErrorDetail } from '@leather.io/services';
 import { deriveStxMultisigAddress } from '@leather.io/stacks';
@@ -16,7 +16,7 @@ import { useCurrentStacksAccount } from '@app/store/accounts/blockchain/stacks/s
 import { useCurrentNetwork } from '@app/store/networks/networks.selectors';
 import { useCurrentPolicy } from '@app/store/policy/policy.selectors';
 
-import type { ProposalSentSummaryState } from '../../../sent-summary/proposal-sent-summary';
+import { type ProposalSentSummaryState } from '../../../sent-summary/proposal-sent-summary';
 
 const placeholderNonce = 0;
 
@@ -35,7 +35,7 @@ export function useProposeStacksSendTransaction() {
   const { proposeMultisigTransaction, isProposing } = useProposeMultisigTransaction();
 
   async function proposeSendTransaction(
-    unsignedTx: StacksTransactionWire,
+    unsignedTx: StacksTransaction,
     summary: ProposalSentSummaryState
   ) {
     try {
@@ -56,8 +56,8 @@ export function useProposeStacksSendTransaction() {
       if (getTxSenderAddress(unsignedTx) !== policy.address)
         throw new Error('Transaction sender does not match the policy address');
 
-      unsignedTx.setNonce(placeholderNonce);
-      const rawPayload = unsignedTx.serialize();
+      unsignedTx.nonce = BigInt(placeholderNonce);
+      const rawPayload = Codec.Transaction.encode(unsignedTx);
 
       const proposal = await proposeMultisigTransaction({
         network: getPolicyAuthNetworkId('stacks', network),

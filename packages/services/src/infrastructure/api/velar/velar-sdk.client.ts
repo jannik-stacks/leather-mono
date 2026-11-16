@@ -1,3 +1,17 @@
+import {
+  Cl,
+  type ClarityValue,
+  Codec,
+  type PostCondition,
+  type Transaction,
+} from '@jannik-stacks/kit';
+import {
+  PostConditionMode,
+  type ClarityValue as VendorClarityValue,
+  type PostCondition as VendorPostCondition,
+  postConditionToHex,
+  serializeCV,
+} from '@stacks/transactions';
 import { VelarSDK, getTokensMeta } from '@velarprotocol/velar-sdk';
 import { AmountOutResponse, SwapResponse, Token } from '@velarprotocol/velar-sdk/dist/types/Swap';
 import { inject, injectable } from 'inversify';
@@ -9,7 +23,14 @@ import { HttpCacheService } from '../../cache/http-cache.service';
 
 export type VelarSdkToken = Token;
 type VelarSdkAmountOutResponse = AmountOutResponse;
-type VelarSdkSwapResponse = SwapResponse;
+type VelarSdkSwapResponse = Omit<
+  SwapResponse,
+  'functionArgs' | 'postConditions' | 'postConditionMode'
+> & {
+  functionArgs: ClarityValue[];
+  postConditions: PostCondition[];
+  postConditionMode: Transaction['postConditionMode'];
+};
 
 @injectable()
 export class VelarSdkClient {
@@ -55,6 +76,22 @@ export class VelarSdkClient {
       inToken,
       outToken,
     });
-    return await swapInstance.swap({ amount, slippage });
+    const tx = await swapInstance.swap({ amount, slippage });
+    return {
+      ...tx,
+      postConditionMode: (
+        {
+          [PostConditionMode.Allow]: 'allow',
+          [PostConditionMode.Deny]: 'deny',
+          [PostConditionMode.Originator]: 'originator',
+        } satisfies Record<PostConditionMode, NonNullable<Transaction['postConditionMode']>>
+      )[tx.postConditionMode],
+      functionArgs: tx.functionArgs.map((arg: VendorClarityValue) =>
+        Cl.deserialize(serializeCV(arg))
+      ),
+      postConditions: tx.postConditions.map((pc: VendorPostCondition) =>
+        Codec.Raw.PostCondition.decode(postConditionToHex(pc))
+      ),
+    };
   }
 }

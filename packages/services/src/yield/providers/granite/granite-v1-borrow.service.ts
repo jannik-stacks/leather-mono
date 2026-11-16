@@ -1,26 +1,26 @@
-import { principalCV, standardPrincipalCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { inject, injectable } from 'inversify';
 import { isNonNullish } from 'remeda';
 
-import type {
-  AccountAddresses,
-  GraniteV1BorrowPosition,
-  GraniteV1CollateralAsset,
-  StacksProtocol,
-  StacksProtocolId,
-  YieldProduct,
-  YieldProductCategory,
-  YieldProductKey,
+import {
+  type AccountAddresses,
+  type GraniteV1BorrowPosition,
+  type GraniteV1CollateralAsset,
+  type StacksProtocol,
+  type StacksProtocolId,
+  type YieldProduct,
+  type YieldProductCategory,
+  type YieldProductKey,
 } from '@leather.io/models';
 import { baseCurrencyAmountInQuote, createMoney, subtractMoney, sumMoney } from '@leather.io/utils';
 
 import { FungibleAssetService } from '../../../assets/fungible-asset.service';
 import { HiroStacksApiClient } from '../../../infrastructure/api/hiro/hiro-stacks-api.client';
 import { LeatherApiClient } from '../../../infrastructure/api/leather/leather-api.client';
-import type { SettingsService } from '../../../infrastructure/settings/settings.service';
+import { type SettingsService } from '../../../infrastructure/settings/settings.service';
 import { Types } from '../../../inversify.types';
 import { MarketDataService } from '../../../market/market-data.service';
-import type { YieldProductService } from '../../yield.service';
+import { type YieldProductService } from '../../yield.service';
 import {
   parseGraniteProtocolGetUserCollateralResponseCV,
   parseGraniteProtocolGetUserPositionResponseCV,
@@ -130,7 +130,7 @@ export class GraniteV1BorrowService implements YieldProductService {
         contractAddress: graniteProductionAddress,
         contractName: 'state-v1',
         functionName: 'get-user-position',
-        functionArgs: [standardPrincipalCV(address)],
+        functionArgs: [Cl.address(address)],
       },
       { signal }
     );
@@ -168,7 +168,7 @@ export class GraniteV1BorrowService implements YieldProductService {
         contractAddress: graniteProductionAddress,
         contractName: 'state-v1',
         functionName: 'get-user-collateral',
-        functionArgs: [standardPrincipalCV(address), principalCV(collateralPrincipal)],
+        functionArgs: [Cl.address(address), Cl.principal(collateralPrincipal)],
       },
       { signal }
     );

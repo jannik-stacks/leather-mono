@@ -1,13 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  AuthType,
-  addressToString,
-  isContractCallPayload,
-  isSmartContractPayload,
-  isTokenTransferPayload,
-  serializeCV,
-} from '@stacks/transactions';
+import { Cl, Codec } from '@jannik-stacks/kit';
 
 import {
   RpcErrorCode,
@@ -16,7 +9,7 @@ import {
   stxSignTransaction,
 } from '@leather.io/rpc';
 import { StxAvatarIcon } from '@leather.io/ui';
-import { createMoney, isString } from '@leather.io/utils';
+import { createMoney } from '@leather.io/utils';
 
 import { sendMessageToOriginatingFrame } from '@shared/messaging/send-message-to-originating-frame';
 import { RpcErrorMessage } from '@shared/rpc/methods/validation.utils';
@@ -67,11 +60,11 @@ export function RpcStxSignTransaction() {
 
   async function onApproveTransaction() {
     if (canEditFeeAndNonce) {
-      unsignedTxForBroadcast.setFee(selectedFee.txFee.amount.toString());
-      unsignedTxForBroadcast.setNonce(nonce);
+      unsignedTxForBroadcast.fee = BigInt(selectedFee.txFee.amount.toString());
+      unsignedTxForBroadcast.nonce = BigInt(nonce);
     }
 
-    if (isSponsored) unsignedTxForBroadcast.setFee(0);
+    if (isSponsored) unsignedTxForBroadcast.fee = BigInt(0);
 
     const signedTransaction = await signStacksTx(unsignedTxForBroadcast);
     if (signedTransaction === null) {
@@ -98,8 +91,8 @@ export function RpcStxSignTransaction() {
       createRpcSuccessResponse('stx_signTransaction', {
         id: requestId,
         result: {
-          txHex: signedTransaction.serialize(),
-          transaction: signedTransaction.serialize(),
+          txHex: Codec.Transaction.encode(signedTransaction),
+          transaction: Codec.Transaction.encode(signedTransaction),
         },
       })
     );
@@ -124,14 +117,14 @@ export function RpcStxSignTransaction() {
       actions={
         <TransactionActionsWithSpend
           isLoading={isLoadingBalance || isLoadingFees}
-          isSponsored={unsignedTxForBroadcast.auth.authType === AuthType.Sponsored}
+          isSponsored={unsignedTxForBroadcast.sponsor !== undefined}
           // TODO: Calculate amount if more than fees
           txAmount={createMoney(0, 'STX')}
           onApprove={onApprove}
         />
       }
     >
-      {isTokenTransferPayload(unsignedTxForBroadcast.payload) ? (
+      {unsignedTxForBroadcast.type === 'transfer' ? (
         <>
           {signer}
           <TransactionRecipientsLayout
@@ -141,10 +134,8 @@ export function RpcStxSignTransaction() {
             convertToFiatAmount={convertToFiatAmount}
             recipients={[
               {
-                address: isString(unsignedTxForBroadcast.payload.recipient)
-                  ? unsignedTxForBroadcast.payload.recipient
-                  : unsignedTxForBroadcast.payload.recipient.value,
-                amount: createMoney(unsignedTxForBroadcast.payload.amount, 'STX'),
+                address: unsignedTxForBroadcast.recipient,
+                amount: createMoney(unsignedTxForBroadcast.amount, 'STX'),
               },
             ]}
           />
@@ -152,25 +143,25 @@ export function RpcStxSignTransaction() {
       ) : (
         <>
           <PostConditionsDetailsLayout
-            postConditions={unsignedTxForBroadcast.postConditions.values}
+            postConditions={unsignedTxForBroadcast.postConditions ?? []}
             postConditionMode={unsignedTxForBroadcast.postConditionMode}
           />
           {signer}
         </>
       )}
-      {isContractCallPayload(unsignedTxForBroadcast.payload) && (
+      {unsignedTxForBroadcast.type === 'call' && (
         <ContractCallDetailsLayout
-          contractAddress={addressToString(unsignedTxForBroadcast.payload.contractAddress)}
-          contractName={unsignedTxForBroadcast.payload.contractName.content}
-          functionName={unsignedTxForBroadcast.payload.functionName.content}
-          functionArgs={unsignedTxForBroadcast.payload.functionArgs.map(arg => serializeCV(arg))}
+          contractAddress={unsignedTxForBroadcast.contract.split('.')[0] ?? ''}
+          contractName={unsignedTxForBroadcast.contract.split('.')[1] ?? ''}
+          functionName={unsignedTxForBroadcast.functionName}
+          functionArgs={unsignedTxForBroadcast.args.map(arg => Cl.serialize(arg))}
         />
       )}
-      {isSmartContractPayload(unsignedTxForBroadcast.payload) && (
+      {unsignedTxForBroadcast.type === 'deploy' && (
         <ContractDeployDetailsLayout
           address={address}
-          contractName={unsignedTxForBroadcast.payload.contractName.content}
-          codeBody={unsignedTxForBroadcast.payload.codeBody.content}
+          contractName={unsignedTxForBroadcast.name}
+          codeBody={unsignedTxForBroadcast.code}
         />
       )}
       {canEditFeeAndNonce && (

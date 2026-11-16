@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
+import { Codec, type StacksNetwork } from '@jannik-stacks/kit';
 import { bytesToHex } from '@stacks/common';
-import { type StacksNetwork } from '@stacks/network';
 
 import { type RpcRequest, type stxDeployContract } from '@leather.io/rpc';
 import { TransactionTypes, generateStacksUnsignedTransaction } from '@leather.io/stacks';
@@ -42,7 +42,7 @@ export function useDeployContractTxHex({
         clarityVersion: request.params.clarityVersion,
         publicKey: bytesToHex(signer.publicKey),
       });
-      const txHex = tx.serialize();
+      const txHex = Codec.Transaction.encode(tx);
       return txHex;
     },
     [

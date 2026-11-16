@@ -3,15 +3,20 @@ import { useAccounts } from '@/store/accounts/accounts.read';
 import { type App } from '@/store/apps/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
-import { deserializeCV } from '@stacks/transactions';
 
 import {
+  RpcErrorCode,
   type RpcRequest,
   type RpcResponse,
+  createRpcErrorResponse,
   createRpcSuccessResponse,
   type stxSignMessage,
 } from '@leather.io/rpc';
-import { type SignatureData } from '@leather.io/stacks';
+import {
+  type SignatureData,
+  decodeStructuredMessage,
+  invalidStructuredMessageError,
+} from '@leather.io/stacks';
 
 interface StxSignMessageApproverProps {
   app: App;
@@ -32,6 +37,15 @@ export function StxSignMessageApprover({
   const signer = useStacksSigners().fromAccountId(accountId)[0];
   assertStacksSigner(signer);
 
+  function onInvalidMessage() {
+    sendResult(
+      createRpcErrorResponse('stx_signMessage', {
+        id: request.id,
+        error: { code: RpcErrorCode.INVALID_PARAMS, message: invalidStructuredMessageError },
+      })
+    );
+  }
+
   async function onApprove() {
     assertStacksSigner(signer);
 
@@ -47,10 +61,9 @@ export function StxSignMessageApprover({
       const signatureData = await signer.signMessage(request.params.message);
       submit(signatureData);
     } else if (request.params.messageType === 'structured') {
-      const signatureData = await signer.signStructuredMessage(
-        deserializeCV(request.params.message),
-        deserializeCV(request.params.domain)
-      );
+      const payload = decodeStructuredMessage(request.params.message, request.params.domain);
+      if (!payload) return onInvalidMessage();
+      const signatureData = await signer.signStructuredMessage(payload.message, payload.domain);
       submit(signatureData);
     }
   }
@@ -62,6 +75,7 @@ export function StxSignMessageApprover({
       messageToSign={request.params}
       onApprove={onApprove}
       onCloseApprover={closeApprover}
+      onInvalidMessage={onInvalidMessage}
       origin={app.origin}
     />
   );

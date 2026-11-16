@@ -1,4 +1,4 @@
-import { standardPrincipalCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { inject, injectable } from 'inversify';
 
 import { BnsName, BnsProfile, bnsContractAddress, bnsContractName } from '@leather.io/models';
@@ -6,7 +6,7 @@ import { BnsName, BnsProfile, bnsContractAddress, bnsContractName } from '@leath
 import { BnsV2ApiClient } from '../infrastructure/api/bns-v2/bns-v2-api.client';
 import { HiroStacksApiClient } from '../infrastructure/api/hiro/hiro-stacks-api.client';
 import { selectStacksNetworkMode } from '../infrastructure/settings/settings.selectors';
-import type { SettingsService } from '../infrastructure/settings/settings.service';
+import { type SettingsService } from '../infrastructure/settings/settings.service';
 import { Types } from '../inversify.types';
 import { AccountRequest } from '../types';
 import {
@@ -131,7 +131,7 @@ export class BnsService {
         contractAddress: bnsContractAddress[selectStacksNetworkMode(this.settings.getSettings())],
         contractName: bnsContractName,
         functionName: 'get-primary',
-        functionArgs: [standardPrincipalCV(stacksAddress)],
+        functionArgs: [Cl.address(stacksAddress)],
       },
       { signal }
     );

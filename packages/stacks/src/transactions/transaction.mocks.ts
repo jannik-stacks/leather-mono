@@ -1,47 +1,36 @@
-import { hexToBytes } from '@noble/hashes/utils';
-import {
-  BytesReader,
-  type PoxPostCondition,
-  type StakingPostCondition,
-  type StxPostCondition,
-  deserializePostConditionWire,
-  postConditionToHex,
-} from '@stacks/transactions';
+import { Codec, type PostCondition } from '@jannik-stacks/kit';
 
-export const mockStxPostCondition: StxPostCondition = {
+export const mockStxPostCondition: Extract<PostCondition, { type: 'stx-postcondition' }> = {
   type: 'stx-postcondition',
   address: 'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW',
   condition: 'eq',
-  amount: 100000000,
+  amount: BigInt(100000000),
 };
 
-export const mockPostConditionHex = postConditionToHex(mockStxPostCondition);
+export const mockPostConditionHex = Codec.Raw.PostCondition.encode(mockStxPostCondition);
 
-export const mockDeserializedPostCondition = deserializePostConditionWire(
-  new BytesReader(hexToBytes(mockPostConditionHex))
-);
+export const mockDeserializedPostCondition = Codec.Raw.PostCondition.decode(mockPostConditionHex);
 
-const mockStakingPostCondition: StakingPostCondition = {
+const mockStakingPostCondition: Extract<PostCondition, { type: 'staking-postcondition' }> = {
   type: 'staking-postcondition',
   address: 'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW',
   condition: 'gte',
-  amount: 100000000,
+  amount: BigInt(100000000),
 };
 
-export const mockStakingPostConditionHex = postConditionToHex(mockStakingPostCondition);
+export const mockStakingPostConditionHex = Codec.Raw.PostCondition.encode(mockStakingPostCondition);
 
-export const mockDeserializedStakingPostCondition = deserializePostConditionWire(
-  new BytesReader(hexToBytes(mockStakingPostConditionHex))
+export const mockDeserializedStakingPostCondition = Codec.Raw.PostCondition.decode(
+  mockStakingPostConditionHex
 );
 
-const mockPoxPostCondition: PoxPostCondition = {
+const mockPoxPostCondition: Extract<PostCondition, { type: 'pox-postcondition' }> = {
   type: 'pox-postcondition',
   address: 'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW',
   condition: 'will-not-perform',
 };
 
-export const mockPoxPostConditionHex = postConditionToHex(mockPoxPostCondition);
+export const mockPoxPostConditionHex = Codec.Raw.PostCondition.encode(mockPoxPostCondition);
 
-export const mockDeserializedPoxPostCondition = deserializePostConditionWire(
-  new BytesReader(hexToBytes(mockPoxPostConditionHex))
-);
+export const mockDeserializedPoxPostCondition =
+  Codec.Raw.PostCondition.decode(mockPoxPostConditionHex);

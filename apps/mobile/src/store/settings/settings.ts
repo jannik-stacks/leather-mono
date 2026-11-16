@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { type AvailableLanguageCode } from '@/i18n/languages';
 import { analytics } from '@/utils/analytics';
 import { whenTheme } from '@/utils/when-theme';
-import type { StacksNetwork } from '@stacks/network';
+import { type StacksNetwork } from '@jannik-stacks/kit';
 
 import { getBtcSignerLibNetworkConfigByMode } from '@leather.io/bitcoin';
 import {

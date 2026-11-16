@@ -1,4 +1,4 @@
-import { serializeCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
@@ -11,7 +11,7 @@ import {
   handOffLedgerFlowToFullPage,
   ledgerFlowHandoffParam,
 } from './ledger-flow-handoff';
-import type { LedgerFlowHandoffRequest } from './ledger-flow.types';
+import { type LedgerFlowHandoffRequest } from './ledger-flow.types';
 
 const h = vi.hoisted(() => ({
   openInNewTab: vi.fn(),
@@ -185,7 +185,7 @@ describe('ledger flow hand-off', () => {
     const loaded = await consumeLedgerFlowHandoff(token);
     expect(loaded).toEqual(storedRequest);
     const parsed = z.object({ message: z.object({ message: clarityValueSchema }) }).parse(loaded);
-    expect(serializeCV(parsed.message.message)).toEqual('010000000000000000000000000000002a');
+    expect(Cl.serialize(parsed.message.message)).toEqual('010000000000000000000000000000002a');
     expect(store[handoffKey]).toBeUndefined();
   });
 });

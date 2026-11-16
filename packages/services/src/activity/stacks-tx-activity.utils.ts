@@ -1,13 +1,3 @@
-import {
-  type ContractCallTransaction,
-  type MempoolContractCallTransaction,
-  type MempoolSmartContractTransaction,
-  type MempoolTokenTransferTransaction,
-  type SmartContractTransaction,
-  type TokenTransferTransaction,
-  type TransactionEvent,
-} from '@stacks/stacks-blockchain-api-types';
-
 import { stxAsset } from '@leather.io/constants';
 import {
   type AccountAddresses,
@@ -18,6 +8,13 @@ import {
   OnChainActivityTypes,
   type ReceiveAssetActivity,
   type SendAssetActivity,
+  type StacksApiContractCallTransaction,
+  type StacksApiMempoolContractCallTransaction,
+  type StacksApiMempoolSmartContractTransaction,
+  type StacksApiMempoolTokenTransferTransaction,
+  type StacksApiSmartContractTransaction,
+  type StacksApiTokenTransferTransaction,
+  type StacksApiTransactionEvent,
 } from '@leather.io/models';
 import { initBigNumber, uniqueArray } from '@leather.io/utils';
 
@@ -35,7 +32,7 @@ import {
 } from './stacks-asset-transfer.utils';
 import { getStacksTxByStatus } from './stacks-mempool-tx.utils';
 
-export function getEventsByTxId(events: TransactionEvent[]) {
+export function getEventsByTxId(events: StacksApiTransactionEvent[]) {
   return events.reduce((acc, event) => {
     if (!acc.has(event.tx_id)) {
       acc.set(event.tx_id, []);
@@ -75,7 +72,7 @@ export function mapStacksTxStatus(tx: HiroStacksTransaction | HiroStacksMempoolT
 }
 
 export function mapTokenTransferActivity(
-  tx: TokenTransferTransaction | MempoolTokenTransferTransaction,
+  tx: StacksApiTokenTransferTransaction | StacksApiMempoolTokenTransferTransaction,
   account: AccountAddresses
 ): SendAssetActivity[] | ReceiveAssetActivity[] {
   const commonProps = {
@@ -169,7 +166,7 @@ export function mapPendingStacksTxActivity(
 }
 
 export function mapSmartContractActivity(
-  tx: SmartContractTransaction | MempoolSmartContractTransaction,
+  tx: StacksApiSmartContractTransaction | StacksApiMempoolSmartContractTransaction,
   account: AccountAddresses,
   transfers: StacksAssetTransferWithInfo[]
 ): OnChainActivity[] {
@@ -190,7 +187,7 @@ export function mapSmartContractActivity(
 }
 
 export function mapContractCallActivity(
-  tx: ContractCallTransaction | MempoolContractCallTransaction,
+  tx: StacksApiContractCallTransaction | StacksApiMempoolContractCallTransaction,
   account: AccountAddresses,
   transfers: StacksAssetTransferWithInfo[]
 ): OnChainActivity[] {

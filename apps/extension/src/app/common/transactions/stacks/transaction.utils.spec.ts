@@ -1,13 +1,13 @@
-import { STACKS_MAINNET, STACKS_TESTNET } from '@stacks/network';
-import { makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
+import { STACKS_MAINNET, STACKS_TESTNET } from '@jannik-stacks/kit';
 
-import type {
-  StacksConfirmedTransaction,
-  StacksConfirmedTransactionStatus,
-  StacksMempoolTransaction,
-  StacksMempoolTransactionStatus,
+import {
+  type StacksConfirmedTransaction,
+  type StacksConfirmedTransactionStatus,
+  type StacksMempoolTransaction,
+  type StacksMempoolTransactionStatus,
 } from '@leather.io/models';
-import { deriveStxMultisigAddress } from '@leather.io/stacks';
+import { deriveStxMultisigAddress, generateStacksUnsignedTransaction } from '@leather.io/stacks';
+import { createMoney } from '@leather.io/utils';
 
 import {
   getTxSenderAddress,
@@ -28,40 +28,43 @@ const recipient = 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG';
 
 describe(isNonSequentialMultisigTransaction.name, () => {
   test('is true for a non-sequential multisig transaction', async () => {
-    const tx = await makeUnsignedSTXTokenTransfer({
+    const tx = await generateStacksUnsignedTransaction({
       recipient,
-      amount: 1_000_000,
-      fee: 3000,
+      amount: createMoney(1_000_000, 'STX'),
+      fee: createMoney(3000, 'STX'),
       nonce: 0,
       network: STACKS_TESTNET,
       publicKeys,
       numSignatures: 2,
       useNonSequentialMultiSig: true,
+      txType: 'token_transfer',
     });
     expect(isNonSequentialMultisigTransaction(tx)).toEqual(true);
   });
 
   test('is false for a sequential multisig transaction', async () => {
-    const tx = await makeUnsignedSTXTokenTransfer({
+    const tx = await generateStacksUnsignedTransaction({
       recipient,
-      amount: 1_000_000,
-      fee: 3000,
+      amount: createMoney(1_000_000, 'STX'),
+      fee: createMoney(3000, 'STX'),
       nonce: 0,
       network: STACKS_TESTNET,
       publicKeys,
       numSignatures: 2,
+      txType: 'token_transfer',
     });
     expect(isNonSequentialMultisigTransaction(tx)).toEqual(false);
   });
 
   test('is false for a singlesig transaction', async () => {
-    const tx = await makeUnsignedSTXTokenTransfer({
+    const tx = await generateStacksUnsignedTransaction({
       recipient,
-      amount: 1_000_000,
-      fee: 3000,
+      amount: createMoney(1_000_000, 'STX'),
+      fee: createMoney(3000, 'STX'),
       nonce: 0,
       network: STACKS_TESTNET,
       publicKey: publicKeys[0],
+      txType: 'token_transfer',
     });
     expect(isNonSequentialMultisigTransaction(tx)).toEqual(false);
   });
@@ -72,15 +75,16 @@ describe(getTxSenderAddress.name, () => {
     'matches the derived multisig policy address on chainId $chainId',
     async network => {
       const threshold = 2;
-      const tx = await makeUnsignedSTXTokenTransfer({
+      const tx = await generateStacksUnsignedTransaction({
         recipient,
-        amount: 1_000_000,
-        fee: 3000,
+        amount: createMoney(1_000_000, 'STX'),
+        fee: createMoney(3000, 'STX'),
         nonce: 0,
         network,
         publicKeys,
         numSignatures: threshold,
         useNonSequentialMultiSig: true,
+        txType: 'token_transfer',
       });
       expect(getTxSenderAddress(tx)).toEqual(
         deriveStxMultisigAddress({ publicKeys, threshold, chainId: network.chainId })

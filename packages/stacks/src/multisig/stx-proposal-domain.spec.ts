@@ -1,4 +1,4 @@
-import { signStructuredData, stringAsciiCV } from '@stacks/transactions';
+import { Cl, signStructuredMessage } from '@jannik-stacks/kit';
 import { describe, expect, it } from 'vitest';
 
 import { buildStxProposalDomain, stxChainIdByAuthNetworkId } from './stx-proposal-domain';
@@ -12,39 +12,49 @@ describe('buildStxProposalDomain', () => {
     '00';
 
   it('reproduces the expected mainnet SIP-018 signature for the test key', () => {
-    const signature = signStructuredData({
-      message: stringAsciiCV(proposalHash),
-      domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:mainnet']),
-      privateKey,
-    });
+    const signature = signStructuredMessage(
+      {
+        message: Cl.ascii(proposalHash),
+        domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:mainnet']),
+      },
+      privateKey
+    );
     expect(signature).toBe(expectedSignature);
   });
 
   it('binds chain-id — testnet domain yields a different signature', () => {
-    const mainnet = signStructuredData({
-      message: stringAsciiCV(proposalHash),
-      domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:mainnet']),
-      privateKey,
-    });
-    const testnet = signStructuredData({
-      message: stringAsciiCV(proposalHash),
-      domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:testnet']),
-      privateKey,
-    });
+    const mainnet = signStructuredMessage(
+      {
+        message: Cl.ascii(proposalHash),
+        domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:mainnet']),
+      },
+      privateKey
+    );
+    const testnet = signStructuredMessage(
+      {
+        message: Cl.ascii(proposalHash),
+        domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:testnet']),
+      },
+      privateKey
+    );
     expect(testnet).not.toBe(mainnet);
   });
 
   it('uses a custom chain-id when provided', () => {
-    const mainnet = signStructuredData({
-      message: stringAsciiCV(proposalHash),
-      domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:mainnet']),
-      privateKey,
-    });
-    const custom = signStructuredData({
-      message: stringAsciiCV(proposalHash),
-      domain: buildStxProposalDomain(256),
-      privateKey,
-    });
+    const mainnet = signStructuredMessage(
+      {
+        message: Cl.ascii(proposalHash),
+        domain: buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:mainnet']),
+      },
+      privateKey
+    );
+    const custom = signStructuredMessage(
+      {
+        message: Cl.ascii(proposalHash),
+        domain: buildStxProposalDomain(256),
+      },
+      privateKey
+    );
     expect(custom).not.toBe(mainnet);
   });
 });

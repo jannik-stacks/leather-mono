@@ -2,13 +2,12 @@ import { type BtcFormSchema } from '@/features/send/forms/btc/btc-form-schema';
 import { type StxFormSchema } from '@/features/send/forms/stx/stx-form-schema';
 import { type PayerLookupFn } from '@/store/keychains/bitcoin/bitcoin-keychains.read';
 import { analytics } from '@/utils/analytics';
+import { Codec, type StacksNetwork } from '@jannik-stacks/kit';
 import { bytesToHex } from '@noble/hashes/utils';
-import { type PublicKey } from '@stacks/common';
-import { type StacksNetwork } from '@stacks/network';
 import BigNumber from 'bignumber.js';
 import memoize from 'p-memoize';
 
-import type { ComplianceScreeningPoint } from '@leather.io/analytics';
+import { type ComplianceScreeningPoint } from '@leather.io/analytics';
 import {
   createBitcoinAddress,
   generateBitcoinUnsignedTransaction,
@@ -77,7 +76,7 @@ export async function btcFormValuesToPsbtHex({
 
 export async function stxFormValuesToSerializedTransaction(
   values: StxFormSchema,
-  publicKey: PublicKey,
+  publicKey: string | Uint8Array,
   stacksNetwork: StacksNetwork
 ) {
   const { amount, fee, memo, nonce, recipient } = values;
@@ -90,10 +89,10 @@ export async function stxFormValuesToSerializedTransaction(
     recipient,
     txType: TransactionTypes.StxTokenTransfer,
     network: stacksNetwork,
-    publicKey,
+    publicKey: typeof publicKey === 'string' ? publicKey : bytesToHex(publicKey),
   });
 
-  return tx.serialize();
+  return Codec.Transaction.encode(tx);
 }
 
 interface addressComplianceValidatorParams {

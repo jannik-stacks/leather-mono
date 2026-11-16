@@ -58,15 +58,15 @@ msgstr "{providerName} fee"
 msgid "{rarityRank} of {totalItems}"
 msgstr "{rarityRank} of {totalItems}"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:70
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:64
 msgid "{sender} may perform PoX actions"
 msgstr "{sender} may perform PoX actions"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:69
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:63
 msgid "{sender} must not perform any PoX actions"
 msgstr "{sender} must not perform any PoX actions"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:71
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:65
 msgid "{sender} must perform a PoX action"
 msgstr "{sender} must perform a PoX action"
 
@@ -84,27 +84,27 @@ msgstr "{themePreference, select, light {Light} dark {Dark} system {System} othe
 msgid "<0>{assetName}</0> has no available receiving options right now."
 msgstr "<0>{assetName}</0> has no available receiving options right now."
 
-#: src/features/approver/utils.tsx:49
+#: src/features/approver/utils.tsx:38
 msgid "~1 hour+"
 msgstr "~1 hour+"
 
-#: src/features/approver/utils.tsx:51
+#: src/features/approver/utils.tsx:40
 msgid "~10 – 20min"
 msgstr "~10 – 20min"
 
-#: src/features/approver/utils.tsx:50
+#: src/features/approver/utils.tsx:39
 msgid "~30 min"
 msgstr "~30 min"
 
-#: src/features/approver/utils.tsx:61
+#: src/features/approver/utils.tsx:50
 msgid "1–2 minutes"
 msgstr "1–2 minutes"
 
-#: src/features/approver/utils.tsx:63
+#: src/features/approver/utils.tsx:52
 msgid "10 seconds"
 msgstr "10 seconds"
 
-#: src/features/approver/utils.tsx:62
+#: src/features/approver/utils.tsx:51
 msgid "20–30 seconds"
 msgstr "20–30 seconds"
 
@@ -313,39 +313,39 @@ msgstr "Analytics updated"
 msgid "Announcement received"
 msgstr "Announcement received"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:84
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:78
 msgid "Another address {shortenedPcAddress}"
 msgstr "Another address {shortenedPcAddress}"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:63
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:57
 msgid "Another address {shortenedPcAddress} may transfer"
 msgstr "Another address {shortenedPcAddress} may transfer"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:58
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:52
 msgid "Another address {shortenedPcAddress} will {verb} equal to or greater than"
 msgstr "Another address {shortenedPcAddress} will {verb} equal to or greater than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:56
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:50
 msgid "Another address {shortenedPcAddress} will {verb} exactly"
 msgstr "Another address {shortenedPcAddress} will {verb} exactly"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:59
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:53
 msgid "Another address {shortenedPcAddress} will {verb} less than"
 msgstr "Another address {shortenedPcAddress} will {verb} less than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:60
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:54
 msgid "Another address {shortenedPcAddress} will {verb} less than or equal to"
 msgstr "Another address {shortenedPcAddress} will {verb} less than or equal to"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:57
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:51
 msgid "Another address {shortenedPcAddress} will {verb} more than"
 msgstr "Another address {shortenedPcAddress} will {verb} more than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:62
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:56
 msgid "Another address {shortenedPcAddress} will keep"
 msgstr "Another address {shortenedPcAddress} will keep"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:61
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:55
 msgid "Another address {shortenedPcAddress} will transfer"
 msgstr "Another address {shortenedPcAddress} will transfer"
 
@@ -373,11 +373,12 @@ msgstr "App is not protected with device-level PIN or biometrics."
 msgid "App Store"
 msgstr "App Store"
 
+#: src/features/approver/clarity-display.vectors-driver.ts:67
 #: src/features/approver/components/approver-buttons/index.tsx:29
 msgid "Approve"
 msgstr "Approve"
 
-#: src/features/approver/contract-call-args.section.tsx:31
+#: src/features/approver/contract-call-args.section.tsx:33
 msgid "Argument {argumentNumber}"
 msgstr "Argument {argumentNumber}"
 
@@ -531,6 +532,10 @@ msgstr "Choose existing wallet"
 msgid "Clear search"
 msgstr "Clear search"
 
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:74
+msgid "Close"
+msgstr "Close"
+
 #: src/features/qr-scanner/qr-scanner-chrome.tsx:31
 msgid "Close the scanner"
 msgstr "Close the scanner"
@@ -630,7 +635,7 @@ msgstr "Continue without security"
 msgid "Contract"
 msgstr "Contract"
 
-#: src/features/approver/contract-call-args.section.tsx:21
+#: src/features/approver/contract-call-args.section.tsx:23
 msgid "Contract arguments"
 msgstr "Contract arguments"
 
@@ -675,9 +680,9 @@ msgstr "Creator"
 msgid "Current app version format is invalid"
 msgstr "Current app version format is invalid"
 
-#: src/features/approver/utils.tsx:40
-#: src/features/approver/utils.tsx:52
-#: src/features/approver/utils.tsx:64
+#: src/features/approver/utils.tsx:29
+#: src/features/approver/utils.tsx:41
+#: src/features/approver/utils.tsx:53
 msgid "Custom"
 msgstr "Custom"
 
@@ -879,7 +884,7 @@ msgstr "Failed to load tokens"
 msgid "Failed to start a swap"
 msgstr "Failed to start a swap"
 
-#: src/features/approver/utils.tsx:39
+#: src/features/approver/utils.tsx:28
 msgid "Fast"
 msgstr "Fast"
 
@@ -1009,7 +1014,7 @@ msgstr "Hidden accounts"
 msgid "Hide account"
 msgstr "Hide account"
 
-#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:176
+#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:168
 #: src/features/psbt-signer/psbt-signer.tsx:319
 msgid "Hide advanced options"
 msgstr "Hide advanced options"
@@ -1086,6 +1091,10 @@ msgstr "Insufficient funds"
 #: src/features/swap/components/amount-field/amount-field-error-messages.ts:14
 msgid "Invalid amount"
 msgstr "Invalid amount"
+
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:67
+msgid "Invalid structured message"
+msgstr "Invalid structured message"
 
 #: src/features/recover-wallet/components/error-message.tsx:5
 msgid "Invalid words: {joinedInvalidWords}"
@@ -1238,8 +1247,8 @@ msgstr "Memo must be less than 34-bytes"
 msgid "Memo updated"
 msgstr "Memo updated"
 
-#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:50
-#: src/features/approver/structured-message.section.tsx:48
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:57
+#: src/features/approver/structured-message.section.tsx:37
 #: src/features/browser/approver-sheet/sign-message/sign-message.layout.tsx:50
 msgid "Message"
 msgstr "Message"
@@ -1676,7 +1685,7 @@ msgstr "Share"
 msgid "Share anonymous usage details"
 msgstr "Share anonymous usage details"
 
-#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:175
+#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:167
 #: src/features/psbt-signer/psbt-signer.tsx:318
 msgid "Show advanced options"
 msgstr "Show advanced options"
@@ -1685,7 +1694,7 @@ msgstr "Show advanced options"
 msgid "Show balances"
 msgstr "Show balances"
 
-#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:40
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:47
 #: src/features/browser/approver-sheet/sign-message/sign-message.layout.tsx:29
 msgid "Sign Message"
 msgstr "Sign Message"
@@ -1695,7 +1704,7 @@ msgstr "Sign Message"
 msgid "Sign transaction"
 msgstr "Sign transaction"
 
-#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:125
+#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:119
 msgid "Sign Transaction"
 msgstr "Sign Transaction"
 
@@ -1736,7 +1745,7 @@ msgstr "Slippage"
 msgid "Slippage tolerance"
 msgstr "Slippage tolerance"
 
-#: src/features/approver/utils.tsx:37
+#: src/features/approver/utils.tsx:26
 msgid "Slow"
 msgstr "Slow"
 
@@ -1770,7 +1779,7 @@ msgstr "Stacks"
 msgid "Stacks address"
 msgstr "Stacks address"
 
-#: src/features/approver/utils.tsx:38
+#: src/features/approver/utils.tsx:27
 msgid "Standard"
 msgstr "Standard"
 
@@ -1832,39 +1841,39 @@ msgstr "Taproot address"
 msgid "The address you entered isn’t valid. Verify and try again"
 msgstr "The address you entered isn’t valid. Verify and try again"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:80
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:74
 msgid "The contract"
 msgstr "The contract"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:45
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:39
 msgid "The contract may transfer"
 msgstr "The contract may transfer"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:40
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:34
 msgid "The contract will {verb} equal to or greater than"
 msgstr "The contract will {verb} equal to or greater than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:38
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:32
 msgid "The contract will {verb} exactly"
 msgstr "The contract will {verb} exactly"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:41
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:35
 msgid "The contract will {verb} less than"
 msgstr "The contract will {verb} less than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:42
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:36
 msgid "The contract will {verb} less than or equal to"
 msgstr "The contract will {verb} less than or equal to"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:39
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:33
 msgid "The contract will {verb} more than"
 msgstr "The contract will {verb} more than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:44
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:38
 msgid "The contract will keep"
 msgstr "The contract will keep"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:43
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:37
 msgid "The contract will transfer"
 msgstr "The contract will transfer"
 
@@ -1955,8 +1964,8 @@ msgstr "This transaction sends funds to an output Leather can’t display as an 
 msgid "tiny amounts that cost more to send than they’re worth."
 msgstr "tiny amounts that cost more to send than they’re worth."
 
-#: src/features/approver/components/sip10-recipient.tsx:43
-#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:150
+#: src/features/approver/components/sip10-recipient.tsx:41
+#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:142
 #: src/features/browser/approver-sheet/send-transfer.tsx:80
 #: src/features/psbt-signer/psbt-signer.tsx:297
 msgid "To address"
@@ -2055,9 +2064,9 @@ msgstr "Unable to Open Store"
 msgid "Uneconomical balance:"
 msgstr "Uneconomical balance:"
 
-#: src/features/approver/utils.tsx:41
-#: src/features/approver/utils.tsx:53
-#: src/features/approver/utils.tsx:65
+#: src/features/approver/utils.tsx:30
+#: src/features/approver/utils.tsx:42
+#: src/features/approver/utils.tsx:54
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -2163,7 +2172,7 @@ msgstr "Wrong URL"
 msgid "Xverse"
 msgstr "Xverse"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:81
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:75
 msgid "You"
 msgstr "You"
 
@@ -2171,27 +2180,27 @@ msgstr "You"
 msgid "You haven’t sent to this address before. Double-check that it’s correct before proceeding."
 msgstr "You haven’t sent to this address before. Double-check that it’s correct before proceeding."
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:30
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:24
 msgid "You may transfer"
 msgstr "You may transfer"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:25
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:19
 msgid "You will {verb} equal to or greater than"
 msgstr "You will {verb} equal to or greater than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:23
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:17
 msgid "You will {verb} exactly"
 msgstr "You will {verb} exactly"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:26
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:20
 msgid "You will {verb} less than"
 msgstr "You will {verb} less than"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:27
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:21
 msgid "You will {verb} less than or equal to"
 msgstr "You will {verb} less than or equal to"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:24
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:18
 msgid "You will {verb} more than"
 msgstr "You will {verb} more than"
 
@@ -2203,15 +2212,15 @@ msgstr "You will find the apps you are connected to here"
 msgid "You will find the apps you recently viewed here"
 msgstr "You will find the apps you recently viewed here"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:29
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:23
 msgid "You will keep"
 msgstr "You will keep"
 
-#: src/features/approver/components/post-conditions/post-conditions.utils.ts:28
+#: src/features/approver/components/post-conditions/post-conditions.utils.ts:22
 msgid "You will transfer"
 msgstr "You will transfer"
 
-#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:141
+#: src/features/approver/layouts/base-stx-tx-approver.layout.tsx:135
 #: src/features/psbt-signer/psbt-signer.tsx:291
 msgid "You’ll send"
 msgstr "You’ll send"

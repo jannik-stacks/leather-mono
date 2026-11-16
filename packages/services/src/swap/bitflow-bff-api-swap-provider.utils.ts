@@ -1,9 +1,9 @@
-import { Cl, type ClarityValue, Pc, type PostCondition } from '@stacks/transactions';
+import { Cl, type ClarityValue, Pc, type PostCondition } from '@jannik-stacks/kit';
 
-import type {
-  BitflowBffApiPostCondition,
-  BitflowBffApiSwapParameter,
-  BitflowBffApiSwapSimpleParameter,
+import {
+  type BitflowBffApiPostCondition,
+  type BitflowBffApiSwapParameter,
+  type BitflowBffApiSwapSimpleParameter,
 } from '../infrastructure/api/bitflow/bitflow-bff-api.client';
 
 const MAX_TOTAL_STEPS = 290;
@@ -53,7 +53,7 @@ export function convertBffApiPostConditions(
     }
 
     const contractId = extractContractId(apiPc.token_contract);
-    return pcWithCondition.ft(contractId, apiPc.token_asset_name);
+    return pcWithCondition.ft(`${contractId}::${apiPc.token_asset_name}`);
   });
 }
 
@@ -74,17 +74,14 @@ export function convertBffApiSimpleSwapToFunctionArgs(
 
   const tuples = swapParams.map((param, index) =>
     Cl.tuple({
-      'pool-trait': Cl.contractPrincipal(
-        param.pool_trait.split('.')[0],
-        param.pool_trait.split('.')[1]
+      'pool-trait': Cl.contract(
+        `${param.pool_trait.split('.')[0]}.${param.pool_trait.split('.')[1]}`
       ),
-      'x-token-trait': Cl.contractPrincipal(
-        param.x_token_trait.split('.')[0],
-        param.x_token_trait.split('.')[1]
+      'x-token-trait': Cl.contract(
+        `${param.x_token_trait.split('.')[0]}.${param.x_token_trait.split('.')[1]}`
       ),
-      'y-token-trait': Cl.contractPrincipal(
-        param.y_token_trait.split('.')[0],
-        param.y_token_trait.split('.')[1]
+      'y-token-trait': Cl.contract(
+        `${param.y_token_trait.split('.')[0]}.${param.y_token_trait.split('.')[1]}`
       ),
       amount: Cl.uint(param.amount),
       'min-received': Cl.uint(param.min_received),

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { type StacksTransactionWire, TransactionSigner } from '@stacks/transactions';
+import { Codec, type StacksTransaction, isTransaction, signInPlace } from '@jannik-stacks/kit';
 
 import { logger } from '@shared/logger';
 
@@ -15,15 +15,15 @@ function useSignTransactionSoftwareWallet() {
   const account = useCurrentStacksAccount();
 
   return useCallback(
-    (tx: StacksTransactionWire) => {
+    (tx: StacksTransaction) => {
       if (account?.type !== 'software') {
         const message = 'Cannot use this method to sign a non-software wallet transaction';
         toast.error(message);
         logger.error(message);
         return;
       }
-      const signer = new TransactionSigner(tx);
-      signer.signOrigin(account.stxPrivateKey);
+      if (!isTransaction(tx)) throw new Error('Unsupported transaction type');
+      signInPlace(tx, account.stxPrivateKey);
       return tx;
     },
     [account, toast]
@@ -40,17 +40,17 @@ export function useSignStacksTransaction({
   const ledgerFlow = useLedgerFlow();
   const signSoftwareTx = useSignTransactionSoftwareWallet();
 
-  return (tx: StacksTransactionWire) =>
+  return (tx: StacksTransaction) =>
     whenWallet({
-      async ledger(tx: StacksTransactionWire) {
+      async ledger(tx: StacksTransaction) {
         const outcome = await ledgerFlow.sign({
           kind: 'sign-stacks-tx',
-          tx: tx.serialize(),
+          tx: Codec.Transaction.encode(tx),
           settleOnRejection,
         });
         return unwrapLedgerSigningOutcome(outcome);
       },
-      software(tx: StacksTransactionWire) {
+      software(tx: StacksTransaction) {
         return signSoftwareTx(tx);
       },
     })(tx);

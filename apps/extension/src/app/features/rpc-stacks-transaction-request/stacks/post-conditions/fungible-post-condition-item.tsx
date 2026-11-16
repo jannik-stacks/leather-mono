@@ -1,4 +1,4 @@
-import { type FungiblePostConditionWire } from '@stacks/transactions';
+import { type PostCondition } from '@jannik-stacks/kit';
 import { PostConditionSelectors } from '@tests/selectors/requests.selectors';
 import { Box, Stack, styled } from 'leather-styles/jsx';
 
@@ -13,7 +13,7 @@ import { formatPostConditionMessage } from './post-conditions.utils';
 interface FungiblePostConditionItemProps {
   isContractPrincipal: boolean;
   isLast: boolean;
-  postCondition: FungiblePostConditionWire;
+  postCondition: Extract<PostCondition, { type: 'ft-postcondition' }>;
 }
 export function FungiblePostConditionItem({
   isContractPrincipal,

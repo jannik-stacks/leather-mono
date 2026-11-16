@@ -7,7 +7,9 @@ import { type App } from '@/store/apps/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
 import { useNetworkPreferenceStacksNetwork } from '@/store/settings/settings';
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
+import { sha512_256 } from '@noble/hashes/sha512';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 
 import {
   type RpcRequest,
@@ -43,7 +45,7 @@ export function SignTransactionApprover({
 
   const txOptions = getTxOptions(signer, network);
 
-  const tx = deserializeTransaction(txHex);
+  const tx = Codec.Transaction.decode(txHex);
 
   async function onApprove() {
     assertStacksSigner(signer);
@@ -52,13 +54,13 @@ export function SignTransactionApprover({
     const response = createRpcSuccessResponse('stx_signTransaction', {
       id: request.id,
       result: {
-        txHex: signedTx.serialize(),
-        transaction: signedTx.serialize(),
+        txHex: Codec.Transaction.encode(signedTx),
+        transaction: Codec.Transaction.encode(signedTx),
       },
     });
     sendResult(response);
 
-    return signedTx.txid();
+    return bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(signedTx))));
   }
 
   return (

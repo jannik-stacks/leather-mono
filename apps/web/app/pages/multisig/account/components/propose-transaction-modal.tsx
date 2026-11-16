@@ -1,5 +1,6 @@
 import { type ChangeEvent, type ReactNode, useState } from 'react';
 
+import { Codec } from '@jannik-stacks/kit';
 import BigNumber from 'bignumber.js';
 import { Box, Flex, Grid, styled } from 'leather-styles/jsx';
 import { Balance } from '~/components/balance/balance';
@@ -688,7 +689,7 @@ function StxProposeForm({
             fee,
           });
       propose.mutate(
-        { multisigAddress: account.multisigAddress, rawPayload: tx.serialize() },
+        { multisigAddress: account.multisigAddress, rawPayload: Codec.Transaction.encode(tx) },
         {
           onSuccess(transaction) {
             onProposed(transaction);
