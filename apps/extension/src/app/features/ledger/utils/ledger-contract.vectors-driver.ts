@@ -1,7 +1,6 @@
 import { Codec } from '@jannik-stacks/kit';
 import { sha512_256 } from '@noble/hashes/sha512';
 import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
-import { signatureVrsToRsv } from '@stacks/common';
 
 import {
   signStacksTransactionWithSignature,
@@ -13,7 +12,7 @@ export function sign(hex: string, signature: string) {
   return {
     hex: Codec.Transaction.encode(tx),
     txid: bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(tx)))),
-    messageSignature: signatureVrsToRsv(signature),
+    messageSignature: signature.slice(2) + signature.slice(0, 2),
   };
 }
 export { stacksChainIdToSingleSigAddressVersion as addressVersion };

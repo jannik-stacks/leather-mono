@@ -1,10 +1,13 @@
-import { bytesToHex } from '@stacks/common';
-import { decryptMnemonic as decrypt, encryptMnemonic as encrypt } from '@stacks/encryption';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import { getMnemonicRootKeyFingerprint } from '@leather.io/crypto';
 
 import { deriveEncryptionKey } from './generate-encryption-key';
 import { generateRandomHexString } from './generate-random-hex';
+import {
+  decryptMnemonicBytes as decrypt,
+  encryptMnemonicBytes as encrypt,
+} from './mnemonic-cipher';
 
 interface EncryptMnemonicArgs {
   secretKey: string;

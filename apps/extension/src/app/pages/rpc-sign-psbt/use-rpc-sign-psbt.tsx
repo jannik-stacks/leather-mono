@@ -1,8 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
-import { hexToBytes } from '@noble/hashes/utils';
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 
 import {
   finalizeWshDescriptorPsbt,

@@ -1,11 +1,5 @@
+import { Cl, type ClarityValue } from '@jannik-stacks/kit';
 import { type BrowserContext, type Page } from '@playwright/test';
-import {
-  type ClarityValue,
-  bufferCVFromString,
-  noneCV,
-  serializeCV,
-  standardPrincipalCV,
-} from '@stacks/transactions';
 import { requestLeatherProvider } from '@tests/leather-provider';
 import { TEST_ACCOUNT_2_STX_ADDRESS } from '@tests/mocks/constants';
 import { getConnectedTestAppPermissionsState } from '@tests/page-object-models/onboarding.page';
@@ -106,17 +100,17 @@ test.describe('RPC: stx_callContract', () => {
 
   test('call contract with no post conditions', async ({ page, context }) => {
     const args: ClarityValue[] = [
-      bufferCVFromString('id'), // namespace
-      bufferCVFromString('test'), // name
-      standardPrincipalCV(TEST_ACCOUNT_2_STX_ADDRESS), // recipient
-      noneCV(), // zonefile
+      Cl.buffer(new TextEncoder().encode('id')), // namespace
+      Cl.buffer(new TextEncoder().encode('test')), // name
+      Cl.principal(TEST_ACCOUNT_2_STX_ADDRESS), // recipient
+      Cl.none(), // zonefile
     ];
 
     const [result] = await Promise.all([
       initiateSip30RpcCallContract(page)({
         contract: 'SP000000000000000000002Q6VF78.bns',
         functionName: 'name-transfer',
-        functionArgs: args.map(arg => serializeCV(arg)),
+        functionArgs: args.map(arg => Cl.serialize(arg)),
       }),
       checkVisibleContentWithNoPostConditions(context)('Cancel'),
     ]);

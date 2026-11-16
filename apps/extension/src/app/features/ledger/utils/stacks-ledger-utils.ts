@@ -1,6 +1,5 @@
 import { Codec, addressVersionFor } from '@jannik-stacks/kit';
 import { type DeviceManagementKit } from '@ledgerhq/device-management-kit';
-import { AddressVersion } from '@stacks/transactions';
 import StacksApp, {
   DMKTransport,
   LedgerError,
@@ -46,7 +45,7 @@ export function showStxAddressOnDevice({ app }: LedgerStacksApp) {
 
 export function stacksChainIdToSingleSigAddressVersion(chainId: number): number {
   return whenStacksChainId(chainId)({
-    [ChainId.Mainnet]: AddressVersion.MainnetSingleSig,
+    [ChainId.Mainnet]: addressVersionFor('mainnet', 'single'),
     [ChainId.Testnet]: addressVersionFor('testnet', 'single'),
   });
 }

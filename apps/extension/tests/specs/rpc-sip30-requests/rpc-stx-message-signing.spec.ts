@@ -1,12 +1,5 @@
+import { Cl } from '@jannik-stacks/kit';
 import { type BrowserContext, type Page } from '@playwright/test';
-import {
-  intCV,
-  serializeCV,
-  stringAsciiCV,
-  stringUtf8CV,
-  tupleCV,
-  uintCV,
-} from '@stacks/transactions';
 import { requestLeatherProvider } from '@tests/leather-provider';
 import { getConnectedTestAppPermissionsState } from '@tests/page-object-models/onboarding.page';
 
@@ -57,10 +50,10 @@ test.describe('stx_signMessage', () => {
   });
 
   test.describe('MessageType: structured', () => {
-    const domain = tupleCV({
-      name: stringAsciiCV('leather.io'),
-      version: stringAsciiCV('1.0.0'),
-      'chain-id': uintCV(1),
+    const domain = Cl.tuple({
+      name: Cl.ascii('leather.io'),
+      version: Cl.ascii('1.0.0'),
+      'chain-id': Cl.uint(1),
     });
 
     function initiateStxStructuredMessageSigning(page: Page) {
@@ -74,8 +67,8 @@ test.describe('stx_signMessage', () => {
     test('Signature approved', async ({ page, context }) => {
       const [result] = await Promise.all([
         initiateStxStructuredMessageSigning(page)(
-          serializeCV(tupleCV({ a: intCV(-1), b: stringUtf8CV('this is a structured message') })),
-          serializeCV(domain)
+          Cl.serialize(Cl.tuple({ a: Cl.int(-1), b: Cl.utf8('this is a structured message') })),
+          Cl.serialize(domain)
         ),
         clickActionButton(context)('Sign'),
       ]);

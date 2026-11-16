@@ -1,4 +1,4 @@
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import type { OwnedUtxo } from '@leather.io/models';
 import { isDefined } from '@leather.io/utils';

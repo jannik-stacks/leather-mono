@@ -1,5 +1,4 @@
-import { hexToBytes } from '@stacks/common';
-import { BytesReader, addressToString, deserializeAddress } from '@stacks/transactions';
+import { Address } from '@jannik-stacks/kit';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -39,9 +38,10 @@ function useGetSbtcDeposits(stxAddress: string, status: string) {
     queryFn: () => getSbtcDeposits(EMILY_API_BASE_URL_MAINNET, status),
     select: resp =>
       resp.deposits.filter(deposit => {
-        const recipient = addressToString(
-          deserializeAddress(new BytesReader(hexToBytes(deposit.recipient.slice(2))))
-        );
+        const recipient = Address.stringify({
+          version: Number.parseInt(deposit.recipient.slice(2, 4), 16),
+          hash160: deposit.recipient.slice(4, 44),
+        });
         return recipient === stxAddress;
       }),
   });

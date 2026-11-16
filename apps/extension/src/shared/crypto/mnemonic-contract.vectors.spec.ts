@@ -91,3 +91,31 @@ test('pins fixed-entropy mnemonic encryption and decrypts salted and legacy ciph
   );
   expect(actual).toEqual(expected);
 });
+
+test('encrypts 24-word entropy with a Unicode password to the legacy wire bytes', async () => {
+  const mnemonic = 'abandon '.repeat(23) + 'art';
+  const ciphertext =
+    '07070707070707070707070707070707f151becaedc2014c332676d41eaa4776e7bf377567c36903a7b6b7d4aaa9ac4922d67e0dbaff076218aa9b2aeb23e3c5fda57344230ff6d6c25c362bc632323e0dbeac71707cea227612f300056e6df2';
+  expect(
+    await driver.encryptLegacy(mnemonic, 'pässword 🔒', new Array<number>(16).fill(7))
+  ).toEqual(ciphertext);
+  const restored = await driver.decryptExisting(
+    { encryptedSecretKey: ciphertext, password: 'pässword 🔒' },
+    'cached-encryption-key'
+  );
+  expect(restored).toMatchObject({ secretKey: mnemonic, reencryptedMnemonic: mnemonic });
+});
+
+test('rejects a modified MAC even when the ciphertext has valid padding', async () => {
+  const ciphertext =
+    '07070707070707070707070707070707f66913750055a7e02f89f99ce8cd57db28b00cd5fddee029166c425929b5215ae20be7bf7e4bdb3bbec8582c0b872bed06e416a0335fbb12521e307872dc44e3';
+  expect(
+    await driver.decryptExisting(
+      {
+        encryptedSecretKey: ciphertext.slice(0, 32) + '00' + ciphertext.slice(34),
+        password: 'vector-password',
+      },
+      'cached-encryption-key'
+    )
+  ).toEqual({ name: 'Error', error: 'Wrong password (HMAC mismatch)' });
+});

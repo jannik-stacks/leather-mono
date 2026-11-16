@@ -1,6 +1,6 @@
-import { decryptMnemonic as decrypt } from '@stacks/encryption';
 import z from 'zod';
 
+import { decryptMnemonicBytes as decrypt } from '@shared/crypto/mnemonic-cipher';
 import { logger } from '@shared/logger';
 
 import { selectSoftwareKeys } from '@app/store/software-keys/software-key.selectors';

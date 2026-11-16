@@ -1,7 +1,7 @@
-import { decryptMnemonic } from '@stacks/encryption';
 import { LocalStorageMock } from '@tests/unit/local-storage-mock';
 import { vi } from 'vitest';
 
+import { decryptMnemonicBytes } from '@shared/crypto/mnemonic-cipher';
 import { assumedZeroFingerprint } from '@shared/utils';
 
 import type { initialKeysState } from '../software-keys/software-key.slice';
@@ -19,7 +19,7 @@ test('decrypts the fixed mnemonic after migrating the legacy localStorage vault 
   const key = migrated.entities[assumedZeroFingerprint];
   if (!key) throw new Error('Missing migrated key');
   expect(
-    await decryptMnemonic(
+    await decryptMnemonicBytes(
       key.encryptedSecretKey,
       '7002728d90ebd2ef32b51a6d197970a6788baddfed67034c7b98f35fc5ba1762972f2dd332bcd9e2bb406b51dfd5c6dd'
     )

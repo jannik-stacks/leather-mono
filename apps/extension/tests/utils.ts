@@ -1,5 +1,10 @@
+import {
+  Codec,
+  type NetworkName,
+  publicKeyToAddress,
+  publicKeysToAddress,
+} from '@jannik-stacks/kit';
 import { type Locator, expect } from '@playwright/test';
-import { type TokenTransferOptions, makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
 
 import { SharedComponentsSelectors } from './selectors/shared-component.selectors';
 
@@ -45,43 +50,51 @@ const unsignedTransferNonce = 0;
 export async function generateUnsignedStxTransfer(
   recipient: string,
   amount: number,
-  network: TokenTransferOptions['network'],
+  network: NetworkName,
   publicKey: string,
   memo?: string
 ) {
-  const options = {
-    recipient,
-    memo,
-    publicKey,
-    amount,
-    network,
-    fee: unsignedTransferFee,
-    nonce: unsignedTransferNonce,
-  };
-  return (await makeUnsignedSTXTokenTransfer(options)).serialize();
+  return Promise.resolve(
+    Codec.Transaction.encode({
+      type: 'transfer',
+      recipient,
+      memo,
+      signer: { value: publicKeyToAddress(publicKey, { network }) },
+      amount: BigInt(amount),
+      network,
+      fee: BigInt(unsignedTransferFee),
+      nonce: BigInt(unsignedTransferNonce),
+    })
+  );
 }
 
 export async function generateMultisigUnsignedStxTransfer(
   recipient: string,
   amount: number,
   fee: number,
-  network: TokenTransferOptions['network'],
+  network: NetworkName,
   publicKeys: string[],
   threshold: number,
   nonce: number,
   memo?: string
 ) {
-  const options = {
-    fee,
-    recipient,
-    memo,
-    publicKeys,
-    nonce,
-    numSignatures: threshold,
-    amount,
-    network,
-  };
-  return (await makeUnsignedSTXTokenTransfer(options)).serialize();
+  return Promise.resolve(
+    Codec.Transaction.encode({
+      type: 'transfer',
+      fee: BigInt(fee),
+      recipient,
+      memo,
+      signer: {
+        value: publicKeysToAddress({ publicKeys, threshold }, { network }),
+        hashMode: 'p2sh',
+      },
+      nonce: BigInt(nonce),
+      signaturesRequired: threshold,
+      signatures: [],
+      amount: BigInt(amount),
+      network,
+    })
+  );
 }
 
 // Intl formatters like NumberFormat output non-breaking spaces. This helper can wrap expected strings to avoid manually writing \u00A0 in tests.

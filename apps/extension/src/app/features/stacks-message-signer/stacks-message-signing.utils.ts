@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { type Cl, type ClarityValue } from '@jannik-stacks/kit';
-import { type PrivateKey } from '@stacks/common';
 
 import { signMessage, signStructuredDataMessage } from '@leather.io/stacks';
 import { delay, isString } from '@leather.io/utils';
@@ -18,7 +17,7 @@ export function useMessageSignerStacksSoftwareWallet() {
     ({ message, domain }: { message: string | ClarityValue; domain?: Cl.Types.Tuple }) => {
       if (!account || account.type === 'ledger') return null;
 
-      const privateKey: PrivateKey = account.stxPrivateKey;
+      const privateKey = account.stxPrivateKey;
 
       if (isString(message)) {
         return signMessage(message, privateKey);
