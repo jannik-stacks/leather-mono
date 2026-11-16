@@ -187,14 +187,27 @@ function checkProof(entry) {
 
 function baseInventory() {
   const base = process.env.AGENTGRAPH_BASE;
-  if (!base) return null;
-  try {
-    return JSON.parse(
-      execFileSync('git', ['show', `${base}:${inventoryPath}`], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })
-    );
-  } catch {
+  if (!base) {
+    console.error('Baseline comparison unavailable: AGENTGRAPH_BASE is not set.');
     return null;
   }
+  const revision = execFileSync('git', ['rev-parse', '--verify', `${base}^{commit}`], {
+    cwd: root,
+    encoding: 'utf8',
+  }).trim();
+  const baselinePath = execFileSync('git', ['ls-tree', '--name-only', revision, '--', inventoryPath], {
+    cwd: root,
+    encoding: 'utf8',
+  }).trim();
+  if (!baselinePath) {
+    console.error(`Baseline comparison unavailable: ${inventoryPath} does not exist at ${base} (${revision}); this is the initial inventory.`);
+    return null;
+  }
+  const inventory = JSON.parse(
+    execFileSync('git', ['show', `${revision}:${inventoryPath}`], { cwd: root, encoding: 'utf8' })
+  );
+  if (!Array.isArray(inventory?.entries)) throw new Error(`Invalid baseline inventory at ${base}: expected entries array`);
+  return inventory;
 }
 
 function draft(sinkSites, inventory) {

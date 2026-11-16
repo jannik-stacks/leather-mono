@@ -314,12 +314,6 @@
             "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
             "name": "pins fixed-entropy mnemonic encryption and decrypts salted and legacy ciphertext"
           }
-        },
-        {
-          "test": {
-            "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
-            "name": "restores existing salted and legacy session ciphertext without exposing failed decryptions"
-          }
         }
       ]
     },
@@ -4643,14 +4637,20 @@
       "proof": [
         {
           "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins unsigned and signed transactions, identifiers, sizing, nonces and Clarity defaults"
+            "file": "apps/extension/src/app/query/bitcoin/utxos/match-wallet-utxos.spec.ts",
+            "name": "returns the wallet utxos spent by the inputs, in input order"
           }
         },
         {
           "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins mainnet deployment bytes when network and Clarity version are omitted"
+            "file": "apps/extension/src/app/query/bitcoin/utxos/match-wallet-utxos.spec.ts",
+            "name": "matches on both txid and vout"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/extension/src/app/query/bitcoin/utxos/match-wallet-utxos.spec.ts",
+            "name": "skips inputs that are not wallet utxos"
           }
         }
       ]
@@ -5034,12 +5034,6 @@
           "test": {
             "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
             "name": "pins fixed-entropy mnemonic encryption and decrypts salted and legacy ciphertext"
-          }
-        },
-        {
-          "test": {
-            "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
-            "name": "restores existing salted and legacy session ciphertext without exposing failed decryptions"
           }
         }
       ]
@@ -5497,12 +5491,6 @@
           "test": {
             "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
             "name": "pins fixed-entropy mnemonic encryption and decrypts salted and legacy ciphertext"
-          }
-        },
-        {
-          "test": {
-            "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
-            "name": "restores existing salted and legacy session ciphertext without exposing failed decryptions"
           }
         }
       ]
@@ -9115,8 +9103,8 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/create-get-pox5-delegated-amount-query-options.spec.ts",
+            "name": "pins delegated-amount request bytes, cache key, decoded amounts and failures"
           }
         }
       ]
@@ -9233,8 +9221,8 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/create-get-pox5-delegated-amount-query-options.spec.ts",
+            "name": "pins each PoX query through its production request and response mapping"
           }
         }
       ]
@@ -9291,8 +9279,8 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/create-get-pox5-delegated-amount-query-options.spec.ts",
+            "name": "pins each PoX query through its production request and response mapping"
           }
         }
       ]
@@ -9335,8 +9323,8 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/create-get-pox5-delegated-amount-query-options.spec.ts",
+            "name": "pins each PoX query through its production request and response mapping"
           }
         }
       ]
@@ -9397,8 +9385,8 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/create-get-pox5-delegated-amount-query-options.spec.ts",
+            "name": "pins each PoX query through its production request and response mapping"
           }
         }
       ]
@@ -9491,8 +9479,8 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/create-get-pox5-delegated-amount-query-options.spec.ts",
+            "name": "pins each PoX query through its production request and response mapping"
           }
         }
       ]
@@ -9544,8 +9532,20 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/queries/get-pending-pox5-txs.spec.ts",
+            "name": "matches stake, stake-update, and unstake on the pox-5 contract"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/bitcoin-staking/queries/get-pending-pox5-txs.spec.ts",
+            "name": "matches wrapper delegate, delegate-update, and undelegate calls"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/bitcoin-staking/queries/get-pending-pox5-txs.spec.ts",
+            "name": "does not match pox-4 delegate calls"
           }
         }
       ]
@@ -9920,8 +9920,20 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stacking-dao.spec.ts",
+            "name": "builds a delegate call against the wrapper contract"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stacking-dao.spec.ts",
+            "name": "keeps the standard staking post-condition"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stacking-dao.spec.ts",
+            "name": "throws when a payout preference is set"
           }
         }
       ]
@@ -10170,8 +10182,20 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/bitcoin-staking/transactions/pox5-stake.spec.ts",
-            "name": "pins PoX-5 calldata, post-condition bytes and modes"
+            "file": "apps/web/app/features/bitcoin-staking/utils/pool-fee.spec.ts",
+            "name": "decodes a rate"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/bitcoin-staking/utils/pool-fee.spec.ts",
+            "name": "decodes a zero rate"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/bitcoin-staking/utils/pool-fee.spec.ts",
+            "name": "is null for a non-uint value"
           }
         }
       ]
@@ -10272,8 +10296,20 @@
       "proof": [
         {
           "test": {
-            "file": "apps/web/app/features/multisig/transactions/signing/pre-sign-verification.spec.ts",
-            "name": "pins a real extension-signed proposal commitment and rejects tampering"
+            "file": "apps/web/app/features/multisig/transactions/build-sip10-transfer.spec.ts",
+            "name": "builds a non-sequential multisig contract call with placeholder nonce 0"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/multisig/transactions/build-sip10-transfer.spec.ts",
+            "name": "calls transfer on the token contract with the vault as sender"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/web/app/features/multisig/transactions/build-sip10-transfer.spec.ts",
+            "name": "attaches a deny-mode FT post condition for the exact amount from the vault"
           }
         }
       ]
@@ -13007,12 +13043,6 @@
             "file": "packages/stacks/src/message-signing.spec.ts",
             "name": "pins the prefixed plain-message digest displayed before RSV signing"
           }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/message-signing.spec.ts",
-            "name": "pins the prefixed plain-message digest displayed before RSV signing"
-          }
         }
       ]
     },
@@ -13408,14 +13438,8 @@
       "proof": [
         {
           "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins unsigned and signed transactions, identifiers, sizing, nonces and Clarity defaults"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins mainnet deployment bytes when network and Clarity version are omitted"
+            "file": "packages/stacks/src/transactions/create-tx-hex.spec.ts",
+            "name": "pins the SIP-10 production builder and rejects unbounded transfers"
           }
         }
       ]
@@ -13572,12 +13596,6 @@
           "test": {
             "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
             "name": "pins unsigned and signed transactions, identifiers, sizing, nonces and Clarity defaults"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins mainnet deployment bytes when network and Clarity version are omitted"
           }
         },
         {
@@ -14297,18 +14315,6 @@
         {
           "test": {
             "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "returns false for undefined address"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "returns false for empty string address"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
             "name": "returns true for valid mainnet address"
           }
         },
@@ -14489,43 +14495,13 @@
         {
           "test": {
             "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "should reject non-string inputs"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
             "name": "should accept valid standard principals"
           }
         },
         {
           "test": {
             "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "should accept valid contract principals"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "should reject invalid addresses"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
             "name": "should reject invalid contract principals"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "should reject non-string inputs"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/validation/address-validation.spec.ts",
-            "name": "should reject empty strings"
           }
         }
       ]
@@ -14638,7 +14614,7 @@
           ]
         }
       ],
-      "flow": "all post-condition wire types, principals and comparators",
+      "flow": "Swap builder Clarity argument validation, normalized post conditions, deny mode, unsigned transaction bytes and transaction IDs",
       "consumers": [
         "Clarity/post-condition/transaction values -> serialized bytes, signing, RPC/API payload, transaction ID or displayed transaction details"
       ],
@@ -14659,12 +14635,18 @@
           "owner": "buildStacksTx"
         }
       ],
-      "contract": "all post-condition wire types, principals and comparators",
+      "contract": "Swap builder Clarity argument validation, normalized post conditions, deny mode, unsigned transaction bytes and transaction IDs",
       "proof": [
         {
           "test": {
-            "file": "packages/stacks/src/transactions/post-condition-contract.vectors.spec.ts",
-            "name": "pins every post-condition family, principal form and condition code"
+            "file": "packages/state/src/swap/strategies/execution-type/execution-type.spec.ts",
+            "name": "pins buildStacksTx wire bytes, ids, defaults and post-condition input forms"
+          }
+        },
+        {
+          "test": {
+            "file": "packages/state/src/swap/strategies/execution-type/execution-type.spec.ts",
+            "name": "pins buildStacksTx rejection of malformed swap arguments and post conditions"
           }
         }
       ]

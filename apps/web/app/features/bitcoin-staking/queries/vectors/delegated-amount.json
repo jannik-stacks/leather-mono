@@ -1,0 +1,219 @@
+{
+  "input": {
+    "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+    "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+    "cycle": 113
+  },
+  "responses": [
+    {
+      "okay": true,
+      "result": "0x0100000000000000000000001176592e00"
+    },
+    {
+      "okay": true,
+      "result": "0x0100000000000000000000000000000000"
+    },
+    {
+      "okay": true,
+      "result": "0x01ffffffffffffffffffffffffffffffff"
+    },
+    {
+      "okay": false
+    },
+    {
+      "okay": true
+    },
+    {
+      "okay": true,
+      "result": "0x070100000000000000000000000000000001"
+    },
+    {
+      "okay": true,
+      "result": "0xff"
+    },
+    {
+      "okay": true,
+      "result": "0x01"
+    }
+  ],
+  "expected": [
+    {
+      "queryKey": [
+        "pox5-delegated-amount",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "amount": "75000000000"
+    },
+    {
+      "queryKey": [
+        "pox5-delegated-amount",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "amount": "0"
+    },
+    {
+      "queryKey": [
+        "pox5-delegated-amount",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "amount": "340282366920938463463374607431768211455"
+    },
+    {
+      "queryKey": [
+        "pox5-delegated-amount",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "amount": null
+    },
+    {
+      "queryKey": [
+        "pox5-delegated-amount",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "amount": null
+    },
+    {
+      "queryKey": [
+        "pox5-delegated-amount",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "amount": null
+    },
+    {
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "error": "Cannot recognize Clarity Type: 255"
+    },
+    {
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-amount-delegated-for-signer",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071"
+            ],
+            "sender": "SP000000000000000000002Q6VF78"
+          }
+        }
+      ],
+      "error": "Cannot convert 0x to a BigInt"
+    }
+  ]
+}
