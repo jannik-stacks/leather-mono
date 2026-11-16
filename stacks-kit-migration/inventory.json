@@ -7981,7 +7981,7 @@
       "file": "apps/mobile/src/features/browser/approver-sheet/stx/utils.ts",
       "line": 52,
       "symbol": [
-        "PostConditionModeName"
+        "StacksTransaction"
       ],
       "sinks": [
         "storage",
@@ -7992,7 +7992,7 @@
         {
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/utils.ts",
           "symbol": [
-            "PostConditionModeName"
+            "StacksTransaction"
           ]
         }
       ],
@@ -8003,14 +8003,8 @@
       "proof": [
         {
           "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins unsigned and signed transactions, identifiers, sizing, nonces and Clarity defaults"
-          }
-        },
-        {
-          "test": {
-            "file": "packages/stacks/src/transactions/generate-unsigned-transaction.spec.ts",
-            "name": "pins mainnet deployment bytes when network and Clarity version are omitted"
+            "file": "apps/mobile/src/features/browser/approver-sheet/stx/request-contract.vectors.spec.ts",
+            "name": "pins mobile request fees, zero nonce handling, sponsorship and modes"
           }
         }
       ]
@@ -8368,7 +8362,7 @@
         "STACKS_MAINNET",
         "STACKS_TESTNET",
         "StacksNetwork",
-        "StacksNetworkName",
+        "NetworkName",
         "TransactionVersion"
       ],
       "sinks": [
@@ -8383,7 +8377,7 @@
             "STACKS_MAINNET",
             "STACKS_TESTNET",
             "StacksNetwork",
-            "StacksNetworkName",
+            "NetworkName",
             "TransactionVersion"
           ]
         }

@@ -1,8 +1,12 @@
 import { useSelector } from 'react-redux';
 
-import { STACKS_MAINNET, STACKS_TESTNET, type StacksNetwork } from '@jannik-stacks/kit';
+import {
+  type NetworkName,
+  STACKS_MAINNET,
+  STACKS_TESTNET,
+  type StacksNetwork,
+} from '@jannik-stacks/kit';
 import { createSelector } from '@reduxjs/toolkit';
-import { type StacksNetworkName } from '@stacks/network';
 
 import {
   accountDisplayPreferencesKeyedByType,
@@ -119,7 +123,7 @@ export function getStacksNetworkFromNetworkConfig(networkConfig: NetworkConfigur
   };
 }
 
-function getNetworkFromNetworkName(stacksNetworkName: StacksNetworkName) {
+function getNetworkFromNetworkName(stacksNetworkName: NetworkName | 'mocknet') {
   if (stacksNetworkName === 'testnet')
     return defaultNetworksKeyedById[WalletDefaultNetworkConfigurationIds.testnet4];
   if (stacksNetworkName === 'mainnet')
@@ -127,7 +131,9 @@ function getNetworkFromNetworkName(stacksNetworkName: StacksNetworkName) {
   throw new Error('This network is currently not supported');
 }
 
-export function getStacksNetworkFromName(stacksNetworkName: StacksNetworkName): StacksNetwork {
+export function getStacksNetworkFromName(
+  stacksNetworkName: NetworkName | 'mocknet'
+): StacksNetwork {
   const networkConfig = getNetworkFromNetworkName(stacksNetworkName);
   return getStacksNetworkFromNetworkConfig(networkConfig);
 }
