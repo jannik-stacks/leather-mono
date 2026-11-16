@@ -15668,6 +15668,53 @@
           }
         }
       ]
+    },
+    {
+      "id": "KIT-STRUCTURED-MESSAGE-VALIDATION",
+      "file": "packages/stacks/src/message-signing.ts",
+      "symbol": [
+        "Cl"
+      ],
+      "sites": [
+        {
+          "file": "packages/stacks/src/message-signing.ts",
+          "symbol": [
+            "Cl"
+          ]
+        }
+      ],
+      "sinks": [
+        "display",
+        "api",
+        "wire"
+      ],
+      "flow": "Kit decoding validates structured messages before approval; invalid domains show an error, prevent signing and return INVALID_PARAMS to the requesting application.",
+      "proof": [
+        {
+          "test": {
+            "file": "packages/stacks/src/message-signing.spec.ts",
+            "name": "rejects invalid domains without throwing"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/mobile/src/features/approver/clarity-display.vectors.spec.ts",
+            "name": "shows an error without approval controls for invalid domain %s"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/mobile/src/features/browser/approver-sheet/stx/replies.vectors.spec.ts",
+            "name": "rejects invalid domain %s for both mobile message signing endpoints"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/extension/src/app/features/stacks-message-signer/use-sign-stacks-message.spec.ts",
+            "name": "shows a validation error and returns INVALID_PARAMS for domain %s"
+          }
+        }
+      ]
     }
   ],
   "contracts": {

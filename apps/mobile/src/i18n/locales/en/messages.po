@@ -373,6 +373,7 @@ msgstr "App is not protected with device-level PIN or biometrics."
 msgid "App Store"
 msgstr "App Store"
 
+#: src/features/approver/clarity-display.vectors-driver.ts:67
 #: src/features/approver/components/approver-buttons/index.tsx:29
 msgid "Approve"
 msgstr "Approve"
@@ -530,6 +531,10 @@ msgstr "Choose existing wallet"
 #: src/features/swap/components/asset-selector/asset-selector-empty-state.tsx:32
 msgid "Clear search"
 msgstr "Clear search"
+
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:74
+msgid "Close"
+msgstr "Close"
 
 #: src/features/qr-scanner/qr-scanner-chrome.tsx:31
 msgid "Close the scanner"
@@ -1087,6 +1092,10 @@ msgstr "Insufficient funds"
 msgid "Invalid amount"
 msgstr "Invalid amount"
 
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:67
+msgid "Invalid structured message"
+msgstr "Invalid structured message"
+
 #: src/features/recover-wallet/components/error-message.tsx:5
 msgid "Invalid words: {joinedInvalidWords}"
 msgstr "Invalid words: {joinedInvalidWords}"
@@ -1238,8 +1247,8 @@ msgstr "Memo must be less than 34-bytes"
 msgid "Memo updated"
 msgstr "Memo updated"
 
-#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:50
-#: src/features/approver/structured-message.section.tsx:36
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:57
+#: src/features/approver/structured-message.section.tsx:37
 #: src/features/browser/approver-sheet/sign-message/sign-message.layout.tsx:50
 msgid "Message"
 msgstr "Message"
@@ -1685,7 +1694,7 @@ msgstr "Show advanced options"
 msgid "Show balances"
 msgstr "Show balances"
 
-#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:40
+#: src/features/approver/layouts/base-stx-message-approver.layout.tsx:47
 #: src/features/browser/approver-sheet/sign-message/sign-message.layout.tsx:29
 msgid "Sign Message"
 msgstr "Sign Message"

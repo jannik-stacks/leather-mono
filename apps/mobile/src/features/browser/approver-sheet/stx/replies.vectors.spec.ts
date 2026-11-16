@@ -3,7 +3,13 @@ import React from 'react';
 import { readFileSync } from 'node:fs';
 import { expect, test, vi } from 'vitest';
 
-import { messageReply, transactionReply } from './replies.vectors-driver';
+import { RpcErrorCode } from '@leather.io/rpc';
+
+import {
+  invalidStructuredMessageReply,
+  messageReply,
+  transactionReply,
+} from './replies.vectors-driver';
 
 const expected: unknown = JSON.parse(readFileSync(__dirname + '/vectors/replies.json', 'utf8'));
 
@@ -23,3 +29,17 @@ test('pins signed transaction and both stx_signMessage RPC reply formats', async
 });
 
 vi.stubGlobal('React', React);
+
+test.each(['03', '0c00000000', 'garbage'])(
+  'rejects invalid domain %s for both mobile message signing endpoints',
+  async domain => {
+    const expected = [
+      expect.objectContaining({
+        id: 'vector-request',
+        error: { code: RpcErrorCode.INVALID_PARAMS, message: 'Invalid structured message' },
+      }),
+    ];
+    expect(await messageReply('03', domain)).toEqual(expected);
+    expect(await invalidStructuredMessageReply(domain)).toEqual(expected);
+  }
+);

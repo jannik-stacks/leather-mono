@@ -3,7 +3,11 @@ import React from 'react';
 import { readFileSync } from 'node:fs';
 import { expect, test, vi } from 'vitest';
 
-import { display, postConditionText } from './clarity-display.vectors-driver';
+import {
+  display,
+  postConditionText,
+  structuredMessageMarkup,
+} from './clarity-display.vectors-driver';
 
 const inputs = [
   '03',
@@ -71,3 +75,13 @@ test('pins shown post-condition messages for every comparator, principal, PoX an
 });
 
 vi.stubGlobal('React', React);
+
+test.each(['03', '0c00000000', 'garbage'])(
+  'shows an error without approval controls for invalid domain %s',
+  domain => {
+    const markup = structuredMessageMarkup(domain);
+    expect(markup).toContain('Invalid structured message');
+    expect(markup).toContain('Close');
+    expect(markup).not.toContain('Approve');
+  }
+);

@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "pnpm sanity:generate && tsdown",
+    "build": "pnpm sanity:schema-extract && pnpm sanity:generate && tsdown",
     "build:watch": "nodemon",
     "dev": "concurrently \"sanity dev\" \"nodemon\"",
     "format": "prettier . --write --ignore-path ../../.prettierignore",

@@ -2,7 +2,11 @@ import { Cl } from '@jannik-stacks/kit';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import * as messageContractVectorDriver from './message-contract.vectors-driver';
-import { signStructuredDataMessage, verifySip018Signature } from './message-signing';
+import {
+  decodeStructuredMessage,
+  signStructuredDataMessage,
+  verifySip018Signature,
+} from './message-signing';
 
 // Mirrors the multisig proposal commitment: a SIP-018 structured signature over
 // the proposal hash, wrapped in the proposal domain. Proves verify accepts what
@@ -18,6 +22,30 @@ const domain = Cl.tuple({
   'chain-id': Cl.uint(1),
 });
 const message = Cl.ascii('2a5f997755408a0a7f063923c830b3ae2fd3a26d8c19ab736ee523c3daf29a86');
+
+describe('structured message validation', () => {
+  test('decodes a valid message and SIP-018 domain', () => {
+    expect(decodeStructuredMessage(Cl.serialize(message), Cl.serialize(domain))).toEqual({
+      message,
+      domain,
+    });
+  });
+
+  test.each([
+    Cl.uint(1),
+    Cl.tuple({}),
+    Cl.tuple({ name: Cl.ascii('app'), version: Cl.ascii('1') }),
+    Cl.tuple({ name: Cl.uint(1), version: Cl.ascii('1'), 'chain-id': Cl.uint(1) }),
+    Cl.tuple({ name: Cl.ascii('app'), version: Cl.ascii('1'), 'chain-id': Cl.ascii('1') }),
+  ])('rejects invalid domains without throwing', invalidDomain => {
+    expect(decodeStructuredMessage(Cl.serialize(message), Cl.serialize(invalidDomain))).toBeNull();
+  });
+
+  test('rejects malformed message and domain encodings without throwing', () => {
+    expect(decodeStructuredMessage('garbage', Cl.serialize(domain))).toBeNull();
+    expect(decodeStructuredMessage(Cl.serialize(message), 'garbage')).toBeNull();
+  });
+});
 
 describe(verifySip018Signature.name, () => {
   const { signature, publicKey } = signStructuredDataMessage(message, domain, privateKey);

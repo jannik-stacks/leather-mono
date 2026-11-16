@@ -9,10 +9,48 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import { sha256 } from '@noble/hashes/sha256';
 import { concatBytes, hexToBytes } from '@noble/hashes/utils';
 
+export const invalidStructuredMessageError = 'Invalid structured message';
+
 export interface SignatureData {
   signature: string;
   publicKey: string;
 }
+
+interface DecodedStructuredMessage {
+  message: ClarityValue;
+  domain: StructuredMessageDomain;
+}
+
+export interface StructuredMessageDomain extends Cl.Types.Tuple {
+  value: Cl.Types.Tuple['value'] & {
+    name: Cl.Types.Ascii;
+    version: Cl.Types.Ascii;
+    'chain-id': Cl.Types.Uint;
+  };
+}
+
+export function decodeStructuredMessage(
+  message: string,
+  domain: string
+): DecodedStructuredMessage | null {
+  try {
+    const domainValue = Cl.deserialize(domain);
+    if (domainValue.type !== 'tuple') return null;
+    const { name, version, 'chain-id': chainId } = domainValue.value;
+    if (name?.type !== 'ascii' || version?.type !== 'ascii' || chainId?.type !== 'uint')
+      return null;
+    return {
+      message: Cl.deserialize(message),
+      domain: {
+        ...domainValue,
+        value: { ...domainValue.value, name, version, 'chain-id': chainId },
+      },
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function signMessage(message: string, privateKey: string): SignatureData {
   return {
     signature: signKitMessage(message, privateKey),
