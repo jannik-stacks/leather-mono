@@ -1,10 +1,5 @@
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 import type { BrowserContext, Page } from '@playwright/test';
-import {
-  PayloadType,
-  type StacksTransactionWire,
-  type TokenTransferPayloadWire,
-  deserializeTransaction,
-} from '@stacks/transactions';
 import { requestLeatherProvider } from '@tests/leather-provider';
 import { TEST_ACCOUNT_2_STX_ADDRESS } from '@tests/mocks/constants';
 import { mockEmptyStacksBalancesRequest } from '@tests/mocks/mock-stacks-balances';
@@ -24,11 +19,11 @@ const broadcastRequestBodySchema = z.object({ tx: z.string() });
 
 const transferStxResultSchema = z.object({ txid: z.string(), transaction: z.string().optional() });
 
-function getTokenTransferPayload(tx: StacksTransactionWire): TokenTransferPayloadWire {
-  if (tx.payload.payloadType !== PayloadType.TokenTransfer) {
+function getTokenTransferPayload(tx: StacksTransaction) {
+  if (tx.type !== 'transfer') {
     throw new Error('Expected a token transfer payload');
   }
-  return tx.payload;
+  return tx;
 }
 
 // Mocked fee estimations resolve to these three tiers (see mockStacksFeeRequests)
@@ -116,7 +111,7 @@ test.describe('RPC: stx_transferStx', () => {
 
       const requestBody = broadcastRequest.postData();
       if (!requestBody) throw new Error('Broadcast request has no body');
-      return deserializeTransaction(broadcastRequestBodySchema.parse(JSON.parse(requestBody)).tx);
+      return Codec.Transaction.decode(broadcastRequestBodySchema.parse(JSON.parse(requestBody)).tx);
     };
   }
 
@@ -136,11 +131,11 @@ test.describe('RPC: stx_transferStx', () => {
 
     const payload = getTokenTransferPayload(broadcastedTx);
     test.expect(Number(payload.amount)).toEqual(100);
-    test.expect(Number(broadcastedTx.auth.spendingCondition.fee)).toEqual(standardFee.microStx);
+    test.expect(Number(broadcastedTx.fee)).toEqual(standardFee.microStx);
 
     const transferResult = transferStxResultSchema.parse(result.result);
     test.expect(transferResult.txid).toEqual(mockedTxid);
-    test.expect(transferResult.transaction).toEqual(broadcastedTx.serialize());
+    test.expect(transferResult.transaction).toEqual(Codec.Transaction.encode(broadcastedTx));
   });
 
   test('broadcasts the fee chosen in the fee editor', async ({ page, context }) => {
@@ -156,7 +151,7 @@ test.describe('RPC: stx_transferStx', () => {
 
     const payload = getTokenTransferPayload(broadcastedTx);
     test.expect(Number(payload.amount)).toEqual(100);
-    test.expect(Number(broadcastedTx.auth.spendingCondition.fee)).toEqual(slowFee.microStx);
+    test.expect(Number(broadcastedTx.fee)).toEqual(slowFee.microStx);
 
     const transferResult = transferStxResultSchema.parse(result.result);
     test.expect(transferResult.txid).toEqual(mockedTxid);

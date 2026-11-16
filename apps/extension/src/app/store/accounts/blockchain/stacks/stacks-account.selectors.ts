@@ -1,8 +1,7 @@
-import { privateKeyToPublicKey } from '@jannik-stacks/kit';
+import { privateKeyToPublicKey, publicKeyToAddress } from '@jannik-stacks/kit';
 import { bytesToHex } from '@noble/hashes/utils';
 import { createSelector } from '@reduxjs/toolkit';
 import { HARDENED_OFFSET, type HDKey } from '@scure/bip32';
-import { createStacksPublicKey, publicKeyToAddressSingleSig } from '@stacks/transactions';
 import { mapValues } from 'remeda';
 
 import { bitcoinNetworkModeToCoreNetworkMode } from '@leather.io/bitcoin';
@@ -64,7 +63,7 @@ function initalizeSoftwareStacksAccount(
 
   const stxPublicKey = publicKeyToHex(privateKeyToPublicKey(stxPrivateKey));
   const dataPublicKey = publicKeyToHex(privateKeyToPublicKey(dataPrivateKey));
-  const address = publicKeyToAddressSingleSig(stxPublicKey, network);
+  const address = publicKeyToAddress(stxPublicKey, { network });
 
   return {
     ...accountId,
@@ -90,10 +89,10 @@ function initalizeHardwareStacksAccount(
   accountId: AccountId,
   network: NetworkModes
 ): HardwareStacksAccount {
-  const address = publicKeyToAddressSingleSig(
-    createStacksPublicKey(ledgerKeychain.stxPublicKey).data,
-    network
-  );
+  const address = publicKeyToAddress(ledgerKeychain.stxPublicKey, {
+    network,
+    encoding: ledgerKeychain.stxPublicKey.length === 130 ? 'uncompressed' : 'compressed',
+  });
 
   return {
     type: 'ledger',

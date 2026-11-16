@@ -142,4 +142,16 @@ describe('signPsbtHandler', () => {
     expect(mocks.triggerRequestPopupWindowOpen).toHaveBeenCalled();
     expect(mocks.sendErrorResponseOnUserPopupClose).toHaveBeenCalled();
   });
+
+  test('preserves a 0x-prefixed PSBT when opening the approval popup', async () => {
+    const hex = '0x' + makePsbtHex();
+    await invokeHandler(makeRequest({ hex }));
+
+    expect(mocks.sendMessage).not.toHaveBeenCalled();
+    expect(mocks.createConnectingAppSearchParamsWithLastKnownAccount).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.arrayContaining([['hex', hex]])
+    );
+    expect(mocks.triggerRequestPopupWindowOpen).toHaveBeenCalled();
+  });
 });

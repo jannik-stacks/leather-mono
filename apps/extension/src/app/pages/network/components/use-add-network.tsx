@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { createFetchFn } from '@stacks/common';
 import { z } from 'zod';
 
 import {
@@ -38,6 +37,11 @@ export interface AddNetworkFormValues {
   bitcoinUrl: string;
   bitcoinNetwork: BitcoinNetwork;
 }
+
+const nodeRequestOptions: RequestInit = {
+  referrerPolicy: 'origin',
+  headers: { 'x-hiro-product': 'stacksjs' },
+};
 
 const initialFormValues: AddNetworkFormValues = {
   key: '',
@@ -81,7 +85,6 @@ export function useAddNetwork() {
   const networksActions = useNetworksActions();
   const networks = useNetworks();
   const initialValues = useInitialValues();
-  const fetchFn = createFetchFn();
 
   function saveNetwork(network: PersistedNetworkConfiguration) {
     if (initialValues.key) {
@@ -130,7 +133,7 @@ export function useAddNetwork() {
       const bitcoinPath = removeTrailingSlash(new URL(values.bitcoinUrl).href);
 
       try {
-        const bitcoinResponse = await fetchFn(`${bitcoinPath}/mempool/recent`);
+        const bitcoinResponse = await fetch(`${bitcoinPath}/mempool/recent`, nodeRequestOptions);
         if (!bitcoinResponse?.ok) throw new Error('Unable to fetch mempool from bitcoin node');
         const bitcoinMempool: unknown = await bitcoinResponse.json();
         if (!Array.isArray(bitcoinMempool))
@@ -143,7 +146,7 @@ export function useAddNetwork() {
 
       let stacksChainInfo: unknown;
       try {
-        const stacksResponse = await fetchFn(`${stacksPath}/v2/info`);
+        const stacksResponse = await fetch(`${stacksPath}/v2/info`, nodeRequestOptions);
         stacksChainInfo = await stacksResponse?.json();
         if (!stacksChainInfo) throw new Error('Unable to fetch info from stacks node');
       } catch {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
+import { bytesToHex } from '@noble/hashes/utils';
 import type { TransactionInput } from '@scure/btc-signer/psbt';
-import { bytesToHex } from '@stacks/common';
 
 import {
   getBitcoinInputAddress,

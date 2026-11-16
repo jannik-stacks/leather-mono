@@ -1,5 +1,5 @@
+import { hexToBytes } from '@noble/hashes/utils';
 import * as btc from '@scure/btc-signer';
-import { hexToBytes } from '@stacks/common';
 
 import { isWshDescriptor } from '@leather.io/bitcoin';
 import { RpcErrorCode, createRpcErrorResponse, signPsbt } from '@leather.io/rpc';
@@ -25,7 +25,7 @@ import {
 
 function validatePsbt(hex: string) {
   try {
-    btc.Transaction.fromPSBT(hexToBytes(hex));
+    btc.Transaction.fromPSBT(hexToBytes(hex.replace(/^0x/, '')));
     return true;
   } catch {
     return false;
