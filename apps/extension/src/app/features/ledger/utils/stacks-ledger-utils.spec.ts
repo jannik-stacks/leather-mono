@@ -1,12 +1,10 @@
-import { ChainId } from '@stacks/network';
-import {
-  AddressVersion,
-  deserializeTransaction,
-  isSingleSig,
-  makeUnsignedSTXTokenTransfer,
-} from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 import { LedgerError } from '@zondax/ledger-stacks';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
+
+import { ChainId } from '@leather.io/models';
+import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
+import { createMoney } from '@leather.io/utils';
 
 import {
   isLedgerDeviceDisconnectedError,
@@ -33,51 +31,61 @@ const signatureVrs = Buffer.from(signatureHex, 'hex');
 
 describe(signStacksTransactionWithSignature.name, () => {
   test('sets the signature on single-sig transactions', async () => {
-    const unsignedTx = await makeUnsignedSTXTokenTransfer({
+    const unsignedTx = await generateStacksUnsignedTransaction({
       recipient,
-      amount: 500,
-      fee: 100,
+      amount: createMoney(500, 'STX'),
+      fee: createMoney(100, 'STX'),
       nonce: 0,
       network: 'mainnet',
       publicKey: signerPublicKey,
+      txType: 'token_transfer',
     });
 
-    const signedTx = signStacksTransactionWithSignature(unsignedTx.serialize(), signatureVrs);
-    const spendingCondition = signedTx.auth.spendingCondition;
+    const signedTx = signStacksTransactionWithSignature(
+      Codec.Transaction.encode(unsignedTx),
+      signatureVrs
+    );
+    const spendingCondition = signedTx;
 
-    if (!isSingleSig(spendingCondition)) throw new Error('Expected single-sig spending condition');
+    if (spendingCondition.signaturesRequired !== undefined)
+      throw new Error('Expected single-sig spending condition');
 
-    expect(spendingCondition.signature.data).toEqual(signatureHex);
-    expect(() => signedTx.serialize()).not.toThrow();
+    expect(spendingCondition.signature).toEqual(signatureHex);
+    expect(() => Codec.Transaction.encode(signedTx)).not.toThrow();
   });
 
   test('appends a signature auth field to multisig transactions', async () => {
-    const unsignedTx = await makeUnsignedSTXTokenTransfer({
+    const unsignedTx = await generateStacksUnsignedTransaction({
       recipient,
-      amount: 500,
-      fee: 100,
+      amount: createMoney(500, 'STX'),
+      fee: createMoney(100, 'STX'),
       nonce: 0,
       network: 'mainnet',
       publicKeys: [secondPublicKey, signerPublicKey],
       numSignatures: 2,
+      txType: 'token_transfer',
     });
 
-    const signedTx = signStacksTransactionWithSignature(unsignedTx.serialize(), signatureVrs);
-    const spendingCondition = signedTx.auth.spendingCondition;
+    const signedTx = signStacksTransactionWithSignature(
+      Codec.Transaction.encode(unsignedTx),
+      signatureVrs
+    );
+    const spendingCondition = signedTx;
 
-    if (isSingleSig(spendingCondition)) throw new Error('Expected multisig spending condition');
+    if (spendingCondition.signaturesRequired === undefined)
+      throw new Error('Expected multisig spending condition');
 
-    expect(spendingCondition.fields).toHaveLength(1);
-    expect(() => signedTx.serialize()).not.toThrow();
+    expect(spendingCondition.signatures).toHaveLength(1);
+    expect(() => Codec.Transaction.encode(signedTx)).not.toThrow();
 
-    const serializedTx = signedTx.serialize();
-    const deserializedTx = deserializeTransaction(serializedTx);
-    const deserializedSpendingCondition = deserializedTx.auth.spendingCondition;
+    const serializedTx = Codec.Transaction.encode(signedTx);
+    const deserializedTx = Codec.Transaction.decode(serializedTx);
+    const deserializedSpendingCondition = deserializedTx;
 
-    if (isSingleSig(deserializedSpendingCondition))
+    if (deserializedSpendingCondition.signaturesRequired === undefined)
       throw new Error('Expected deserialized multisig spending condition');
 
-    expect(deserializedSpendingCondition.fields).toHaveLength(1);
+    expect(deserializedSpendingCondition.signatures).toHaveLength(1);
   });
 });
 
@@ -138,19 +146,15 @@ describe(getStacksAppVersion.name, () => {
 
 describe(stacksChainIdToSingleSigAddressVersion.name, () => {
   test('maps the mainnet chain id to the mainnet single sig version', () => {
-    expect(stacksChainIdToSingleSigAddressVersion(ChainId.Mainnet)).toBe(
-      AddressVersion.MainnetSingleSig
-    );
+    expect(stacksChainIdToSingleSigAddressVersion(ChainId.Mainnet)).toBe(22);
   });
 
   test('maps the testnet chain id to the testnet single sig version', () => {
-    expect(stacksChainIdToSingleSigAddressVersion(ChainId.Testnet)).toBe(
-      AddressVersion.TestnetSingleSig
-    );
+    expect(stacksChainIdToSingleSigAddressVersion(ChainId.Testnet)).toBe(26);
   });
 
   test('falls back to the testnet version for custom chain ids', () => {
-    expect(stacksChainIdToSingleSigAddressVersion(256)).toBe(AddressVersion.TestnetSingleSig);
+    expect(stacksChainIdToSingleSigAddressVersion(256)).toBe(26);
   });
 });
 
@@ -185,12 +189,9 @@ describe(showStxAddressOnDevice.name, () => {
     );
     const app = makeFakeLedgerStacksApp({ showAddressAndPubKey });
 
-    await showStxAddressOnDevice(app)("m/44'/5757'/0'/0/3", AddressVersion.MainnetSingleSig);
+    await showStxAddressOnDevice(app)("m/44'/5757'/0'/0/3", 22);
 
-    expect(showAddressAndPubKey).toHaveBeenCalledWith(
-      "m/44'/5757'/0'/0/3",
-      AddressVersion.MainnetSingleSig
-    );
+    expect(showAddressAndPubKey).toHaveBeenCalledWith("m/44'/5757'/0'/0/3", 22);
   });
 
   test('shows a ledger live derivation path unchanged', async () => {
@@ -199,12 +200,9 @@ describe(showStxAddressOnDevice.name, () => {
     );
     const app = makeFakeLedgerStacksApp({ showAddressAndPubKey });
 
-    await showStxAddressOnDevice(app)("m/44'/5757'/3'/0/0", AddressVersion.MainnetSingleSig);
+    await showStxAddressOnDevice(app)("m/44'/5757'/3'/0/0", 22);
 
-    expect(showAddressAndPubKey).toHaveBeenCalledWith(
-      "m/44'/5757'/3'/0/0",
-      AddressVersion.MainnetSingleSig
-    );
+    expect(showAddressAndPubKey).toHaveBeenCalledWith("m/44'/5757'/3'/0/0", 22);
   });
 });
 

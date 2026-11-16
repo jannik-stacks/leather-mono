@@ -1,8 +1,12 @@
-import { privateKeyToPublic, stringAsciiCV } from '@stacks/transactions';
+import { Cl, privateKeyToPublicKey } from '@jannik-stacks/kit';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import { computeProposalHash, decodeProposalPayload } from '@leather.io/crypto';
-import type { MultisigTransaction, VaultAccount, VaultAccountSigner } from '@leather.io/models';
+import {
+  type MultisigTransaction,
+  type VaultAccount,
+  type VaultAccountSigner,
+} from '@leather.io/models';
 import {
   buildStxProposalDomain,
   signStructuredDataMessage,
@@ -178,7 +182,7 @@ describe(preSignVerification.name, () => {
 });
 
 function stxPublicKeyHex(privateKey: string): string {
-  const publicKey = privateKeyToPublic(privateKey);
+  const publicKey = privateKeyToPublicKey(privateKey);
   if (typeof publicKey !== 'string') throw new Error('Expected a compressed hex public key');
   return publicKey;
 }
@@ -242,7 +246,7 @@ const stxTransaction: MultisigTransaction = {
   proposerUserId: 'stx-user-0',
   proposalRawPayload: stxProposalRawPayload,
   proposalSignature: signStructuredDataMessage(
-    stringAsciiCV(stxProposalHash),
+    Cl.ascii(stxProposalHash),
     buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:testnet']),
     stxPrivateKeys[0]
   ).signature,
@@ -302,7 +306,7 @@ describe(`${preSignVerification.name} (STX)`, () => {
         : signer
     );
     const attackerSignature = signStructuredDataMessage(
-      stringAsciiCV(stxProposalHash),
+      Cl.ascii(stxProposalHash),
       buildStxProposalDomain(stxChainIdByAuthNetworkId['stx:testnet']),
       attackerPrivateKey
     ).signature;

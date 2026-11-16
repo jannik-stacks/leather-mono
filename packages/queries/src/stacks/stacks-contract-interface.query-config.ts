@@ -1,5 +1,5 @@
-import type { ClarityAbi } from '@stacks/transactions';
-import type { QueryFunctionContext, UseQueryOptions } from '@tanstack/react-query';
+import { type ClarityAbiLike } from '@jannik-stacks/kit';
+import { type QueryFunctionContext, type UseQueryOptions } from '@tanstack/react-query';
 
 import { type UserSettings, getHiroStacksApiClient } from '@leather.io/services';
 import { minutesInMs } from '@leather.io/utils';
@@ -29,5 +29,5 @@ export function createStacksContractInterfaceQueryConfig(
       getHiroStacksApiClient().getContractInterface(contractAddress, contractName, { signal }),
     staleTime: minutesInMs(30),
     refetchOnWindowFocus: false,
-  } satisfies UseQueryOptions<ClarityAbi>;
+  } satisfies UseQueryOptions<ClarityAbiLike>;
 }

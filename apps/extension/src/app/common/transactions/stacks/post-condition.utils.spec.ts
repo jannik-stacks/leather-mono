@@ -1,11 +1,4 @@
-import {
-  FungibleConditionCode,
-  PostConditionPrincipalId,
-  PostConditionType,
-  PoxConditionCode,
-  deserializePostConditionWire,
-  postConditionToWire,
-} from '@stacks/transactions';
+import { Codec, type PostCondition } from '@jannik-stacks/kit';
 
 import {
   getAmountFromPostCondition,
@@ -15,46 +8,38 @@ import {
   getPoxConditionTitle,
 } from '@app/common/transactions/stacks/post-condition.utils';
 import { formatPostConditionMessage } from '@app/features/rpc-stacks-transaction-request/stacks/post-conditions/post-conditions.utils';
-import type { StacksAccount } from '@app/store/accounts/blockchain/stacks/stacks-account.models';
+import { type StacksAccount } from '@app/store/accounts/blockchain/stacks/stacks-account.models';
 
 const SENDER_ADDRESS = 'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW';
 
 describe('getPostConditionCodeMessage with stake context', () => {
   it('uses the stake verb for fungible condition codes', () => {
-    expect(getPostConditionCodeMessage(FungibleConditionCode.LessEqual, true, 'stake')).toBe(
-      'You will stake at most'
-    );
-    expect(getPostConditionCodeMessage(FungibleConditionCode.Equal, false, 'stake')).toBe(
+    expect(getPostConditionCodeMessage('lte', true, 'stake')).toBe('You will stake at most');
+    expect(getPostConditionCodeMessage('eq', false, 'stake')).toBe(
       'The contract will stake exactly'
     );
   });
 
   it('defaults to the transfer verb', () => {
-    expect(getPostConditionCodeMessage(FungibleConditionCode.Equal, true)).toBe(
-      'You will transfer exactly'
-    );
+    expect(getPostConditionCodeMessage('eq', true)).toBe('You will transfer exactly');
   });
 });
 
 describe('pox condition messaging', () => {
   it('returns a message for each pox condition code', () => {
-    expect(getPoxConditionCodeMessage(PoxConditionCode.WillNotPerform, true)).toBe(
+    expect(getPoxConditionCodeMessage('will-not-perform', true)).toBe(
       'You must not perform any PoX actions'
     );
-    expect(getPoxConditionCodeMessage(PoxConditionCode.MayPerform, true)).toBe(
-      'You may perform PoX actions'
-    );
-    expect(getPoxConditionCodeMessage(PoxConditionCode.WillPerform, false)).toBe(
+    expect(getPoxConditionCodeMessage('may-perform', true)).toBe('You may perform PoX actions');
+    expect(getPoxConditionCodeMessage('will-perform', false)).toBe(
       'The contract must perform a PoX action'
     );
   });
 
   it('returns a title for each pox condition code', () => {
-    expect(getPoxConditionTitle(PoxConditionCode.WillNotPerform)).toBe(
-      'must not perform any PoX actions'
-    );
-    expect(getPoxConditionTitle(PoxConditionCode.MayPerform)).toBe('may perform PoX actions');
-    expect(getPoxConditionTitle(PoxConditionCode.WillPerform)).toBe('must perform a PoX action');
+    expect(getPoxConditionTitle('will-not-perform')).toBe('must not perform any PoX actions');
+    expect(getPoxConditionTitle('may-perform')).toBe('may perform PoX actions');
+    expect(getPoxConditionTitle('will-perform')).toBe('must perform a PoX action');
   });
 });
 
@@ -62,10 +47,10 @@ describe('origin principal post conditions', () => {
   const serializedOriginStxPostCondition = '0x0001010000000005f5e100';
 
   it('attributes an origin principal post condition to the signing user', () => {
-    const wire = deserializePostConditionWire(serializedOriginStxPostCondition);
-    expect(wire.principal.prefix).toBe(PostConditionPrincipalId.Origin);
-    expect(wire.conditionType).toBe(PostConditionType.STX);
-    if (wire.conditionType === PostConditionType.STX) {
+    const wire = Codec.Raw.PostCondition.decode(serializedOriginStxPostCondition);
+    expect(wire.address).toBe('origin');
+    expect(wire.type).toBe('stx-postcondition');
+    if (wire.type === 'stx-postcondition') {
       const formatted = formatPostConditionMessage({
         isContractPrincipal: false,
         postCondition: wire,
@@ -88,14 +73,14 @@ describe('origin principal post conditions', () => {
       fingerprint: '',
       derivationPath: '',
     };
-    const wire = postConditionToWire({
+    const wire = {
       type: 'stx-postcondition',
       address: SENDER_ADDRESS,
       condition: 'eq',
-      amount: 100000000,
-    });
-    expect(wire.principal.prefix).toBe(PostConditionPrincipalId.Standard);
-    if (wire.conditionType === PostConditionType.STX) {
+      amount: 100000000n,
+    } satisfies PostCondition;
+    expect(wire.address).toBe(SENDER_ADDRESS);
+    if (wire.type === 'stx-postcondition') {
       const matched = formatPostConditionMessage({
         account: mockAccount,
         isContractPrincipal: false,
@@ -119,14 +104,14 @@ describe('origin principal post conditions', () => {
 
 describe('staking display helpers', () => {
   it('formats the staked amount as STX and uses the STX icon', () => {
-    const wire = postConditionToWire({
+    const wire = {
       type: 'staking-postcondition',
       address: SENDER_ADDRESS,
       condition: 'gte',
-      amount: 1000000,
-    });
-    expect(wire.conditionType).toBe(PostConditionType.Staking);
-    if (wire.conditionType === PostConditionType.Staking) {
+      amount: 1000000n,
+    } satisfies PostCondition;
+    expect(wire.type).toBe('staking-postcondition');
+    if (wire.type === 'staking-postcondition') {
       expect(getIconStringFromPostCondition(wire)).toBe('STX');
       const amount = getAmountFromPostCondition(wire);
       expect(amount).not.toBe('');
@@ -137,15 +122,15 @@ describe('staking display helpers', () => {
 
 describe('fungible post condition contract id', () => {
   it('derives the contract id from the asset rather than the principal', () => {
-    const wire = postConditionToWire({
+    const wire = {
       type: 'ft-postcondition',
       address: SENDER_ADDRESS,
       condition: 'eq',
-      amount: 100000000,
+      amount: 100000000n,
       asset: 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token',
-    });
-    expect(wire.conditionType).toBe(PostConditionType.Fungible);
-    if (wire.conditionType === PostConditionType.Fungible) {
+    } satisfies PostCondition;
+    expect(wire.type).toBe('ft-postcondition');
+    if (wire.type === 'ft-postcondition') {
       const formatted = formatPostConditionMessage({
         isContractPrincipal: false,
         postCondition: wire,

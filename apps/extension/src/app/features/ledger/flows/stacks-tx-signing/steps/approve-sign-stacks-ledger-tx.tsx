@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
 import * as Sentry from '@sentry/react';
-import { PayloadType, addressToString, cvToString } from '@stacks/transactions';
 import { BigNumber } from 'bignumber.js';
 
+import { formatClarityValue } from '@leather.io/stacks';
 import { microStxToStx } from '@leather.io/utils';
 
 import { getSip10TransferPayload } from '@app/common/transactions/stacks/transaction.utils';
@@ -33,65 +33,57 @@ export function ApproveSignLedgerStacksTx() {
 
     try {
       const details: [string, string, string?][] = [];
+      const nonce = transaction.nonce ?? 0n;
+      const fee = transaction.fee ?? 0n;
 
       details.push(['Origin', currentAccount?.address ?? '']);
-      details.push(['Nonce', String(transaction.auth.spendingCondition.nonce)]);
+      details.push(['Nonce', String(nonce)]);
 
-      details.push([
-        'Fee (µSTX)',
-        String(transaction.auth.spendingCondition.fee),
-        formatTooltipLabel(transaction.auth.spendingCondition.fee),
-      ]);
+      details.push(['Fee (µSTX)', String(fee), formatTooltipLabel(fee)]);
 
-      if (transaction.payload.payloadType === PayloadType.TokenTransfer) {
+      if (transaction.type === 'transfer') {
         details.push(
           [
             'Amount (µSTX)',
-            new BigNumber(String(transaction.payload.amount)).toFormat(),
-            formatTooltipLabel(transaction.payload.amount),
+            new BigNumber(String(transaction.amount)).toFormat(),
+            formatTooltipLabel(transaction.amount),
           ],
-          ['To', cvToString(transaction.payload.recipient)],
-          ['Memo', transaction.payload.memo.content]
+          ['To', transaction.recipient],
+          ['Memo', transaction.memo ?? '']
         );
         return details;
       }
 
-      if (transaction.payload.payloadType === PayloadType.ContractCall) {
-        details.push(['Contract address', addressToString(transaction.payload.contractAddress)]);
-        details.push(['Contract name', transaction.payload.contractName.content]);
+      if (transaction.type === 'call') {
+        details.push(['Contract address', transaction.contract.split('.')[0] ?? '']);
+        details.push(['Contract name', transaction.contract.split('.')[1] ?? '']);
       }
 
-      if (
-        transaction.payload.payloadType === PayloadType.SmartContract ||
-        transaction.payload.payloadType === PayloadType.VersionedSmartContract
-      ) {
+      if (transaction.type === 'deploy') {
         details.push(['Contract address', currentAccount?.address ?? '']);
-        details.push(['Contract name', transaction.payload.contractName.content]);
+        details.push(['Contract name', transaction.name]);
       }
 
-      if (transaction.payload.payloadType === PayloadType.ContractCall) {
-        details.push(['Function name', transaction.payload.functionName.content]);
+      if (transaction.type === 'call') {
+        details.push(['Function name', transaction.functionName]);
 
-        if (transaction.payload.functionArgs.length === 0) {
+        if (transaction.args.length === 0) {
           details.push(['Arguments', 'None']);
         }
 
         if (getSip10TransferPayload(transaction)) {
-          transaction.payload.functionArgs.forEach((cv, index) => {
-            details.push([formatSipTenTransferArgument(index), cvToString(cv)]);
+          transaction.args.forEach((cv, index) => {
+            details.push([formatSipTenTransferArgument(index), formatClarityValue(cv)]);
           });
         } else {
-          transaction.payload.functionArgs.forEach((cv, index) =>
-            details.push([`Argument ${index + 0}`, cvToString(cv)])
+          transaction.args.forEach((cv, index) =>
+            details.push([`Argument ${index + 0}`, formatClarityValue(cv)])
           );
         }
       }
 
-      if (
-        transaction.payload.payloadType === PayloadType.SmartContract ||
-        transaction.payload.payloadType === PayloadType.VersionedSmartContract
-      ) {
-        details.push(['Contract code', transaction.payload.codeBody.content]);
+      if (transaction.type === 'deploy') {
+        details.push(['Contract code', transaction.code]);
       }
 
       return details;

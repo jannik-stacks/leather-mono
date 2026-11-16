@@ -1,4 +1,4 @@
-import { stringAsciiCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 
 import {
   deriveXpubChildPublicKey,
@@ -6,7 +6,11 @@ import {
   verifyP2wpkhBip322Signature,
 } from '@leather.io/bitcoin';
 import { computeProposalHash, decodeProposalPayload } from '@leather.io/crypto';
-import type { MultisigTransaction, VaultAccount, VaultAccountSigner } from '@leather.io/models';
+import {
+  type MultisigTransaction,
+  type VaultAccount,
+  type VaultAccountSigner,
+} from '@leather.io/models';
 import { buildStxProposalDomain, verifySip018Signature } from '@leather.io/stacks';
 
 import { resolveBtcNetworkMode } from '../../network/resolve-btc-network-mode';
@@ -72,7 +76,7 @@ function assertProposalCommitment(
           transaction.proposalSignature
         )
       : verifySip018Signature({
-          message: stringAsciiCV(proposalHash),
+          message: Cl.ascii(proposalHash),
           domain: buildStxProposalDomain(resolveStxChainId(account.network)),
           signature: transaction.proposalSignature,
           publicKey: proposer.signingPubkey,

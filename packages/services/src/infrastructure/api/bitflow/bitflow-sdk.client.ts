@@ -6,13 +6,20 @@ import {
   SwapExecutionData,
   Token,
 } from '@bitflowlabs/core-sdk';
+import { Cl, Codec } from '@jannik-stacks/kit';
+import {
+  type ClarityValue as VendorClarityValue,
+  type PostCondition as VendorPostCondition,
+  postConditionToHex,
+  serializeCV,
+} from '@stacks/transactions';
 import { inject, injectable } from 'inversify';
 
 import { HIRO_API_BASE_URL_MAINNET } from '@leather.io/models';
 
 import { Types } from '../../../inversify.types';
 import { HttpCacheService } from '../../cache/http-cache.service';
-import type { Environment } from '../../environment';
+import { type Environment } from '../../environment';
 
 type BitflowSdkToken = Token;
 type BitflowSdkQuoteResult = QuoteResult;
@@ -78,6 +85,19 @@ export class BitflowSdkClient {
     slippageTolerance?: number
   ) {
     if (!this.bitflow) return null;
-    return await this.bitflow.getSwapParams(swapExecutionData, senderAddress, slippageTolerance);
+    const tx = await this.bitflow.getSwapParams(
+      swapExecutionData,
+      senderAddress,
+      slippageTolerance
+    );
+    return {
+      ...tx,
+      functionArgs: tx.functionArgs.map((arg: VendorClarityValue) =>
+        Cl.deserialize(serializeCV(arg))
+      ),
+      postConditions: tx.postConditions.map((pc: VendorPostCondition) =>
+        Codec.Raw.PostCondition.decode(postConditionToHex(pc))
+      ),
+    };
   }
 }

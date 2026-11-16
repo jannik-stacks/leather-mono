@@ -1,8 +1,8 @@
 import { HDKey } from '@scure/bip32';
-import { ChainId } from '@stacks/network';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import { deriveBip39SeedFromMnemonic } from '@leather.io/crypto';
+import { ChainId } from '@leather.io/models';
 import { testMnemonic, testMnemonicWithLeadingZeros } from '@leather.io/test-config';
 
 import * as accountsVectorDriver from './accounts.vectors-driver';

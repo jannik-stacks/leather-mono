@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 
-import { stringAsciiCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import type * as bitcoin from 'bitcoinjs-lib';
 
 import { createBitcoinAddress } from '@leather.io/bitcoin';
-import type { AuthNetworkId } from '@leather.io/models';
+import { type AuthNetworkId } from '@leather.io/models';
 import { buildStxProposalDomain } from '@leather.io/stacks';
 
-import type { UnsignedMessage } from '@shared/signature/signature-types';
+import { type UnsignedMessage } from '@shared/signature/signature-types';
 
 import { signBip322MessageUnlessDismissed } from '@app/common/sign-bip322-message-unless-dismissed';
 import { useWalletType } from '@app/common/use-wallet-type';
@@ -51,7 +51,7 @@ export function useSignProposalCommitment() {
 
       const unsignedMessage: UnsignedMessage = {
         messageType: 'structured',
-        message: stringAsciiCV(proposalHash),
+        message: Cl.ascii(proposalHash),
         domain: buildStxProposalDomain(stacksChainId),
       };
 

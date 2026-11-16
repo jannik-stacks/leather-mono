@@ -1,5 +1,3 @@
-import { type TransactionEvent } from '@stacks/stacks-blockchain-api-types';
-
 import { stxAsset } from '@leather.io/constants';
 import {
   type AccountAddresses,
@@ -7,6 +5,7 @@ import {
   CryptoAssetCategories,
   OnChainActivityStatuses,
   OnChainActivityTypes,
+  type StacksApiTransactionEvent,
 } from '@leather.io/models';
 import { initBigNumber } from '@leather.io/utils';
 
@@ -530,7 +529,7 @@ describe('mapStacksTxFee', () => {
 
 describe('getEventsByTxId', () => {
   it('groups events by tx_id', () => {
-    const events: TransactionEvent[] = [
+    const events: StacksApiTransactionEvent[] = [
       createActivitySmartContractLogEvent({ tx_id: '0xaaa', event_index: 0 }),
       createActivitySmartContractLogEvent({ tx_id: '0xbbb', event_index: 0 }),
       createActivitySmartContractLogEvent({ tx_id: '0xaaa', event_index: 1 }),

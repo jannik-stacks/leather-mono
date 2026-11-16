@@ -3,7 +3,7 @@ import { useApps } from '@/store/apps/apps.read';
 import { useStacksSignerAddressFromAccountIndex } from '@/store/keychains/stacks/stacks-keychains.read';
 import { useSettings } from '@/store/settings/settings';
 import { destructAccountIdentifier } from '@/store/utils';
-import { PostConditionType, deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { Approver } from '@leather.io/ui/native';
 import { assertExistence } from '@leather.io/utils';
@@ -21,8 +21,8 @@ export function ContractCallPostConditionsSection({
   txHex: string;
   origin?: string;
 }) {
-  const tx = deserializeTransaction(txHex);
-  assertContractCallPayload(tx.payload);
+  const tx = Codec.Transaction.decode(txHex);
+  assertContractCallPayload(tx);
   const { fromOrigin } = useApps();
 
   const { currentAccount } = useSettings();
@@ -39,14 +39,14 @@ export function ContractCallPostConditionsSection({
 
   return (
     <Approver.Section>
-      {tx.postConditions.values.map((pc, index) => {
-        if (pc.conditionType === PostConditionType.Fungible) {
+      {(tx.postConditions ?? []).map((pc, index) => {
+        if (pc.type === 'ft-postcondition') {
           return (
             <FTPostCondition key={`ft-${index}`} stacksAddress={stacksAddress} postCondition={pc} />
           );
         }
 
-        if (pc.conditionType === PostConditionType.NonFungible) {
+        if (pc.type === 'nft-postcondition') {
           return (
             <NFTPostCondition
               key={`nft-${index}`}
@@ -56,7 +56,7 @@ export function ContractCallPostConditionsSection({
           );
         }
 
-        if (pc.conditionType === PostConditionType.Staking) {
+        if (pc.type === 'staking-postcondition') {
           return (
             <StakingPostCondition
               key={`staking-${index}`}
@@ -66,7 +66,7 @@ export function ContractCallPostConditionsSection({
           );
         }
 
-        if (pc.conditionType === PostConditionType.PoX) {
+        if (pc.type === 'pox-postcondition') {
           return (
             <PoxPostCondition
               key={`pox-${index}`}

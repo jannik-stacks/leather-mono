@@ -1,4 +1,5 @@
-import { privateKeyToPublic, publicKeyToHex } from '@stacks/transactions';
+import { Codec, privateKeyToPublicKey } from '@jannik-stacks/kit';
+import { publicKeyToHex } from '@stacks/transactions';
 
 import {
   TransactionTypes,
@@ -10,7 +11,7 @@ import { createMoney } from '@leather.io/utils';
 import { extractStxMultisigSignature } from './extract-stx-multisig-signature';
 
 const privateKeys = ['11'.repeat(32) + '01', '22'.repeat(32) + '01', '33'.repeat(32) + '01'];
-const publicKeys = privateKeys.map(key => publicKeyToHex(privateKeyToPublic(key)));
+const publicKeys = privateKeys.map(key => publicKeyToHex(privateKeyToPublicKey(key)));
 const recipient = 'ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH';
 
 function makeUnsignedMultisigTransfer() {
@@ -29,7 +30,7 @@ function makeUnsignedMultisigTransfer() {
 describe(extractStxMultisigSignature.name, () => {
   test('returns the lone VRS signature a signer contributed', async () => {
     const tx = await makeUnsignedMultisigTransfer();
-    const signedHex = signStacksTransaction(tx, privateKeys[0]).serialize();
+    const signedHex = Codec.Transaction.encode(signStacksTransaction(tx, privateKeys[0]));
 
     const signature = extractStxMultisigSignature(signedHex);
     // A recoverable VRS signature is 65 bytes = 130 hex chars.
@@ -38,7 +39,7 @@ describe(extractStxMultisigSignature.name, () => {
   });
 
   test('throws when no signature has been added yet', async () => {
-    const unsignedHex = (await makeUnsignedMultisigTransfer()).serialize();
+    const unsignedHex = Codec.Transaction.encode(await makeUnsignedMultisigTransfer());
     expect(() => extractStxMultisigSignature(unsignedHex)).toThrow('found 0');
   });
 
@@ -51,6 +52,8 @@ describe(extractStxMultisigSignature.name, () => {
       nonce: 0,
       publicKey: publicKeys[0],
     });
-    expect(() => extractStxMultisigSignature(singleSig.serialize())).toThrow('multisig');
+    expect(() => extractStxMultisigSignature(Codec.Transaction.encode(singleSig))).toThrow(
+      'multisig'
+    );
   });
 });

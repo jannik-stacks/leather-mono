@@ -15,20 +15,12 @@ import {
   assertTokenTransferPayload,
   getTotalSpendMoney,
   getTxRecipient,
-  isContractCall,
-  isContractDeploy,
-  isTokenTransfer,
 } from '@/features/approver/utils';
 import { useOpenUrl } from '@/features/browser/browser/use-open-url';
 import { useCurrentNetworkState } from '@/queries/leather-query-provider';
 import { type Account } from '@/store/accounts/accounts';
+import { Codec } from '@jannik-stacks/kit';
 import { t } from '@lingui/core/macro';
-import {
-  AuthType,
-  PostConditionMode,
-  deserializeTransaction,
-  isTokenTransferPayload,
-} from '@stacks/transactions';
 import * as Clipboard from 'expo-clipboard';
 
 import { stxAsset } from '@leather.io/constants';
@@ -71,7 +63,9 @@ export function BaseStxTxApproverLayout({
   onBack,
 }: BaseStxTxApproverLayoutProps) {
   const approverWarningSheetRef = useRef<SheetInstance>(null);
-  const tx = deserializeTransaction(txHex);
+  const tx = Codec.Transaction.decode(txHex);
+  const fee = tx.fee ?? 0n;
+  const nonce = tx.nonce ?? 0n;
   const { changeFeeToastHandler, changeMemoToastHandler, changeNonceToastHandler } =
     useStxTransactionUpdatesHandler();
   const [broadcastedTxid, setBroadcastedTxid] = useState<null | string>(null);
@@ -79,40 +73,40 @@ export function BaseStxTxApproverLayout({
   const { openUrl } = useOpenUrl();
 
   useEffect(() => {
-    if (tx.postConditionMode === PostConditionMode.Allow) {
+    if (tx.postConditionMode === 'allow') {
       approverWarningSheetRef.current?.present();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function changeMemo(memo: string) {
-    assertTokenTransferPayload(tx.payload);
+    assertTokenTransferPayload(tx);
     const newTx = await generateStacksUnsignedTransaction({
       txType: TransactionTypes.StxTokenTransfer,
-      amount: createMoney(tx.payload.amount, 'STX'),
-      fee: createMoney(tx.auth.spendingCondition.fee, 'STX'),
-      nonce: Number(tx.auth.spendingCondition.nonce),
-      recipient: tx.payload.recipient,
+      amount: createMoney(tx.amount, 'STX'),
+      fee: createMoney(fee, 'STX'),
+      nonce: Number(nonce),
+      recipient: tx.recipient,
       memo,
       // Rebuilding must keep sponsored auth, or the approver would try to broadcast a 0-fee tx.
-      sponsored: tx.auth.authType === AuthType.Sponsored,
+      sponsored: tx.sponsor !== undefined,
       ...txOptions,
     });
-    const newTxHex = newTx.serialize();
+    const newTxHex = Codec.Transaction.encode(newTx);
     setTxHex(newTxHex);
   }
 
   const onChangeMemo = changeMemoToastHandler((memo: string) => void changeMemo(memo));
 
   const onChangeFee = changeFeeToastHandler((fee: number) => {
-    tx.setFee(fee);
-    const newTxHex = tx.serialize();
+    tx.fee = BigInt(fee);
+    const newTxHex = Codec.Transaction.encode(tx);
     setTxHex(newTxHex);
   });
 
   const onChangeNonce = changeNonceToastHandler((nonce: string) => {
-    tx.setNonce(Number(nonce));
-    const newTxHex = tx.serialize();
+    tx.nonce = BigInt(Number(nonce));
+    const newTxHex = Codec.Transaction.encode(tx);
     setTxHex(newTxHex);
   });
 
@@ -123,7 +117,7 @@ export function BaseStxTxApproverLayout({
       <Approver requester={origin}>
         <Approver.Container>
           <Approver.Header title={t`Sign Transaction`} />
-          {isContractCall(tx.payload) && <AllowModePostConditionWarning txHex={txHex} />}
+          {tx.type === 'call' && <AllowModePostConditionWarning txHex={txHex} />}
           {broadcastedTxid && <StxStatusRow txid={broadcastedTxid} />}
 
           <Approver.Section>
@@ -134,26 +128,24 @@ export function BaseStxTxApproverLayout({
               displayPreference="stacks"
             />
           </Approver.Section>
-          {isTokenTransferPayload(tx.payload) && (
+          {tx.type === 'transfer' && (
             <Approver.Overview>
               <Approver.Section mb="-3">
                 <Approver.Subheader icon={<SentIcon variant="small" />}>
                   {t`You’ll send`}
                 </Approver.Subheader>
 
-                <StacksOutcome
-                  amount={getTotalSpendMoney(tx.payload, tx.auth.spendingCondition.fee)}
-                />
+                <StacksOutcome amount={getTotalSpendMoney(tx, fee)} />
               </Approver.Section>
 
               <Approver.Section>
                 <Approver.Subheader>{t`To address`}</Approver.Subheader>
 
-                <OutcomeAddressesCard addresses={[getTxRecipient(tx.payload)]} />
+                <OutcomeAddressesCard addresses={[getTxRecipient(tx)]} />
               </Approver.Section>
             </Approver.Overview>
           )}
-          {isContractCall(tx.payload) && accountId && (
+          {tx.type === 'call' && accountId && (
             <Approver.Overview>
               <ContractCallPostConditionsSection txHex={txHex} origin={origin} />
 
@@ -161,24 +153,24 @@ export function BaseStxTxApproverLayout({
             </Approver.Overview>
           )}
 
-          {isContractCall(tx.payload) && <ContractCallSummarySection txHex={txHex} />}
-          {isContractDeploy(tx.payload) && <ContractDeploySummarySection txHex={txHex} />}
+          {tx.type === 'call' && <ContractCallSummarySection txHex={txHex} />}
+          {tx.type === 'deploy' && <ContractDeploySummarySection txHex={txHex} />}
           <StacksFeesSection
             disabled={isModifyingDisabled}
             txHex={txHex}
             onChangeFee={onChangeFee}
           />
-          {isTokenTransfer(tx.payload) && (
-            <MemoSection memo={tx.payload.memo.content} disabled onChangeMemo={onChangeMemo} />
+          {tx.type === 'transfer' && (
+            <MemoSection memo={tx.memo ?? ''} disabled onChangeMemo={onChangeMemo} />
           )}
           <Approver.Advanced
             titleClosed={t`Show advanced options`}
             titleOpened={t`Hide advanced options`}
           >
-            {isContractCall(tx.payload) && <ContractCallArgsSection txHex={txHex} />}
-            {isContractDeploy(tx.payload) && <ContractDeployCodeSection txHex={txHex} />}
+            {tx.type === 'call' && <ContractCallArgsSection txHex={txHex} />}
+            {tx.type === 'deploy' && <ContractDeployCodeSection txHex={txHex} />}
             <NonceSection
-              nonce={tx.auth.spendingCondition.nonce.toString()}
+              nonce={(tx.nonce ?? 0n).toString()}
               onChangeNonce={onChangeNonce}
               disabled={isModifyingDisabled}
             />

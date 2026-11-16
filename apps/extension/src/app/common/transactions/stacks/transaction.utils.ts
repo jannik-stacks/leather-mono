@@ -1,19 +1,5 @@
-import type { StacksNetwork } from '@stacks/network';
-import {
-  AddressHashMode,
-  ClarityType,
-  type ContractCallPayload,
-  type StacksTransactionWire,
-  type TokenTransferPayloadWire,
-  addressFromVersionHash,
-  addressHashModeToVersion,
-  addressToString,
-  createAddress,
-  cvToString,
-  deserializeMemoString,
-  isTokenTransferPayload,
-  serializeCV,
-} from '@stacks/transactions';
+import { Address, Codec, type StacksTransaction as KitTransaction } from '@jannik-stacks/kit';
+import { hexToBytes } from '@noble/hashes/utils';
 import { BigNumber } from 'bignumber.js';
 
 import {
@@ -21,7 +7,7 @@ import {
   type StacksTxStatus,
   isStacksMempoolTransaction,
 } from '@leather.io/models';
-import { getStacksContractName } from '@leather.io/stacks';
+import { formatClarityValue, getStacksContractName } from '@leather.io/stacks';
 import {
   createMoney,
   isDefined,
@@ -32,7 +18,6 @@ import {
 import { safeCall } from '@shared/utils';
 
 import { stacksValue } from '@app/common/stacks-utils';
-import { getStacksNetworkFromChainId } from '@app/store/networks/networks.hooks';
 
 export function statusFromTx(tx: StacksTransaction): StacksTxStatus {
   const { status } = tx;
@@ -41,8 +26,8 @@ export function statusFromTx(tx: StacksTransaction): StacksTxStatus {
   return 'failed';
 }
 
-export function stacksTransactionToHex(transaction: StacksTransactionWire) {
-  return `0x${transaction.serialize()}`;
+export function stacksTransactionToHex(transaction: KitTransaction) {
+  return `0x${Codec.Transaction.encode(transaction)}`;
 }
 
 export function getTxCaption(transaction: StacksTransaction) {
@@ -89,35 +74,14 @@ export function getTxTitle(tx: StacksTransaction) {
   }
 }
 
-function getAddressFromPublicKeyHash(
-  publicKeyHash: Buffer,
-  hashMode: AddressHashMode,
-  network: StacksNetwork
-): string {
-  const addrVer = addressHashModeToVersion(hashMode, network);
-  if (publicKeyHash.length !== 20) {
-    throw new Error('expected 20-byte pubkeyhash');
-  }
-  const addr = addressFromVersionHash(addrVer, publicKeyHash.toString('hex'));
-  return addressToString(addr);
+export function getTxSenderAddress(tx: KitTransaction): string | undefined {
+  return tx.signer?.value;
 }
 
-export function getTxSenderAddress(tx: StacksTransactionWire): string | undefined {
-  if (!tx?.auth?.spendingCondition?.signer) return;
-  const txSender = getAddressFromPublicKeyHash(
-    Buffer.from(tx.auth.spendingCondition.signer, 'hex'),
-    tx.auth.spendingCondition.hashMode,
-    getStacksNetworkFromChainId(tx.chainId)
-  );
-  return txSender;
-}
-
-export function isNonSequentialMultisigTransaction(tx: StacksTransactionWire) {
-  const hashMode = tx.auth.spendingCondition.hashMode;
-  return (
-    hashMode === AddressHashMode.P2SHNonSequential ||
-    hashMode === AddressHashMode.P2WSHNonSequential
-  );
+export function isNonSequentialMultisigTransaction(tx: KitTransaction) {
+  const hashMode =
+    tx.signer?.hashMode ?? (tx.signaturesRequired === undefined ? 'p2pkh' : 'p2sh-non-sequential');
+  return hashMode === 'p2sh-non-sequential' || hashMode === 'p2wsh-non-sequential';
 }
 
 export function isPendingTx(tx: StacksTransaction) {
@@ -131,73 +95,80 @@ export const StacksTransactionActionType = {
 export type StacksTransactionActionType =
   (typeof StacksTransactionActionType)[keyof typeof StacksTransactionActionType];
 
-export function getRecipientFromStacksTransaction(transaction: StacksTransactionWire) {
-  if (isTokenTransferPayload(transaction.payload)) {
-    return cvToString(transaction.payload.recipient);
+export function getRecipientFromStacksTransaction(transaction: KitTransaction) {
+  if (transaction.type === 'transfer') {
+    return transaction.recipient;
   }
 
   const sip10Payload = getSip10TransferPayload(transaction);
   if (sip10Payload) {
-    const sip10RecipientArg = sip10Payload.functionArgs?.[2];
+    const sip10RecipientArg = sip10Payload.args?.[2];
     if (!sip10RecipientArg) return null;
-    const [result] = safeCall(() => cvToString(sip10RecipientArg));
+    const [result] = safeCall(() => formatClarityValue(sip10RecipientArg));
     return result;
   }
 
   return null;
 }
 
-export function getTokenTransferAmount(payload: TokenTransferPayloadWire) {
+export function getTokenTransferAmount(payload: Extract<KitTransaction, { type: 'transfer' }>) {
   return createMoney(Number(payload.amount), 'STX');
 }
 
-export function getTokenTransferMemoDisplayText(payload: TokenTransferPayloadWire) {
-  return removeTrailingNullCharacters(payload.memo.content);
+export function getTokenTransferMemoDisplayText(
+  payload: Extract<KitTransaction, { type: 'transfer' }>
+) {
+  const memo = payload.memo ?? '';
+  return removeTrailingNullCharacters(memo);
 }
 
-export function getStacksTransactionFee(tx: StacksTransactionWire) {
-  return createMoney(Number(tx.auth.spendingCondition.fee), 'STX');
+export function getStacksTransactionFee(tx: KitTransaction) {
+  const fee = tx.fee ?? 0n;
+  return createMoney(Number(fee), 'STX');
 }
 
-export function getNonceFromStacksTransaction(tx: StacksTransactionWire) {
-  return Number(tx.auth.spendingCondition.nonce);
+export function getNonceFromStacksTransaction(tx: KitTransaction) {
+  const nonce = tx.nonce ?? 0n;
+  return Number(nonce);
 }
 
 export function getSip10TransferAmount(
-  payload: ContractCallPayload,
+  payload: Extract<KitTransaction, { type: 'call' }>,
   symbol: string,
   decimals?: number
 ) {
-  const amountArg = payload.functionArgs?.[0];
+  const amountArg = payload.args?.[0];
   const amount = new BigNumber(
     Number(amountArg && 'value' in amountArg ? amountArg.value : undefined)
   );
   return createMoney(amount, symbol.toUpperCase(), decimals);
 }
 
-export function getSip10TransferPayload(tx: StacksTransactionWire) {
-  const { payload } = tx;
-  if (!payload || !('functionName' in payload)) return undefined;
-  if (payload.functionName.content !== 'transfer') return undefined;
-  if (payload.functionArgs.length !== 3 && payload.functionArgs.length !== 4) return undefined;
-  return payload;
+export function getSip10TransferPayload(tx: KitTransaction) {
+  if (tx.type !== 'call' || tx.functionName !== 'transfer') return undefined;
+  if (tx.args.length !== 3 && tx.args.length !== 4) return undefined;
+  return tx;
 }
 
-export function getSip10MemoDisplayText(payload: ContractCallPayload) {
-  if (!isDefined(payload.functionArgs[3])) return null;
-  const isSome = payload.functionArgs[3].type === ClarityType.OptionalSome;
-  return isSome ? deserializeMemoString(serializeCV(payload.functionArgs[3])).content : null;
+export function getSip10MemoDisplayText(payload: Extract<KitTransaction, { type: 'call' }>) {
+  if (!isDefined(payload.args[3])) return null;
+  const isSome = payload.args[3].type === 'some';
+  const memo = payload.args[3];
+  return isSome && memo.type === 'some' && memo.value.type === 'buffer'
+    ? new TextDecoder().decode(hexToBytes(memo.value.value))
+    : null;
 }
 
-export function getContractAddressFromContractCallPayload(payload: ContractCallPayload) {
-  const contractAddress = addressToString(payload.contractAddress);
-  const contractName = payload.contractName.content;
-  return [contractAddress, contractName].join('.');
+export function getContractAddressFromContractCallPayload(
+  payload: Extract<KitTransaction, { type: 'call' }>
+) {
+  return payload.contract;
 }
 
 export function safeAddressToString(address: string) {
   try {
-    return addressToString(createAddress(address));
+    Address.parse(address);
+    return address;
   } catch {
     return null;
   }

@@ -1,4 +1,4 @@
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 import axios from 'axios';
 
 import {
@@ -13,12 +13,12 @@ import { queryClient } from '@app/common/persistence';
 
 export interface TransactionBase {
   options?: StacksUnsignedTransactionOptions;
-  transaction: StacksTransactionWire | undefined;
+  transaction: StacksTransaction | undefined;
 }
 
 export interface SbtcSponsorshipEligibility {
   isEligible: boolean;
-  unsignedSponsoredTx?: StacksTransactionWire;
+  unsignedSponsoredTx?: StacksTransaction;
 }
 
 export interface SbtcSponsorshipVerificationResult {
@@ -47,7 +47,7 @@ export async function verifySponsoredSbtcTransaction({
       fee: createMoney(fee, 'STX'),
       nonce: nonce ?? options.nonce,
     });
-    const serializedTx = sponsoredTx.serialize();
+    const serializedTx = Codec.Transaction.encode(sponsoredTx);
 
     const result = await queryClient.fetchQuery({
       queryKey: ['verify-sponsored-sbtc-transaction', apiUrl, serializedTx],

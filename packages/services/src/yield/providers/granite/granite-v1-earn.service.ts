@@ -1,14 +1,14 @@
-import { standardPrincipalCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { injectable } from 'inversify';
 
-import type {
-  AccountAddresses,
-  GraniteV1EarnPosition,
-  StacksProtocol,
-  StacksProtocolId,
-  YieldProduct,
-  YieldProductCategory,
-  YieldProductKey,
+import {
+  type AccountAddresses,
+  type GraniteV1EarnPosition,
+  type StacksProtocol,
+  type StacksProtocolId,
+  type YieldProduct,
+  type YieldProductCategory,
+  type YieldProductKey,
 } from '@leather.io/models';
 import { baseCurrencyAmountInQuote, createMoney } from '@leather.io/utils';
 
@@ -16,7 +16,7 @@ import { FungibleAssetService } from '../../../assets/fungible-asset.service';
 import { HiroStacksApiClient } from '../../../infrastructure/api/hiro/hiro-stacks-api.client';
 import { LeatherApiClient } from '../../../infrastructure/api/leather/leather-api.client';
 import { MarketDataService } from '../../../market/market-data.service';
-import type { YieldProductService } from '../../yield.service';
+import { type YieldProductService } from '../../yield.service';
 import { parseGraniteProtocolGetBalanceResponseCV } from './granite-v1.utils';
 import { aeusdcAssetPrincipal, graniteProductionAddress } from './granite.constants';
 
@@ -98,7 +98,7 @@ export class GraniteV1EarnService implements YieldProductService {
         contractAddress: graniteProductionAddress,
         contractName: 'state-v1',
         functionName: 'get-balance',
-        functionArgs: [standardPrincipalCV(address)],
+        functionArgs: [Cl.address(address)],
       },
       { signal }
     );

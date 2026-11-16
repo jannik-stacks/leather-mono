@@ -1,8 +1,7 @@
-import { STACKS_TESTNET } from '@stacks/network';
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { STACKS_TESTNET, type StacksTransaction } from '@jannik-stacks/kit';
 import { customNetworkConfig } from '~/constants/custom-network-config';
 
-import type { AuthNetworkId, Money, VaultAccount } from '@leather.io/models';
+import { type AuthNetworkId, type Money, type VaultAccount } from '@leather.io/models';
 import { TransactionTypes, generateStacksUnsignedTransaction } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
@@ -32,7 +31,7 @@ export async function buildUnsignedMultisigStxTransfer({
   amount,
   fee = createMoney(0, 'STX'),
   memo,
-}: BuildMultisigStxTransferArgs): Promise<StacksTransactionWire> {
+}: BuildMultisigStxTransferArgs): Promise<StacksTransaction> {
   const publicKeys = getOrderedSigningPubkeys(account);
   if (deriveMultisigAddress(account) !== account.multisigAddress)
     throw new Error(

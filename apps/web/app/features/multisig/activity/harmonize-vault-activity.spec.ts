@@ -1,8 +1,9 @@
-import { privateKeyToPublic, publicKeyToHex } from '@stacks/transactions';
+import { Codec, privateKeyToPublicKey } from '@jannik-stacks/kit';
+import { publicKeyToHex } from '@stacks/transactions';
 import { activityCounterpartyOffset } from '~/queries/activity/blockchain-activity.query';
 
-import type { BlockchainActivityView } from '@leather.io/features';
-import type { MultisigTransactionSummary } from '@leather.io/models';
+import { type BlockchainActivityView } from '@leather.io/features';
+import { type MultisigTransactionSummary } from '@leather.io/models';
 import { TransactionTypes, generateStacksUnsignedTransaction } from '@leather.io/stacks';
 import { createMoney, truncateMiddle } from '@leather.io/utils';
 
@@ -14,7 +15,7 @@ import {
 } from './harmonize-vault-activity';
 
 const privateKeys = ['11'.repeat(32) + '01', '22'.repeat(32) + '01'];
-const publicKeys = privateKeys.map(key => publicKeyToHex(privateKeyToPublic(key)));
+const publicKeys = privateKeys.map(key => publicKeyToHex(privateKeyToPublicKey(key)));
 const recipient = 'ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH';
 
 const stxContext = {
@@ -33,7 +34,7 @@ async function generateStxTransferPayload() {
     numSignatures: 2,
     useNonSequentialMultiSig: true,
   });
-  return tx.serialize();
+  return Codec.Transaction.encode(tx);
 }
 
 function makeView(

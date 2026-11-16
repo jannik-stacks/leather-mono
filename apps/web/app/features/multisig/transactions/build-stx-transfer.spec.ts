@@ -1,13 +1,7 @@
-import {
-  AddressHashMode,
-  AddressVersion,
-  addressFromPublicKeys,
-  addressToString,
-  createStacksPublicKey,
-} from '@stacks/transactions';
+import { publicKeysToAddress } from '@jannik-stacks/kit';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
-import type { VaultAccount, VaultAccountSigner } from '@leather.io/models';
+import { type VaultAccount, type VaultAccountSigner } from '@leather.io/models';
 import { createMoney } from '@leather.io/utils';
 
 import { buildUnsignedMultisigStxTransfer } from './build-stx-transfer';
@@ -22,14 +16,7 @@ const publicKeys = [
 const recipient = 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG';
 
 function deriveTestnetAddress(threshold: number, keys: string[]) {
-  return addressToString(
-    addressFromPublicKeys(
-      AddressVersion.TestnetMultiSig,
-      AddressHashMode.P2SHNonSequential,
-      threshold,
-      keys.map(createStacksPublicKey)
-    )
-  );
+  return publicKeysToAddress({ publicKeys: keys, threshold }, { network: 'testnet' });
 }
 
 function makeSigner(signerIndex: number, signingPubkey: string): VaultAccountSigner {
@@ -74,8 +61,8 @@ describe(buildUnsignedMultisigStxTransfer.name, () => {
       fee: createMoney(3000, 'STX'),
     });
 
-    const { spendingCondition } = tx.auth;
-    expect(spendingCondition.hashMode).toEqual(AddressHashMode.P2SHNonSequential);
+    const spendingCondition = tx;
+    expect(spendingCondition.signer?.hashMode).toEqual('p2sh-non-sequential');
     expect(Number(spendingCondition.nonce)).toEqual(0);
     expect(Number(spendingCondition.fee)).toEqual(3000);
     expect(
@@ -90,7 +77,7 @@ describe(buildUnsignedMultisigStxTransfer.name, () => {
       amount: createMoney(1_000_000, 'STX'),
     });
 
-    expect(Number(tx.auth.spendingCondition.fee)).toEqual(0);
+    expect(Number(tx.fee)).toEqual(0);
   });
 
   test('orders signer public keys by signer index regardless of input order', async () => {
@@ -102,7 +89,7 @@ describe(buildUnsignedMultisigStxTransfer.name, () => {
       amount: createMoney(1_000_000, 'STX'),
     });
 
-    expect(tx.auth.spendingCondition.hashMode).toEqual(AddressHashMode.P2SHNonSequential);
+    expect(tx.signer?.hashMode ?? 'p2pkh').toEqual('p2sh-non-sequential');
   });
 
   test('throws when the derived sender does not match the vault address', async () => {

@@ -1,27 +1,21 @@
 import { useSelector } from 'react-redux';
 
+import { STACKS_MAINNET, STACKS_TESTNET, type StacksNetwork } from '@jannik-stacks/kit';
 import { createSelector } from '@reduxjs/toolkit';
-import {
-  ChainId,
-  STACKS_MAINNET,
-  STACKS_TESTNET,
-  type StacksNetwork,
-  type StacksNetworkName,
-  TransactionVersion,
-} from '@stacks/network';
+import { type StacksNetworkName } from '@stacks/network';
 
 import {
   accountDisplayPreferencesKeyedByType,
   bitcoinUnitsKeyedByName,
 } from '@leather.io/constants';
 import {
+  ChainId,
   type NetworkConfiguration,
   WalletDefaultNetworkConfigurationIds,
   defaultNetworksKeyedById,
 } from '@leather.io/models';
-import { whenStacksChainId } from '@leather.io/stacks';
 
-import type { RootState } from '../store';
+import { type RootState } from '../store';
 
 function selectSettings(state: RootState) {
   return state.settings;
@@ -117,10 +111,6 @@ function getNetworkFromChainId(chainId: number) {
 export function getStacksNetworkFromNetworkConfig(networkConfig: NetworkConfiguration) {
   return {
     ...getNetworkFromChainId(networkConfig.chain.stacks.chainId),
-    transactionVersion: whenStacksChainId(networkConfig.chain.stacks.chainId)({
-      [ChainId.Mainnet]: TransactionVersion.Mainnet,
-      [ChainId.Testnet]: TransactionVersion.Testnet,
-    }),
     client: {
       baseUrl: networkConfig.chain.stacks.url,
     },

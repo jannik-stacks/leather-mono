@@ -1,11 +1,6 @@
-import {
-  Pc,
-  PostConditionMode,
-  type StacksTransactionWire,
-  serializeCV,
-} from '@stacks/transactions';
+import { Cl, Pc, type StacksTransaction } from '@jannik-stacks/kit';
 
-import type { Money, VaultAccount } from '@leather.io/models';
+import { type Money, type VaultAccount } from '@leather.io/models';
 import {
   TransactionTypes,
   createSip10FnArgs,
@@ -36,7 +31,7 @@ export async function buildUnsignedMultisigSip10Transfer({
   amount,
   fee = createMoney(0, 'STX'),
   memo,
-}: BuildMultisigSip10TransferArgs): Promise<StacksTransactionWire> {
+}: BuildMultisigSip10TransferArgs): Promise<StacksTransaction> {
   const publicKeys = getOrderedSigningPubkeys(account);
   if (deriveMultisigAddress(account) !== account.multisigAddress)
     throw new Error(
@@ -58,13 +53,13 @@ export async function buildUnsignedMultisigSip10Transfer({
     contractAddress,
     contractName,
     functionName: 'transfer',
-    functionArgs: functionArgs.map(arg => serializeCV(arg)),
+    functionArgs: functionArgs.map(arg => Cl.serialize(arg)),
     postConditions: [
       Pc.principal(account.multisigAddress)
         .willSendEq(baseUnitAmount)
-        .ft(formatContractIdString({ contractAddress, contractName }), contractAssetName),
+        .ft(`${formatContractIdString({ contractAddress, contractName })}::${contractAssetName}`),
     ],
-    postConditionMode: PostConditionMode.Deny,
+    postConditionMode: 'deny',
     fee,
     nonce: placeholderNonce,
     network: getStxTransactionNetwork(account.network),

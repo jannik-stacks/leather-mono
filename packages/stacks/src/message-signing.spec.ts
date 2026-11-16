@@ -1,4 +1,4 @@
-import { stringAsciiCV, tupleCV, uintCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import * as messageContractVectorDriver from './message-contract.vectors-driver';
@@ -12,12 +12,12 @@ const privateKey = '753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3b
 // A valid compressed pubkey that is not the signer, for the wrong-signer case.
 const otherPublicKey = '02f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9';
 
-const domain = tupleCV({
-  name: stringAsciiCV('leather-multisig-proposal-v1'),
-  version: stringAsciiCV('1'),
-  'chain-id': uintCV(1),
+const domain = Cl.tuple({
+  name: Cl.ascii('leather-multisig-proposal-v1'),
+  version: Cl.ascii('1'),
+  'chain-id': Cl.uint(1),
 });
-const message = stringAsciiCV('2a5f997755408a0a7f063923c830b3ae2fd3a26d8c19ab736ee523c3daf29a86');
+const message = Cl.ascii('2a5f997755408a0a7f063923c830b3ae2fd3a26d8c19ab736ee523c3daf29a86');
 
 describe(verifySip018Signature.name, () => {
   const { signature, publicKey } = signStructuredDataMessage(message, domain, privateKey);
@@ -33,17 +33,15 @@ describe(verifySip018Signature.name, () => {
   });
 
   test('rejects a tampered message', () => {
-    const tampered = stringAsciiCV(
-      '0000000000000000000000000000000000000000000000000000000000000000'
-    );
+    const tampered = Cl.ascii('0000000000000000000000000000000000000000000000000000000000000000');
     expect(verifySip018Signature({ message: tampered, domain, signature, publicKey })).toBe(false);
   });
 
   test('rejects a tampered domain (different chain-id)', () => {
-    const otherDomain = tupleCV({
-      name: stringAsciiCV('leather-multisig-proposal-v1'),
-      version: stringAsciiCV('1'),
-      'chain-id': uintCV(2147483648),
+    const otherDomain = Cl.tuple({
+      name: Cl.ascii('leather-multisig-proposal-v1'),
+      version: Cl.ascii('1'),
+      'chain-id': Cl.uint(2147483648),
     });
     expect(verifySip018Signature({ message, domain: otherDomain, signature, publicKey })).toBe(
       false

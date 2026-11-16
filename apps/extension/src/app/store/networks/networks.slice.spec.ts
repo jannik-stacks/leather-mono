@@ -1,6 +1,7 @@
-import { ChainId } from '@stacks/network';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { describe, expect, test } from 'vitest';
+
+import { ChainId } from '@leather.io/models';
 
 import * as networkPersistenceContractVectorDriver from './network-persistence-contract.vectors-driver';
 import { type PersistedNetworkConfiguration, networksSlice } from './networks.slice';

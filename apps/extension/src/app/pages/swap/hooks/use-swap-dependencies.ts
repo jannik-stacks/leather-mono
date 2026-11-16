@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 
-import { type StacksNetwork } from '@stacks/network';
 import {
-  type StacksTransactionWire,
-  type TxBroadcastResultOk,
-  broadcastTransaction,
-} from '@stacks/transactions';
+  Codec,
+  type StacksNetwork,
+  type StacksTransaction,
+  createClient,
+} from '@jannik-stacks/kit';
+import { z } from 'zod';
 
 import { type BitcoinNativeSegwitPayer } from '@leather.io/bitcoin';
 import { type NetworkModes, bitcoinNetworkToNetworkMode } from '@leather.io/models';
@@ -48,21 +49,38 @@ import { isSigningCancelledError } from '../swap-utils';
 const accountDataRefreshDelayMs = 250;
 
 interface BroadcastStacksTransactionParams {
-  tx: StacksTransactionWire;
+  tx: StacksTransaction;
   stacksNetwork: StacksNetwork;
 }
 
 async function broadcastStacksTx({
   tx,
   stacksNetwork,
-}: BroadcastStacksTransactionParams): Promise<TxBroadcastResultOk> {
-  const response = await broadcastTransaction({
-    transaction: tx,
+}: BroadcastStacksTransactionParams): Promise<{ txid: string }> {
+  const { data, error } = await createClient({
     network: stacksNetwork,
-    client: { fetch: hiroFetchWrapper },
+    fetch: hiroFetchWrapper,
+  }).api.POST('/v2/transactions', {
+    body: Codec.Transaction.encode(tx),
+    bodySerializer(tx) {
+      return JSON.stringify({ tx });
+    },
+    headers: { 'Content-Type': 'application/json' },
+    parseAs: 'text',
   });
+  const txid = typeof data === 'string' ? data.replace(/["]+/g, '') : undefined;
+  if (typeof data === 'string' && (txid === undefined || !/^(?:0x)?[a-f0-9]{64}$/i.test(txid)))
+    throw new Error(data);
+  const response = z
+    .object({
+      txid: z.string().optional(),
+      error: z.string().optional(),
+      reason: z.string().optional(),
+    })
+    .loose()
+    .parse(error ?? { txid });
 
-  if ('error' in response) {
+  if (response.error !== undefined) {
     throw new Error(response.reason);
   }
 
@@ -70,7 +88,7 @@ async function broadcastStacksTx({
     throw new Error('Broadcast returned no txid');
   }
 
-  return response;
+  return { ...response, txid: response.txid };
 }
 
 export function useSwapDependencies(): SwapDependencies {
@@ -104,7 +122,7 @@ export function useSwapDependencies(): SwapDependencies {
       accountIndex: currentAccountId.accountIndex,
       network: stacksNetworkMode,
       publicKey: Uint8Array.from(Buffer.from(stacksAccount.stxPublicKey, 'hex')),
-      async sign(tx: StacksTransactionWire) {
+      async sign(tx: StacksTransaction) {
         const result = signStacksTx(tx);
         const signed = await Promise.resolve(result);
         if (!signed) throw new SwapSigningCancelledError();

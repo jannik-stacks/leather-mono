@@ -1,4 +1,4 @@
-import { principalCV, standardPrincipalCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { inject, injectable } from 'inversify';
 
 import { stxAsset } from '@leather.io/constants';
@@ -25,10 +25,10 @@ import {
 import { FungibleAssetService } from '../../../assets/fungible-asset.service';
 import { HiroStacksApiClient } from '../../../infrastructure/api/hiro/hiro-stacks-api.client';
 import { LeatherApiClient } from '../../../infrastructure/api/leather/leather-api.client';
-import type { SettingsService } from '../../../infrastructure/settings/settings.service';
+import { type SettingsService } from '../../../infrastructure/settings/settings.service';
 import { Types } from '../../../inversify.types';
 import { MarketDataService } from '../../../market/market-data.service';
-import type { YieldProductService } from '../../yield.service';
+import { type YieldProductService } from '../../yield.service';
 import {
   parseZestGetUserAssetsReadResponseCV,
   parseZestGetZTokenBalanceResponseCV,
@@ -182,7 +182,7 @@ export class ZestBorrowService implements YieldProductService {
         contractAddress: zestProductionAddress,
         contractName: 'pool-reserve-data',
         functionName: 'get-user-assets-read',
-        functionArgs: [standardPrincipalCV(address)],
+        functionArgs: [Cl.address(address)],
       },
       { signal }
     );
@@ -199,7 +199,7 @@ export class ZestBorrowService implements YieldProductService {
         contractAddress: zestProductionAddress,
         contractName: 'pool-0-reserve-v2-0',
         functionName: 'get-user-borrow-balance',
-        functionArgs: [standardPrincipalCV(address), principalCV(assetPrincipal)],
+        functionArgs: [Cl.address(address), Cl.principal(assetPrincipal)],
       },
       { signal }
     );
@@ -217,7 +217,7 @@ export class ZestBorrowService implements YieldProductService {
         contractAddress: zestProductionAddress,
         contractName,
         functionName: 'get-balance',
-        functionArgs: [standardPrincipalCV(address)],
+        functionArgs: [Cl.address(address)],
       },
       { signal }
     );

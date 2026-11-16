@@ -1,4 +1,4 @@
-import { StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 import { injectable } from 'inversify';
 
 import { type StacksTransactionFees, TransactionFeeTier } from '@leather.io/models';
@@ -28,7 +28,7 @@ export class StacksTransactionFeesService {
   ) {}
 
   async getStacksTransactionFees(
-    unsignedTx: StacksTransactionWire,
+    unsignedTx: StacksTransaction,
     signerCount?: number,
     signal?: AbortSignal
   ): Promise<StacksTransactionFees> {
@@ -48,7 +48,7 @@ export class StacksTransactionFeesService {
   }
 
   private async getTieredFeeAmounts(
-    unsignedTx: StacksTransactionWire,
+    unsignedTx: StacksTransaction,
     estimatedTxSize: number,
     config: StacksFeeConfig,
     signal?: AbortSignal

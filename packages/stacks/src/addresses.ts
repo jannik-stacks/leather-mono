@@ -1,21 +1,14 @@
-import { ChainId } from '@stacks/network';
-import {
-  AddressHashMode,
-  AddressVersion,
-  addressFromPublicKeys,
-  addressToString,
-  createStacksPublicKey,
-  getAddressFromPrivateKey,
-  makeRandomPrivKey,
-} from '@stacks/transactions';
+import { privateKeyToAddress, publicKeysToAddress } from '@jannik-stacks/kit';
+import { secp256k1 } from '@noble/curves/secp256k1';
+import { bytesToHex, randomBytes } from '@noble/hashes/utils';
 
-import { whenStacksChainId } from './stacks.utils';
+import { stacksChainIdToCoreNetworkMode } from './stacks.utils';
 
 export function generateRandomStacksAddress() {
-  const randomPrivateKey = makeRandomPrivKey();
-  const privateKeyString = randomPrivateKey;
-  const randomAddress = getAddressFromPrivateKey(privateKeyString);
-  return randomAddress;
+  const entropyBytes = 40;
+  const entropy = BigInt('0x' + bytesToHex(randomBytes(entropyBytes)));
+  const scalar = (entropy % (secp256k1.CURVE.n - 1n)) + 1n;
+  return privateKeyToAddress(scalar.toString(16).padStart(64, '0'));
 }
 
 interface DeriveStxMultisigAddressArgs {
@@ -33,16 +26,8 @@ export function deriveStxMultisigAddress({
   threshold,
   chainId,
 }: DeriveStxMultisigAddressArgs): string {
-  const version = whenStacksChainId(chainId)({
-    [ChainId.Mainnet]: AddressVersion.MainnetMultiSig,
-    [ChainId.Testnet]: AddressVersion.TestnetMultiSig,
-  });
-  return addressToString(
-    addressFromPublicKeys(
-      version,
-      AddressHashMode.P2SHNonSequential,
-      threshold,
-      publicKeys.map(createStacksPublicKey)
-    )
+  return publicKeysToAddress(
+    { publicKeys, threshold },
+    { network: stacksChainIdToCoreNetworkMode(chainId) }
   );
 }

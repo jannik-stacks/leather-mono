@@ -1,4 +1,4 @@
-import { STACKS_MAINNET } from '@stacks/network';
+import { STACKS_MAINNET } from '@jannik-stacks/kit';
 import { describe, expect, test, vi } from 'vitest';
 
 import { type TransactionFeeTier } from '@leather.io/models';

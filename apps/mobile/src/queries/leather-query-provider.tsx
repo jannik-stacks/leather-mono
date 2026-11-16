@@ -1,9 +1,8 @@
 import { type ReactNode, createContext, useContext, useMemo } from 'react';
 
-import { ChainId } from '@stacks/network';
 import { type QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { type NetworkConfiguration, type NetworkModes } from '@leather.io/models';
+import { ChainId, type NetworkConfiguration, type NetworkModes } from '@leather.io/models';
 
 const stacksTestnetChainId: number = ChainId.Testnet;
 

@@ -1,99 +1,82 @@
-import {
-  type BufferCV,
-  ClarityType,
-  type ClarityValue,
-  type ContractIdString,
-  type ContractPrincipalCV,
-  type FalseCV,
-  type IntCV,
-  type NoneCV,
-  type ResponseErrorCV,
-  type ResponseOkCV,
-  type SomeCV,
-  type StandardPrincipalCV,
-  type StringAsciiCV,
-  type StringUtf8CV,
-  type TrueCV,
-  type UIntCV,
-} from '@stacks/transactions';
+import { type Cl, type ClarityValue } from '@jannik-stacks/kit';
 import { z } from 'zod';
 
 // Clarity values
-export const cvIntSchema: z.ZodType<IntCV> = z.object({
-  type: z.literal(ClarityType.Int),
-  value: z.coerce.string(),
+export const cvIntSchema: z.ZodType<Cl.Types.Int> = z.object({
+  type: z.literal('int'),
+  value: z.coerce.bigint(),
 });
 
-export const cvUintSchema: z.ZodType<UIntCV> = z.object({
-  type: z.literal(ClarityType.UInt),
-  value: z.coerce.string(),
+export const cvUintSchema: z.ZodType<Cl.Types.Uint> = z.object({
+  type: z.literal('uint'),
+  value: z.coerce.bigint(),
 });
 
-export const cvBufferSchema: z.ZodType<BufferCV> = z.object({
-  type: z.literal(ClarityType.Buffer),
+export const cvBufferSchema: z.ZodType<Cl.Types.Buffer> = z.object({
+  type: z.literal('buffer'),
   value: z.string(),
 });
 
-export const cvTrueSchema: z.ZodType<TrueCV> = z.object({
-  type: z.literal(ClarityType.BoolTrue),
+export const cvTrueSchema: z.ZodType<Cl.Types.True> = z.object({
+  type: z.literal('true'),
 });
 
-export const cvFalseSchema: z.ZodType<FalseCV> = z.object({
-  type: z.literal(ClarityType.BoolFalse),
+export const cvFalseSchema: z.ZodType<Cl.Types.False> = z.object({
+  type: z.literal('false'),
 });
 
-export const cvAddressSchema: z.ZodType<StandardPrincipalCV> = z.object({
-  type: z.literal(ClarityType.PrincipalStandard),
+export const cvAddressSchema: z.ZodType<Cl.Types.Address> = z.object({
+  type: z.literal('address'),
   value: z.string(),
 });
 
-export const cvContractSchema: z.ZodType<ContractPrincipalCV> = z.object({
-  type: z.literal(ClarityType.PrincipalContract),
+export const cvContractSchema: z.ZodType<Cl.Types.Contract> = z.object({
+  type: z.literal('contract'),
   value: z.string().pipe(
-    z.custom<ContractIdString>(value => typeof value === 'string' && value.includes('.'), {
+    z.custom<string>(value => typeof value === 'string' && value.includes('.'), {
       message: 'Stacks contract principals are denoted with a dot',
     })
   ),
 });
 
-export const cvAsciiSchema: z.ZodType<StringAsciiCV> = z.object({
-  type: z.literal(ClarityType.StringASCII),
+export const cvAsciiSchema: z.ZodType<Cl.Types.Ascii> = z.object({
+  type: z.literal('ascii'),
   value: z.string(),
 });
 
-export const cvUtf8Schema: z.ZodType<StringUtf8CV> = z.object({
-  type: z.literal(ClarityType.StringUTF8),
+export const cvUtf8Schema: z.ZodType<Cl.Types.Utf8> = z.object({
+  type: z.literal('utf8'),
   value: z.string(),
 });
 
-export const cvOkSchema: z.ZodType<ResponseOkCV> = z
+export const cvOkSchema: z.ZodType<Cl.Types.Ok> = z
   .object({
-    type: z.literal(ClarityType.ResponseOk),
+    type: z.literal('ok'),
     value: z.lazy(() => clarityValueSchema),
   })
-  .transform((value): ResponseOkCV => value);
+  .transform((value): Cl.Types.Ok => value);
 
-export const cvErrSchema: z.ZodType<ResponseErrorCV> = z.object({
-  type: z.literal(ClarityType.ResponseErr),
+export const cvErrSchema: z.ZodType<Cl.Types.Err> = z.object({
+  type: z.literal('err'),
   value: z.lazy(() => clarityValueSchema),
 });
 
-export const cvNoneSchema: z.ZodType<NoneCV> = z.object({
-  type: z.literal(ClarityType.OptionalNone),
+export const cvNoneSchema: z.ZodType<Cl.Types.None> = z.object({
+  type: z.literal('none'),
 });
 
-export const cvSomeSchema: z.ZodType<SomeCV> = z.object({
-  type: z.literal(ClarityType.OptionalSome),
+export const cvSomeSchema: z.ZodType<Cl.Types.Some> = z.object({
+  type: z.literal('some'),
   value: z.lazy(() => clarityValueSchema),
 });
 
 export const cvListSchema = z.object({
-  type: z.literal(ClarityType.List),
+  type: z.literal('list'),
   value: z.array(z.lazy(() => clarityValueSchema)),
 });
 
 export const cvTupleSchema = z.object({
-  type: z.literal(ClarityType.Tuple),
+  type: z.literal('tuple'),
   value: z.record(
     z.string(),
     z.lazy(() => clarityValueSchema)

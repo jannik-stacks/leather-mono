@@ -1,6 +1,6 @@
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
-import type { StacksFeeConfig } from '../infrastructure/app-config/app-config.service';
+import { type StacksFeeConfig } from '../infrastructure/app-config/app-config.service';
 import { createHiroFeeEstimateResponse } from '../test/fees-stacks-transactions';
 import {
   createStacksTransactionFeeQuote,
@@ -11,7 +11,7 @@ import {
 } from './stacks-transaction-fees.utils';
 
 export function fees(hex: string, config: StacksFeeConfig, size: number, estimates: number[]) {
-  const tx = deserializeTransaction(hex);
+  const tx = Codec.Transaction.decode(hex);
   return {
     type: getStacksTxPayloadTypeFees(tx, config),
     defaults: getStacksTxFeeDefaultAmounts(tx, config, size),

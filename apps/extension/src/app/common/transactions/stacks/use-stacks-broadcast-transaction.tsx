@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 
-import type { CryptoCurrency } from '@leather.io/models';
+import { type CryptoCurrency } from '@leather.io/models';
 import { isError, isString } from '@leather.io/utils';
 
 import { logger } from '@shared/logger';
@@ -47,7 +47,7 @@ export function useStacksBroadcastTransaction({
   });
 
   return useMemo(() => {
-    function handlePreviewSuccess(signedTx: StacksTransactionWire, txid?: string) {
+    function handlePreviewSuccess(signedTx: StacksTransaction, txid?: string) {
       if (txid && redirectToSuccessPage) {
         void navigate(
           RouteUrls.SentStxTxSummary.replace(':symbol', token.toLowerCase()).replace(
@@ -59,7 +59,7 @@ export function useStacksBroadcastTransaction({
       }
     }
 
-    async function broadcastTransactionAction(signedTx: StacksTransactionWire) {
+    async function broadcastTransactionAction(signedTx: StacksTransaction) {
       if (!signedTx) {
         logger.error('Cannot broadcast transaction, no tx in state');
         toast.error('Unable to broadcast transaction');
@@ -96,7 +96,7 @@ export function useStacksBroadcastTransaction({
       }
     }
 
-    async function broadcastTransaction(unsignedTx: StacksTransactionWire) {
+    async function broadcastTransaction(unsignedTx: StacksTransaction) {
       try {
         if (!unsignedTx) return;
         const signedTx = await signStacksTransaction(unsignedTx);

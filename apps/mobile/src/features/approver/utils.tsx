@@ -1,18 +1,7 @@
 import { calculateDefaultStacksFee } from '@/features/send/utils';
+import { type StacksNetwork, type StacksTransaction } from '@jannik-stacks/kit';
 import { t } from '@lingui/core/macro';
 import { bytesToHex } from '@noble/hashes/utils';
-import { type StacksNetwork } from '@stacks/network';
-import {
-  type ContractCallPayload,
-  PayloadType,
-  type PayloadWire,
-  type SmartContractPayloadWire,
-  type StacksTransactionWire,
-  type TokenTransferPayloadWire,
-  type VersionedSmartContractPayloadWire,
-  addressToString,
-  cvToString,
-} from '@stacks/transactions';
 
 import { FeeTypes } from '@leather.io/models';
 import { type StacksSigner, createTransferSip10TxHex } from '@leather.io/stacks';
@@ -71,55 +60,43 @@ export function getStacksFeeData(feeType: FeeTypes) {
   };
 }
 
-export function getTxRecipient(payload: TokenTransferPayloadWire) {
-  return cvToString(payload.recipient);
+export function getTxRecipient(payload: Extract<StacksTransaction, { type: 'transfer' }>) {
+  return payload.recipient;
 }
 
-export function getTotalSpendMoney(payload: TokenTransferPayloadWire, fee: bigint) {
+export function getTotalSpendMoney(
+  payload: Extract<StacksTransaction, { type: 'transfer' }>,
+  fee: bigint
+) {
   return convertToMoneyTypeWithDefaultOfZero('STX', Number(payload.amount + fee));
 }
 
-export function getTxFeeMoney(tx: StacksTransactionWire) {
-  return convertToMoneyTypeWithDefaultOfZero('STX', Number(tx.auth.spendingCondition.fee));
+export function getTxFeeMoney(tx: StacksTransaction) {
+  const fee = tx.fee ?? 0n;
+  return convertToMoneyTypeWithDefaultOfZero('STX', Number(fee));
 }
 
-export function getContractAddress(payload: ContractCallPayload) {
-  return addressToString(payload.contractAddress);
+export function getContractAddress(payload: Extract<StacksTransaction, { type: 'call' }>) {
+  return payload.contract.split('.')[0] ?? '';
 }
 
 export function assertTokenTransferPayload(
-  payload: PayloadWire
-): asserts payload is TokenTransferPayloadWire {
-  if (payload.payloadType !== PayloadType.TokenTransfer)
+  payload: StacksTransaction
+): asserts payload is Extract<StacksTransaction, { type: 'transfer' }> {
+  if (payload.type !== 'transfer')
     throw new Error('This component should only be used for token transfers');
 }
 export function assertContractCallPayload(
-  payload: PayloadWire
-): asserts payload is ContractCallPayload {
-  if (payload.payloadType !== PayloadType.ContractCall)
+  payload: StacksTransaction
+): asserts payload is Extract<StacksTransaction, { type: 'call' }> {
+  if (payload.type !== 'call')
     throw new Error('This component should only be used for contract calls');
 }
 export function assertContractDeployPayload(
-  payload: PayloadWire
-): asserts payload is SmartContractPayloadWire | VersionedSmartContractPayloadWire {
-  if (
-    payload.payloadType !== PayloadType.VersionedSmartContract &&
-    payload.payloadType !== PayloadType.SmartContract
-  )
+  payload: StacksTransaction
+): asserts payload is Extract<StacksTransaction, { type: 'deploy' }> {
+  if (payload.type !== 'deploy')
     throw new Error('This component should only be used for contract deploys');
-}
-
-export function isTokenTransfer(payload: PayloadWire) {
-  return payload.payloadType === PayloadType.TokenTransfer;
-}
-export function isContractCall(payload: PayloadWire) {
-  return payload.payloadType === PayloadType.ContractCall;
-}
-export function isContractDeploy(payload: PayloadWire) {
-  return (
-    payload.payloadType === PayloadType.SmartContract ||
-    payload.payloadType === PayloadType.VersionedSmartContract
-  );
 }
 
 export interface TxOptions {

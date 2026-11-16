@@ -1,6 +1,5 @@
+import { type StacksNetwork, type StacksTransaction } from '@jannik-stacks/kit';
 import type * as btc from '@scure/btc-signer';
-import { type StacksNetwork } from '@stacks/network';
-import { type StacksTransactionWire, type TxBroadcastResultOk } from '@stacks/transactions';
 import { type UseQueryResult } from '@tanstack/react-query';
 import type BigNumber from 'bignumber.js';
 
@@ -67,9 +66,9 @@ export interface SwapDependencies {
     stacksSigner: StacksSigner;
     stacksNetwork: StacksNetwork;
     broadcast(params: {
-      tx: StacksTransactionWire;
+      tx: StacksTransaction;
       stacksNetwork: StacksNetwork;
-    }): Promise<TxBroadcastResultOk>;
+    }): Promise<{ txid: string }>;
     nextNonce: NextNonce | undefined;
   };
   bitcoin?: {

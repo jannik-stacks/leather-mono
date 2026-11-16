@@ -1,11 +1,7 @@
 import { Fragment, type ReactNode, createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import {
-  PostConditionType,
-  deserializeCV,
-  deserializePostConditionWire,
-} from '@stacks/transactions';
+import { Cl, Codec } from '@jannik-stacks/kit';
 import { vi } from 'vitest';
 
 import { ClarityValueListDisplayer } from './clarity-value.section';
@@ -35,7 +31,7 @@ vi.mock('@leather.io/ui/native', () => ({
 export function display(hex: string) {
   const container = document.createElement('div');
   container.innerHTML = renderToStaticMarkup(
-    createElement(ClarityValueListDisplayer, { val: deserializeCV(hex) })
+    createElement(ClarityValueListDisplayer, { val: Cl.deserialize(hex) })
   );
   return container.textContent;
 }
@@ -46,8 +42,8 @@ export function postConditionText(
   isContractPrincipal: boolean,
   context: 'transfer' | 'stake'
 ) {
-  const postCondition = deserializePostConditionWire(hex);
-  if (postCondition.conditionType === PostConditionType.PoX) {
+  const postCondition = Codec.Raw.PostCondition.decode(hex);
+  if (postCondition.type === 'pox-postcondition') {
     return formatPoxPostConditionMessage({ stacksAddress, isContractPrincipal, postCondition });
   }
   return formatPostConditionMessage({

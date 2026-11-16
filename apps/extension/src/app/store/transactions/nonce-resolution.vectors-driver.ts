@@ -1,10 +1,10 @@
-import { STACKS_TESTNET } from '@stacks/network';
+import { Codec, STACKS_TESTNET } from '@jannik-stacks/kit';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 
 import { useGenerateStxTokenTransferUnsignedTx } from './token-transfer.hooks';
 
-const transport = vi.hoisted(() => vi.fn());
+const transport = vi.hoisted(() => vi.fn<(url: string, init?: RequestInit) => Promise<Response>>());
 vi.mock('@app/store/networks/networks.hooks', () => ({
   useCurrentStacksNetworkState() {
     return {
@@ -63,13 +63,13 @@ export async function resolveNonce(
       nonce,
     });
     return {
-      hex: transaction?.serialize(),
-      nonce: transaction?.auth.spendingCondition.nonce.toString(),
-      requests: transport.mock.calls,
+      hex: transaction ? Codec.Transaction.encode(transaction) : undefined,
+      nonce: transaction ? (transaction.nonce ?? 0n).toString() : undefined,
+      requests: transport.mock.calls.map(([url]) => [url]),
     };
   } catch (error) {
     if (!(error instanceof Error)) throw error;
-    return { error: error.message, requests: transport.mock.calls };
+    return { error: error.message, requests: transport.mock.calls.map(([url]) => [url]) };
   } finally {
     hook.unmount();
   }

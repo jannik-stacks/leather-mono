@@ -1,14 +1,4 @@
-import { type TxBroadcastResultRejected } from '@stacks/transactions';
-
-export function getErrorMessage(
-  reason:
-    | TxBroadcastResultRejected['reason']
-    | 'BadTransactionVersion'
-    | 'ConflictingNonceInMempool'
-    | 'EstimatorError'
-    | 'TransferAmountMustBePositive'
-    | 'TransferRecipientCannotEqualSender'
-) {
+export function getErrorMessage(reason: string | undefined) {
   switch (reason) {
     case 'BadAddressVersionByte':
       return 'Incorrect address';

@@ -1,12 +1,5 @@
-import { bytesToHex } from '@stacks/common';
-import { type StacksNetwork } from '@stacks/network';
-import {
-  type ClarityValue,
-  type PostCondition,
-  PostConditionMode,
-  type PostConditionWire,
-  serializeCV,
-} from '@stacks/transactions';
+import { Cl, type ClarityValue, type PostCondition, type StacksNetwork } from '@jannik-stacks/kit';
+import { bytesToHex } from '@noble/hashes/utils';
 import z from 'zod';
 
 import { type StacksContractCallSwapExecutionData } from '@leather.io/models';
@@ -18,7 +11,7 @@ import {
 } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
-type PostConditionInput = string | PostCondition | PostConditionWire;
+type PostConditionInput = string | PostCondition;
 
 const clarityValueSchema = z.custom<ClarityValue>(
   value => typeof value === 'object' && value !== null && 'type' in value,
@@ -43,13 +36,15 @@ export async function buildStacksTx(
     contractName: executionData.contractName,
     functionName: executionData.functionName,
     // TODO: Clarify why functionArgs and postConditions are unknown[]
-    functionArgs: executionData.functionArgs.map(arg => serializeCV(clarityValueSchema.parse(arg))),
+    functionArgs: executionData.functionArgs.map(arg =>
+      Cl.serialize(clarityValueSchema.parse(arg))
+    ),
     postConditions: getPostConditions(
       executionData.postConditions.map(postCondition =>
         postConditionInputSchema.parse(postCondition)
       )
     ),
-    postConditionMode: PostConditionMode.Deny,
+    postConditionMode: 'deny',
     publicKey: bytesToHex(signer.publicKey),
     sponsored: false,
     network,

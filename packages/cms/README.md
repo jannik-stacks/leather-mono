@@ -27,6 +27,8 @@ Schemas for content models are added in `./schemaTypes`. Add a schema you would 
 
 You can run `pnpm dev` to concurrently run and rebuild Sanity Studio as you add `schemaTypes`. This will also rebuild the types for all of the exported client code.
 
+Production builds generate client types from the committed `schema.json` without contacting Sanity. After changing schema types, run `pnpm sanity:schema-extract` and commit the updated `schema.json`. The development watcher refreshes this file automatically.
+
 If you want to add new queries add them to `src/queries` and the types will be generated. You can test queries by either running them in VSCode via the Sanity plugin or by navigating to the Sanity Studio in a browser and running queries in the "vision" tab.
 
 Queries use Sanity's query language called Groq - [documentation here](https://www.sanity.io/docs/content-lake/query-cheat-sheet).

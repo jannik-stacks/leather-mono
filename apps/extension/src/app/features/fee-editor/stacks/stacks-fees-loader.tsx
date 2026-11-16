@@ -1,4 +1,4 @@
-import { AuthType, type StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 
 import { createMoneyFromDecimal } from '@leather.io/utils';
 
@@ -17,7 +17,7 @@ interface StacksFees {
 
 interface StacksFeesLoaderProps {
   children({ fees, isLoading, isSponsored, getCustomFee }: StacksFees): React.JSX.Element;
-  unsignedTx: StacksTransactionWire;
+  unsignedTx: StacksTransaction;
 }
 export function StacksFeesLoader({ children, unsignedTx }: StacksFeesLoaderProps) {
   const { data: stxFees, isLoading: isLoadingFees } = useStacksTransactionFees(unsignedTx);
@@ -38,8 +38,7 @@ export function StacksFeesLoader({ children, unsignedTx }: StacksFeesLoaderProps
   return children({
     fees,
     isLoading: isLoadingFees || isVerifyingSbtcSponsorship,
-    isSponsored:
-      sbtcSponsorshipEligibility?.isEligible || unsignedTx.auth.authType === AuthType.Sponsored,
+    isSponsored: sbtcSponsorshipEligibility?.isEligible || unsignedTx.sponsor !== undefined,
     getCustomFee,
   });
 }

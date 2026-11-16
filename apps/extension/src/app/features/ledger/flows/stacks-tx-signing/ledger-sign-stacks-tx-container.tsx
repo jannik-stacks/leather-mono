@@ -1,4 +1,4 @@
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 import { LedgerError } from '@zondax/ledger-stacks';
 
 import { delay } from '@leather.io/utils';
@@ -6,14 +6,14 @@ import { delay } from '@leather.io/utils';
 import { makeLedgerAppResponseError } from '@app/features/ledger/dmk/ledger-dmk-errors';
 import { useLedgerDmk } from '@app/features/ledger/dmk/ledger-dmk.context';
 import { useLedgerSteps } from '@app/features/ledger/flow/ledger-flow.context';
-import type {
-  ActiveLedgerSigningRequest,
-  LedgerSigningFailure,
+import {
+  type ActiveLedgerSigningRequest,
+  type LedgerSigningFailure,
 } from '@app/features/ledger/flow/ledger-flow.types';
 import { type LedgerTxSigningContext } from '@app/features/ledger/generic-flows/tx-signing/ledger-sign-tx.context';
 import { useSignerActionController } from '@app/features/ledger/utils/bitcoin-signer-kit-utils';
 import { useCancelLedgerAction } from '@app/features/ledger/utils/generic-ledger-utils';
-import type { LedgerStacksApp } from '@app/features/ledger/utils/ledger-app';
+import { type LedgerStacksApp } from '@app/features/ledger/utils/ledger-app';
 import {
   connectLedgerStacksApp,
   getStacksAppVersion,
@@ -126,7 +126,7 @@ export function LedgerSignStacksTxContainer({ request }: LedgerSignStacksTxConta
 
   const ledgerContextValue: LedgerTxSigningContext = {
     chain,
-    transaction: deserializeTransaction(unsignedTx),
+    transaction: Codec.Transaction.decode(unsignedTx),
     signTransaction,
     onCancelTxSigning: closeAction,
     latestDeviceResponse,

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
-import { type StacksTransactionWire, broadcastTransaction } from '@stacks/transactions';
+import { Codec, type StacksTransaction, createClient } from '@jannik-stacks/kit';
+import { z } from 'zod';
 
 import { delay, isError } from '@leather.io/utils';
 
@@ -29,16 +30,36 @@ export function useSubmitTransactionCallback({ loadingKey }: UseSubmitTransactio
 
   return useCallback(
     ({ onSuccess, onError }: UseSubmitTransactionCallbackArgs) =>
-      async (transaction: StacksTransactionWire) => {
+      async (transaction: StacksTransaction) => {
         setIsLoading();
         try {
-          const response = await broadcastTransaction({
-            transaction,
+          const { data, error } = await createClient({
             network: stacksNetwork,
-            client: { fetch: hiroFetchWrapper },
+            fetch: hiroFetchWrapper,
+          }).api.POST('/v2/transactions', {
+            body: Codec.Transaction.encode(transaction),
+            bodySerializer(tx) {
+              return JSON.stringify({ tx });
+            },
+            headers: { 'Content-Type': 'application/json' },
+            parseAs: 'text',
           });
+          const txid = typeof data === 'string' ? data.replace(/["]+/g, '') : undefined;
+          if (
+            typeof data === 'string' &&
+            (txid === undefined || !/^(?:0x)?[a-f0-9]{64}$/i.test(txid))
+          )
+            throw new Error(data);
+          const response = z
+            .object({
+              txid: z.string().optional(),
+              error: z.string().optional(),
+              reason: z.string().optional(),
+            })
+            .loose()
+            .parse(error ?? { txid });
 
-          if ('error' in response) {
+          if (response.error !== undefined) {
             logger.error('Transaction failed to broadcast', response);
             onError(response.error);
             return setIsIdle();

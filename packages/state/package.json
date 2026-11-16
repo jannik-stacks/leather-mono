@@ -30,6 +30,7 @@
   },
   "bugs": "https://github.com/leather-io/mono/issues",
   "dependencies": {
+    "@jannik-stacks/kit": "0.1.0",
     "@leather.io/analytics": "workspace:*",
     "@leather.io/bitcoin": "workspace:*",
     "@leather.io/constants": "workspace:*",
@@ -42,15 +43,14 @@
     "@reduxjs/toolkit": "2.11.2",
     "@scure/btc-signer": "1.6.0",
     "@stacks/common": "7.0.2",
-    "@stacks/network": "7.0.2",
-    "@stacks/transactions": "7.5.0",
     "@tanstack/react-query": "5.85.5",
     "bignumber.js": "9.1.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "remeda": "2.21.2",
     "sbtc": "0.3.2",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "@noble/hashes": "1.5.0"
   },
   "devDependencies": {
     "@leather.io/prettier-config": "workspace:*",

@@ -1,6 +1,6 @@
 import { Navigate, useParams } from 'react-router';
 
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 import z from 'zod';
 
 import { useRouteState } from '@app/common/hooks/use-route-state';
@@ -34,10 +34,10 @@ export function StacksChainTxSummaryRoute() {
         txid={params.txid}
         fallback={<StacksChainTxSummaryLoading txid={params.txid} />}
       >
-        {({ rawTx }) => <SummaryComponent {...params} tx={deserializeTransaction(rawTx)} />}
+        {({ rawTx }) => <SummaryComponent {...params} tx={Codec.Transaction.decode(rawTx)} />}
       </StacksChainTxSummaryLoader>
     );
   }
 
-  return <SummaryComponent {...params} tx={deserializeTransaction(tx)} />;
+  return <SummaryComponent {...params} tx={Codec.Transaction.decode(tx)} />;
 }

@@ -1,4 +1,4 @@
-import { ClarityType } from '@stacks/transactions';
+import { type ClarityType } from '@jannik-stacks/kit';
 import { Box, type BoxProps, Flex, type FlexProps } from 'leather-styles/jsx';
 
 interface TupleDisplayerProps extends BoxProps {
@@ -21,7 +21,7 @@ interface TupleNodeDisplayerProps {
   children: React.ReactNode;
 }
 export function TupleNodeDisplayer({ clarityType, ...props }: TupleNodeDisplayerProps) {
-  return clarityType === ClarityType.Tuple ? <Box {...props} /> : <Flex {...props} />;
+  return clarityType === 'tuple' ? <Box {...props} /> : <Flex {...props} />;
 }
 export function TupleNodeLabelDisplayer(props: BoxProps) {
   return <Box mr="space.04" color="ink.text-subdued" {...props} />;

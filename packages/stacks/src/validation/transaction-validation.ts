@@ -1,4 +1,4 @@
-import { type ChainId, type Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 
 import {
   isValidAddressChain,
@@ -12,7 +12,7 @@ interface StacksTransaction {
   amount: Money;
   payer: string;
   recipient: string;
-  chainId: ChainId;
+  chainId: number;
   availableBalance: Money;
   fee: Money;
 }

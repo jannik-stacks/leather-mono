@@ -1,6 +1,7 @@
 import { useNetworkPreferenceStacksNetwork, useSettings } from '@/store/settings/settings';
 import { getStacksNetworkFromName } from '@/store/settings/settings.read';
-import { type StacksNetwork, StacksNetworks } from '@stacks/network';
+import { type StacksNetwork } from '@jannik-stacks/kit';
+import { StacksNetworks } from '@stacks/network';
 
 import { type NetworkConfiguration, defaultNetworksKeyedById } from '@leather.io/models';
 

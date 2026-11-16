@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 
-import { deserializeTransaction, isTokenTransferPayload } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 import { Box, Stack } from 'leather-styles/jsx';
 
 import { BasicTooltip, InfoCircleIcon } from '@leather.io/ui';
@@ -24,7 +24,7 @@ import { Content, Page } from '@app/components/layout';
 import { PageHeader } from '@app/features/container/headers/page.header';
 import { useCryptoCurrencyMarketData } from '@app/query/common/market-data/market-data.hooks';
 
-import type { ProposalSentSummaryState } from '../../../sent-summary/proposal-sent-summary';
+import { type ProposalSentSummaryState } from '../../../sent-summary/proposal-sent-summary';
 import { stacksConfirmationRouteStateSchema } from '../../hooks/use-send-form-navigate';
 import { SendFormConfirmationLayout } from '../send-form-confirmation.layout';
 import { useProposeStacksSendTransaction } from './use-propose-stacks-send-transaction';
@@ -45,7 +45,7 @@ export function StacksSendFormConfirmation() {
   });
   const { proposeSendTransaction, isProposing } = useProposeStacksSendTransaction();
 
-  const tx = deserializeTransaction(txHex);
+  const tx = Codec.Transaction.decode(txHex);
   const sip10Payload = getSip10TransferPayload(tx);
   const isMultisigProposal = isNonSequentialMultisigTransaction(tx);
 
@@ -68,14 +68,14 @@ export function StacksSendFormConfirmation() {
       recipient: getRecipientFromStacksTransaction(tx) ?? '',
       feeRowValue: formatCurrency(getStacksTransactionFee(tx)),
     };
-    if (isTokenTransferPayload(tx.payload)) {
-      const amount = getTokenTransferAmount(tx.payload);
+    if (tx.type === 'transfer') {
+      const amount = getTokenTransferAmount(tx);
       return {
         ...base,
         txValue: convertAmountToBaseUnit(amount).toString(),
         txFiatValue: formatCurrency(baseCurrencyAmountInQuote(amount, tokenMarketData)),
         txFiatValueSymbol: tokenMarketData.price.symbol,
-        memoDisplayText: getTokenTransferMemoDisplayText(tx.payload) || 'No memo',
+        memoDisplayText: getTokenTransferMemoDisplayText(tx) || 'No memo',
       };
     }
     if (sip10Payload) {
@@ -116,18 +116,16 @@ export function StacksSendFormConfirmation() {
       <PageHeader title="Review" />
       <Content>
         <Page>
-          {isTokenTransferPayload(tx.payload) && (
+          {tx.type === 'transfer' && (
             <SendFormConfirmationLayout
-              txValue={getTokenTransferAmount(tx.payload)}
+              txValue={getTokenTransferAmount(tx)}
               txFiatValue={formatCurrency(
-                baseCurrencyAmountInQuote(getTokenTransferAmount(tx.payload), tokenMarketData)
+                baseCurrencyAmountInQuote(getTokenTransferAmount(tx), tokenMarketData)
               )}
               txFiatValueSymbol={tokenMarketData.price.symbol}
-              totalSpend={formatCurrency(
-                sumMoney([sharedProps.fee, getTokenTransferAmount(tx.payload)])
-              )}
-              sendingValue={formatCurrency(getTokenTransferAmount(tx.payload))}
-              memoDisplayText={getTokenTransferMemoDisplayText(tx.payload) || 'No memo'}
+              totalSpend={formatCurrency(sumMoney([sharedProps.fee, getTokenTransferAmount(tx)]))}
+              sendingValue={formatCurrency(getTokenTransferAmount(tx))}
+              memoDisplayText={getTokenTransferMemoDisplayText(tx) || 'No memo'}
               {...sharedProps}
             />
           )}

@@ -1,13 +1,4 @@
-import {
-  type ClarityValue,
-  bufferCVFromString,
-  createAddress,
-  deserializeCV,
-  noneCV,
-  someCV,
-  standardPrincipalCVFromAddress,
-  uintCV,
-} from '@stacks/transactions';
+import { Cl, type ClarityValue } from '@jannik-stacks/kit';
 
 interface GetSip10FnArgs {
   amount: number | string;
@@ -23,10 +14,10 @@ export function createSip10FnArgs({
   memo,
 }: GetSip10FnArgs) {
   const fnArgs: ClarityValue[] = [
-    uintCV(amount),
-    standardPrincipalCVFromAddress(createAddress(senderStacksAddress)),
-    standardPrincipalCVFromAddress(createAddress(recipientStacksAddress)),
-    memo && memo !== '' ? someCV(bufferCVFromString(memo)) : noneCV(),
+    Cl.uint(amount),
+    Cl.address(senderStacksAddress),
+    Cl.address(recipientStacksAddress),
+    memo && memo !== '' ? Cl.some(Cl.buffer(new TextEncoder().encode(memo))) : Cl.none(),
   ];
   return fnArgs;
 }
@@ -42,9 +33,30 @@ export function createSip9FnArgs({
   recipientStacksAddress,
 }: GetSip9FnArgs) {
   const fnArgs: ClarityValue[] = [
-    deserializeCV(assetId),
-    standardPrincipalCVFromAddress(createAddress(senderStacksAddress)),
-    standardPrincipalCVFromAddress(createAddress(recipientStacksAddress)),
+    Cl.deserialize(assetId),
+    Cl.address(senderStacksAddress),
+    Cl.address(recipientStacksAddress),
   ];
   return fnArgs;
+}
+
+export function decodeClarityArgument(hex: string): ClarityValue {
+  if (!/^(?:[0-9a-f]{2})*$/i.test(hex)) throw new Error('Invalid byte sequence');
+  const typeByte = hex === '' ? undefined : Number.parseInt(hex.slice(0, 2), 16);
+  if (typeByte === undefined || typeByte > 14)
+    throw new Error(`Cannot recognize Clarity Type: ${typeByte}`);
+  if ((typeByte === 0 || typeByte === 1) && hex.length === 2)
+    throw new Error('Cannot convert 0x to a BigInt');
+  try {
+    return Cl.deserialize(hex);
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (hex.length < 4 ||
+        error.message.includes('out of bounds') ||
+        error.message.includes('Unexpected end'))
+    )
+      throw new Error('Cannot recognize Clarity Type: undefined');
+    throw error;
+  }
 }

@@ -1,12 +1,12 @@
-import type { StacksNetwork } from '@stacks/network';
+import { type StacksNetwork } from '@jannik-stacks/kit';
 
-import type { Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 import { createRequestEncoder, stxTransferStx } from '@leather.io/rpc';
 import { type StacksUnsignedTokenTransferOptions, TransactionTypes } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
 import { initialSearchParams } from '@app/common/initial-search-params';
-import type { Nonce } from '@app/features/nonce-editor/nonce-editor.context';
+import { type Nonce } from '@app/features/nonce-editor/nonce-editor.context';
 
 export function getDecodedRpcStxTransferStxRequest() {
   const { decode } = createRequestEncoder(stxTransferStx.request);

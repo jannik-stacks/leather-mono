@@ -1,8 +1,4 @@
-import {
-  AddressHashMode,
-  type StacksTransactionWire,
-  deserializeTransaction,
-} from '@stacks/transactions';
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 
 import { type RpcParams, createRequestEncoder, stxSignTransaction } from '@leather.io/rpc';
 
@@ -22,15 +18,15 @@ function getDecodedRpcStxSignTransactionRequest() {
 
 export function getUnsignedStacksTransactionFromRpcRequest() {
   const decodedRpcRequest = getDecodedRpcStxSignTransactionRequest();
-  return deserializeTransaction(getStacksTransactionHexFromRequest(decodedRpcRequest.params));
+  return Codec.Transaction.decode(getStacksTransactionHexFromRequest(decodedRpcRequest.params));
 }
 
-export function checkUnsignedStacksTransactionHashMode(tx: StacksTransactionWire) {
-  const hashMode = tx.auth.spendingCondition.hashMode;
+export function checkUnsignedStacksTransactionHashMode(tx: StacksTransaction) {
+  const hashMode = tx.signer?.hashMode ?? 'p2pkh';
   return (
-    hashMode === AddressHashMode.P2SH ||
-    hashMode === AddressHashMode.P2WSH ||
-    hashMode === AddressHashMode.P2SHNonSequential ||
-    hashMode === AddressHashMode.P2WSHNonSequential
+    hashMode === 'p2sh' ||
+    hashMode === 'p2wsh' ||
+    hashMode === 'p2sh-non-sequential' ||
+    hashMode === 'p2wsh-non-sequential'
   );
 }

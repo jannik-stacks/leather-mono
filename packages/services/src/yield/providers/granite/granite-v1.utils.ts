@@ -1,6 +1,8 @@
-import { type ClarityValue, cvToString, getCVTypeString } from '@stacks/transactions';
+import { type ClarityValue } from '@jannik-stacks/kit';
 
 import {
+  formatClarityType,
+  formatClarityValue,
   getClarityPrincipal,
   isClarityList,
   isClarityOptionalNone,
@@ -58,7 +60,7 @@ export function parseGraniteProtocolGetUserPositionResponseCV(
   }
 
   throw new Error(
-    `Unexpected Granite get-user-position Clarity Value type: ${getCVTypeString(response)}`
+    `Unexpected Granite get-user-position Clarity Value type: ${formatClarityType(response)}`
   );
 }
 
@@ -83,13 +85,13 @@ export function parseGraniteProtocolGetUserCollateralResponseCV(
   }
 
   throw new Error(
-    `Unexpected Granite get-user-collateral Clarity Value type: ${getCVTypeString(response)}`
+    `Unexpected Granite get-user-collateral Clarity Value type: ${formatClarityType(response)}`
   );
 }
 
 export function parseGraniteProtocolGetBalanceResponseCV(response: ClarityValue): bigint {
   if (isClarityResponseError(response)) {
-    throw new Error(`Granite get-balance error: ${cvToString(response.value)}`);
+    throw new Error(`Granite get-balance error: ${formatClarityValue(response.value)}`);
   }
 
   if (isClarityResponseOk(response)) {
@@ -101,6 +103,6 @@ export function parseGraniteProtocolGetBalanceResponseCV(response: ClarityValue)
   }
 
   throw new Error(
-    `Unexpected Granite get-balance Clarity Value type: ${getCVTypeString(response)}`
+    `Unexpected Granite get-balance Clarity Value type: ${formatClarityType(response)}`
   );
 }

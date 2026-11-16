@@ -1,6 +1,8 @@
-import { type ClarityValue, type TupleCV, cvToString, getCVTypeString } from '@stacks/transactions';
+import { type Cl, type ClarityValue } from '@jannik-stacks/kit';
 
 import {
+  formatClarityType,
+  formatClarityValue,
   isClarityOptionalSome,
   isClarityResponseError,
   isClarityResponseOk,
@@ -18,7 +20,7 @@ export function parseStackingDaoGetWithdrawalResponseCV(
   response: ClarityValue
 ): StackingDaoGetWithdrawalsByNft {
   if (isClarityResponseError(response)) {
-    throw new Error(cvToString(response.value));
+    throw new Error(formatClarityValue(response.value));
   }
 
   if (
@@ -33,10 +35,10 @@ export function parseStackingDaoGetWithdrawalResponseCV(
   }
 
   throw new Error(
-    `Unexpected get-withdrawals-by-nft Clarity Value type: ${getCVTypeString(response)}`
+    `Unexpected get-withdrawals-by-nft Clarity Value type: ${formatClarityType(response)}`
   );
 
-  function parseWithdrawalsTuple(tuple: TupleCV): StackingDaoGetWithdrawalsByNft {
+  function parseWithdrawalsTuple(tuple: Cl.Types.Tuple): StackingDaoGetWithdrawalsByNft {
     const stxAmountCV = tuple.value['stx-amount'];
     const ststxAmountCV = tuple.value['ststx-amount'];
     const unlockBurnHeightCV = tuple.value['unlock-burn-height'];

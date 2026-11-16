@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { networkFromName } from '@stacks/network';
-import { deserializeCV } from '@stacks/transactions';
+import { Cl, parseNetwork } from '@jannik-stacks/kit';
 
 import {
   RpcErrorCode,
@@ -34,7 +33,7 @@ function getNetwork(networkName: string | null) {
     networkName === 'devnet' ||
     networkName === 'mocknet'
   ) {
-    return networkFromName(networkName);
+    return parseNetwork(networkName === 'mocknet' ? 'devnet' : networkName);
   }
   return;
 }
@@ -53,11 +52,13 @@ export function useRpcStacksMessagePayload() {
 
   if (isStructuredMessageType(messageType)) {
     if (!domain) return null;
+    const domainValue = Cl.deserialize(domain);
+    if (domainValue.type !== 'tuple') return null;
 
     return {
       messageType: 'structured' as const,
-      message: deserializeCV(message),
-      domain: deserializeCV(domain),
+      message: Cl.deserialize(message),
+      domain: domainValue,
       network: getNetwork(network),
       appName,
     } satisfies StructuredPayload;

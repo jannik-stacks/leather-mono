@@ -1,12 +1,13 @@
-import { cvToJSON, deserializeCV, serializeCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import axios, { type AxiosInstance } from 'axios';
 import { vi } from 'vitest';
 
 import { defaultNetworksKeyedById } from '@leather.io/models';
+import { clarityValueToJson } from '@leather.io/stacks';
 
 import { createMock } from '../../../test/create-mock';
-import type { HttpCacheService } from '../../cache/http-cache.service';
-import type { RateLimiterService } from '../../rate-limiter/rate-limiter.service';
+import { type HttpCacheService } from '../../cache/http-cache.service';
+import { type RateLimiterService } from '../../rate-limiter/rate-limiter.service';
 import { HiroStacksApiClient } from './hiro-stacks-api.client';
 
 export async function read(
@@ -51,14 +52,14 @@ export async function read(
   );
   try {
     const value = await client.callReadOnlyFunction(
-      { ...input, functionArgs: input.args.map(deserializeCV) },
+      { ...input, functionArgs: input.args.map(Cl.deserialize) },
       {}
     );
     await client.getTransactionFeeEstimate(payload, size, { skipCache: true });
     const transferRate = await client.getTransferFeeRate();
-    const json: unknown = cvToJSON(value);
+    const json: unknown = clarityValueToJson(value);
     return {
-      hex: serializeCV(value),
+      hex: Cl.serialize(value),
       json,
       transferRate,
       post: post.mock.calls,

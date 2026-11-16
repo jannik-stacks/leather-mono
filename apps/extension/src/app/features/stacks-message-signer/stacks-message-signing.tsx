@@ -1,5 +1,4 @@
-import { type StacksNetwork } from '@stacks/network';
-import type { ClarityValue } from '@stacks/transactions';
+import { type ClarityValue, type StacksNetwork } from '@jannik-stacks/kit';
 
 import { stxSignMessageTypeSchema } from '@leather.io/rpc';
 

@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js';
 import { describe, expect, it } from 'vitest';
 
 import { stxAsset } from '@leather.io/constants';
-import type {
-  StacksContractCallSwapExecutionData,
-  SwappableFungibleCryptoAsset,
+import {
+  type StacksContractCallSwapExecutionData,
+  type SwappableFungibleCryptoAsset,
 } from '@leather.io/models';
 import { createMoney } from '@leather.io/utils';
 
@@ -14,7 +14,7 @@ import { hasValidMinReceiveAmountPostCondition } from './swap.utils';
 function makeExecutionData(
   targetAsset: SwappableFungibleCryptoAsset,
   targetAmount: { amount: string; symbol: string; decimals: number },
-  postConditions: unknown[]
+  postConditions: StacksContractCallSwapExecutionData['postConditions']
 ): StacksContractCallSwapExecutionData {
   return {
     executionType: 'stacks-contract-call',
@@ -63,7 +63,7 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000.pool',
             condition: 'gte',
-            amount: '960000',
+            amount: 960000n,
             asset: sip10Target.assetId,
           },
         ]
@@ -81,7 +81,7 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'stx-postcondition',
             address: 'SP000.pool',
             condition: 'gte',
-            amount: '4800000',
+            amount: 4800000n,
           },
         ]
       );
@@ -97,7 +97,7 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000',
             condition: 'lte',
-            amount: '500000',
+            amount: 500000n,
             asset: 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token',
           },
         ]
@@ -115,7 +115,7 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000.pool',
             condition: 'gte',
-            amount: '900000',
+            amount: 900000n,
             asset: sip10Target.assetId,
           },
         ]
@@ -136,21 +136,21 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000',
             condition: 'lte',
-            amount: '50990',
+            amount: 50990n,
             asset: 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token',
           },
           {
             type: 'ft-postcondition',
             address: 'SP000.pool-1',
             condition: 'gte',
-            amount: '3429384',
+            amount: 3429384n,
             asset: sip10Target.assetId,
           },
           {
             type: 'ft-postcondition',
             address: 'SP000.pool-2',
             condition: 'gte',
-            amount: '29294000',
+            amount: 29294000n,
             asset: sip10Target.assetId,
           },
         ]
@@ -169,14 +169,14 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000.pool-1',
             condition: 'gte',
-            amount: '1000000',
+            amount: 1000000n,
             asset: sip10Target.assetId,
           },
           {
             type: 'ft-postcondition',
             address: 'SP000.pool-2',
             condition: 'gte',
-            amount: '2000000',
+            amount: 2000000n,
             asset: sip10Target.assetId,
           },
         ]
@@ -194,28 +194,28 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000',
             condition: 'lte',
-            amount: '50000',
+            amount: 50000n,
             asset: 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token::sbtc-token',
           },
           {
             type: 'ft-postcondition',
             address: 'SP000',
             condition: 'gte',
-            amount: '99999999',
+            amount: 99999999n,
             asset: 'SOME_OTHER_TOKEN::token',
           },
           {
             type: 'ft-postcondition',
             address: 'SP000.pool-1',
             condition: 'gte',
-            amount: '500000',
+            amount: 500000n,
             asset: sip10Target.assetId,
           },
           {
             type: 'ft-postcondition',
             address: 'SP000.pool-2',
             condition: 'gte',
-            amount: '460000',
+            amount: 460000n,
             asset: sip10Target.assetId,
           },
         ]
@@ -245,7 +245,7 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
             type: 'ft-postcondition',
             address: 'SP000.pool',
             condition: 'gte',
-            amount: '970000',
+            amount: 970000n,
             asset: sip10Target.assetId,
           },
         ]

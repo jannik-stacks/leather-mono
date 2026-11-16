@@ -1,4 +1,5 @@
-import { estimateTransactionByteLength } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
+import { hexToBytes } from '@noble/hashes/utils';
 import BigNumber from 'bignumber.js';
 import { describe, expect, it } from 'vitest';
 
@@ -27,7 +28,7 @@ describe('estimateStacksTransactionByteLength', () => {
       network: 'testnet',
       publicKey: publicKeys[0],
     });
-    expect(estimateStacksTransactionByteLength(tx)).toBe(estimateTransactionByteLength(tx));
+    expect(estimateStacksTransactionByteLength(tx)).toBe(Codec.Transaction.encode(tx).length / 2);
   });
 
   it('reserves signature space for non-sequential multisig transactions', async () => {
@@ -44,9 +45,11 @@ describe('estimateStacksTransactionByteLength', () => {
       useNonSequentialMultiSig: true,
     });
     expect(estimateStacksTransactionByteLength(tx)).toBe(
-      estimateTransactionByteLength(tx) + numSignatures * messageSignatureWireByteLength
+      Codec.Transaction.encode(tx).length / 2 + numSignatures * messageSignatureWireByteLength
     );
-    expect(estimateStacksTransactionByteLength(tx)).toBeGreaterThan(tx.serializeBytes().byteLength);
+    expect(estimateStacksTransactionByteLength(tx)).toBeGreaterThan(
+      hexToBytes(Codec.Transaction.encode(tx)).byteLength
+    );
   });
 
   it('reserves signature and remaining public key space when signers exceed the threshold', async () => {
@@ -63,7 +66,7 @@ describe('estimateStacksTransactionByteLength', () => {
       useNonSequentialMultiSig: true,
     });
     const expected =
-      estimateTransactionByteLength(tx) +
+      Codec.Transaction.encode(tx).length / 2 +
       numSignatures * messageSignatureWireByteLength +
       (publicKeys.length - numSignatures) * publicKeyWireByteLength;
     expect(estimateStacksTransactionByteLength(tx, publicKeys.length)).toBe(expected);

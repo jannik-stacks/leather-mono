@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { STACKS_TESTNET } from '@stacks/network';
+import { STACKS_TESTNET } from '@jannik-stacks/kit';
 import { vi } from 'vitest';
 
 import { stxSignMessage, stxSignTransaction } from '@leather.io/rpc';

@@ -18,7 +18,9 @@
           "symbol": [
             "deserializeCV",
             "deserializeTransaction",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "Codec"
           ]
         }
       ],
@@ -67,7 +69,8 @@
           "file": "apps/extension/src/app/common/transactions/stacks/broadcast-contract.vectors-driver.ts",
           "symbol": [
             "STACKS_TESTNET",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -109,7 +112,8 @@
         {
           "file": "apps/extension/src/app/features/ledger/utils/ledger-contract.vectors-driver.ts",
           "symbol": [
-            "signatureVrsToRsv"
+            "signatureVrsToRsv",
+            "Codec"
           ]
         }
       ],
@@ -151,7 +155,39 @@
           "symbol": [
             "STACKS_TESTNET",
             "StacksTransactionWire",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec",
+            "StacksTransaction"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/components/loaders/stacks-nonce-loader.tsx",
+          "symbol": [
+            "StacksTransaction"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/stacks-rpc-transaction-request.context.tsx",
+          "symbol": [
+            "StacksNetwork"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/pages/rpc-stx-call-contract/rpc-stx-call-contract.utils.ts",
+          "symbol": [
+            "StacksNetwork"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/pages/rpc-stx-deploy-contract/rpc-stx-deploy-contract.utils.ts",
+          "symbol": [
+            "StacksNetwork"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/pages/rpc-stx-transfer-stx/rpc-stx-transfer-stx.utils.ts",
+          "symbol": [
+            "StacksNetwork"
           ]
         }
       ],
@@ -193,7 +229,8 @@
         {
           "file": "apps/extension/src/app/features/stacks-message-signer/components/clarity-display.vectors-driver.ts",
           "symbol": [
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -236,7 +273,8 @@
         {
           "file": "apps/extension/src/app/store/transactions/nonce-resolution.vectors-driver.ts",
           "symbol": [
-            "STACKS_TESTNET"
+            "STACKS_TESTNET",
+            "Codec"
           ]
         }
       ],
@@ -373,7 +411,9 @@
           "symbol": [
             "PostConditionType",
             "deserializeCV",
-            "deserializePostConditionWire"
+            "deserializePostConditionWire",
+            "Cl",
+            "Codec"
           ]
         }
       ],
@@ -542,7 +582,20 @@
         {
           "file": "packages/queries/src/fees/fee-query-contract.vectors-driver.ts",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/query/stacks/fees/stacks-transaction-fees.hooks.ts",
+          "symbol": [
+            "StacksTransaction"
+          ]
+        },
+        {
+          "file": "apps/mobile/src/queries/stacks/fees/fees.hooks.ts",
+          "symbol": [
+            "StacksTransaction"
           ]
         }
       ],
@@ -579,7 +632,8 @@
         {
           "file": "packages/services/src/bns/bns-contract.vectors-driver.ts",
           "symbol": [
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -616,7 +670,8 @@
         {
           "file": "packages/services/src/fees/fee-contract.vectors-driver.ts",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -659,7 +714,8 @@
           "symbol": [
             "cvToJSON",
             "deserializeCV",
-            "serializeCV"
+            "serializeCV",
+            "Cl"
           ]
         }
       ],
@@ -708,7 +764,10 @@
           "file": "packages/services/src/swap/withdrawal-contract.vectors-driver.ts",
           "symbol": [
             "postConditionToHex",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "Codec",
+            "PostCondition"
           ]
         }
       ],
@@ -753,7 +812,8 @@
           "file": "packages/services/src/yield/providers/stacking-dao/yield-contract.vectors-driver.ts",
           "symbol": [
             "deserializeCV",
-            "serializeCV"
+            "serializeCV",
+            "Cl"
           ]
         }
       ],
@@ -802,7 +862,9 @@
             "bytesToHex",
             "privateKeyToPublic",
             "publicKeyToAddressSingleSig",
-            "publicKeyToHex"
+            "publicKeyToHex",
+            "privateKeyToPublicKey",
+            "publicKeyToAddress"
           ]
         }
       ],
@@ -878,7 +940,8 @@
           "symbol": [
             "bytesToHex",
             "hashMessage",
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -945,7 +1008,14 @@
             "cvToJSON",
             "cvToString",
             "deserializeCV",
-            "serializeCV"
+            "serializeCV",
+            "Cl"
+          ]
+        },
+        {
+          "file": "packages/stacks/src/clarity-format.ts",
+          "symbol": [
+            "ClarityValue"
           ]
         }
       ],
@@ -1013,7 +1083,9 @@
             "deserializeCV",
             "postConditionToHex",
             "postConditionToWire",
-            "serializePostConditionWire"
+            "serializePostConditionWire",
+            "Cl",
+            "Codec"
           ]
         }
       ],
@@ -1079,7 +1151,9 @@
           "symbol": [
             "hexToBytes",
             "PostConditionMode",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec",
+            "StacksNetwork"
           ]
         }
       ],
@@ -1147,7 +1221,17 @@
             "PostConditionMode",
             "TransactionSigner",
             "privateKeyToPublic",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "Codec",
+            "privateKeyToPublicKey",
+            "signMultisigInPlace"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/features/ledger/flow/ledger-flow.types.ts",
+          "symbol": [
+            "StacksTransaction"
           ]
         }
       ],
@@ -1213,7 +1297,10 @@
           "file": "apps/extension/src/app/common/hooks/use-submit-stx-transaction.ts",
           "symbol": [
             "StacksTransactionWire",
-            "broadcastTransaction"
+            "broadcastTransaction",
+            "Codec",
+            "StacksTransaction",
+            "createClient"
           ]
         }
       ],
@@ -1269,7 +1356,12 @@
             "PostConditionWire",
             "PoxConditionCode",
             "PoxPostConditionWire",
-            "addressToString"
+            "addressToString",
+            "FungibleComparator",
+            "NonFungibleComparator",
+            "PostCondition",
+            "PoxComparator",
+            "Transaction"
           ]
         }
       ],
@@ -1504,7 +1596,11 @@
           "symbol": [
             "StacksTransactionWire",
             "TxBroadcastResultRejected",
-            "broadcastTransaction"
+            "broadcastTransaction",
+            "Codec",
+            "StacksNetwork",
+            "StacksTransaction",
+            "createClient"
           ]
         }
       ],
@@ -1568,7 +1664,10 @@
             "cvToString",
             "deserializeMemoString",
             "isTokenTransferPayload",
-            "serializeCV"
+            "serializeCV",
+            "Address",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -1762,7 +1861,8 @@
         {
           "file": "apps/extension/src/app/common/transactions/stacks/use-stacks-broadcast-transaction.tsx",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -1931,7 +2031,8 @@
         {
           "file": "apps/extension/src/app/features/dialogs/transaction-action-dialog/stacks-transaction-action-sheet.tsx",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -1968,7 +2069,8 @@
         {
           "file": "apps/extension/src/app/features/fee-editor/stacks/stacks-fee-editor.provider.tsx",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -2007,7 +2109,8 @@
           "file": "apps/extension/src/app/features/fee-editor/stacks/stacks-fees-loader.tsx",
           "symbol": [
             "AuthType",
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -2051,7 +2154,8 @@
           "file": "apps/extension/src/app/features/ledger/flows/stacks-message-signing/ledger-stacks-sign-msg-container.tsx",
           "symbol": [
             "signatureVrsToRsv",
-            "serializeCV"
+            "serializeCV",
+            "Cl"
           ]
         }
       ],
@@ -2111,7 +2215,8 @@
             "ClarityType",
             "ClarityValue",
             "cvToString",
-            "encodeStructuredDataBytes"
+            "encodeStructuredDataBytes",
+            "Cl"
           ]
         }
       ],
@@ -2175,7 +2280,8 @@
         {
           "file": "apps/extension/src/app/features/ledger/flows/stacks-tx-signing/ledger-sign-stacks-tx-container.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -2307,7 +2413,8 @@
         {
           "file": "apps/extension/src/app/features/ledger/generic-flows/tx-signing/ledger-sign-tx.context.ts",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -2356,7 +2463,9 @@
             "createMessageSignature",
             "createTransactionAuthField",
             "deserializeTransaction",
-            "isSingleSig"
+            "isSingleSig",
+            "Codec",
+            "addressVersionFor"
           ]
         }
       ],
@@ -2447,7 +2556,10 @@
             "Pc",
             "PostConditionMode",
             "StacksTransactionWire",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "StacksNetwork",
+            "StacksTransaction"
           ]
         }
       ],
@@ -2511,7 +2623,8 @@
         {
           "file": "apps/extension/src/app/features/multisig/use-sign-proposal-commitment.ts",
           "symbol": [
-            "stringAsciiCV"
+            "stringAsciiCV",
+            "Cl"
           ]
         }
       ],
@@ -2604,7 +2717,8 @@
             "ClarityAbiFunction",
             "cvToString",
             "deserializeCV",
-            "getCVTypeString"
+            "getCVTypeString",
+            "Cl"
           ]
         }
       ],
@@ -2658,7 +2772,8 @@
         {
           "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/post-conditions/fungible-post-condition-item.tsx",
           "symbol": [
-            "FungiblePostConditionWire"
+            "FungiblePostConditionWire",
+            "PostCondition"
           ]
         }
       ],
@@ -2735,7 +2850,8 @@
           "symbol": [
             "NonFungiblePostConditionWire",
             "STXPostConditionWire",
-            "StakingPostConditionWire"
+            "StakingPostConditionWire",
+            "PostCondition"
           ]
         }
       ],
@@ -2812,7 +2928,8 @@
           "symbol": [
             "PostConditionPrincipalId",
             "PostConditionType",
-            "PostConditionWire"
+            "PostConditionWire",
+            "PostCondition"
           ]
         }
       ],
@@ -2937,7 +3054,9 @@
           "symbol": [
             "PostConditionMode",
             "PostConditionModeName",
-            "PostConditionWire"
+            "PostConditionWire",
+            "PostCondition",
+            "Transaction"
           ]
         }
       ],
@@ -3120,7 +3239,8 @@
           "symbol": [
             "PostConditionPrincipalId",
             "PoxPostConditionWire",
-            "addressToString"
+            "addressToString",
+            "PostCondition"
           ]
         }
       ],
@@ -3208,7 +3328,9 @@
         {
           "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/use-propose-stacks-transaction.ts",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -3255,7 +3377,9 @@
           "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/use-sign-and-broadcast-stacks-transaction.ts",
           "symbol": [
             "AuthType",
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -3631,7 +3755,8 @@
         {
           "file": "apps/extension/src/app/features/stacks-message-signer/stacks-message-signing.tsx",
           "symbol": [
-            "StacksNetwork"
+            "StacksNetwork",
+            "ClarityValue"
           ]
         }
       ],
@@ -3664,7 +3789,9 @@
           "file": "apps/extension/src/app/features/stacks-message-signer/stacks-message-signing.utils.ts",
           "symbol": [
             "ClarityValue",
-            "TupleCV"
+            "TupleCV",
+            "Cl",
+            "PrivateKey"
           ]
         }
       ],
@@ -3908,7 +4035,9 @@
           "file": "apps/extension/src/app/pages/rpc-sign-stacks-message/use-rpc-sign-stacks-message.ts",
           "symbol": [
             "networkFromName",
-            "deserializeCV"
+            "deserializeCV",
+            "Cl",
+            "parseNetwork"
           ]
         }
       ],
@@ -3969,7 +4098,9 @@
             "isContractCallPayload",
             "isSmartContractPayload",
             "isTokenTransferPayload",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "Codec"
           ]
         }
       ],
@@ -4063,7 +4194,9 @@
           "symbol": [
             "AddressHashMode",
             "StacksTransactionWire",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -4137,7 +4270,10 @@
             "serializeCV",
             "serializePostConditionWire",
             "standardPrincipalCVFromAddress",
-            "uintCV"
+            "uintCV",
+            "Cl",
+            "Codec",
+            "StacksNetwork"
           ]
         }
       ],
@@ -4235,7 +4371,10 @@
             "postConditionToWire",
             "serializeCV",
             "serializePostConditionWire",
-            "standardPrincipalCVFromAddress"
+            "standardPrincipalCVFromAddress",
+            "Cl",
+            "Codec",
+            "StacksNetwork"
           ]
         }
       ],
@@ -4318,7 +4457,8 @@
           "file": "apps/extension/src/app/pages/send/send-crypto-asset-form/form/stacks/stacks-send-form-confirmation.tsx",
           "symbol": [
             "deserializeTransaction",
-            "isTokenTransferPayload"
+            "isTokenTransferPayload",
+            "Codec"
           ]
         }
       ],
@@ -4375,7 +4515,9 @@
         {
           "file": "apps/extension/src/app/pages/send/send-crypto-asset-form/form/stacks/use-propose-stacks-send-transaction.ts",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -4425,7 +4567,9 @@
         {
           "file": "apps/extension/src/app/pages/send/send-crypto-asset-form/hooks/use-send-form-navigate.ts",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -4475,7 +4619,8 @@
         {
           "file": "apps/extension/src/app/pages/send/sent-summary/stacks/stacks-chain-tx-summary.route.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -4528,7 +4673,8 @@
           "file": "apps/extension/src/app/pages/send/sent-summary/stacks/stacks-chain-tx-summary.tsx",
           "symbol": [
             "StacksTransactionWire",
-            "isTokenTransferPayload"
+            "isTokenTransferPayload",
+            "StacksTransaction"
           ]
         }
       ],
@@ -4579,7 +4725,10 @@
             "StacksNetwork",
             "StacksTransactionWire",
             "TxBroadcastResultOk",
-            "broadcastTransaction"
+            "broadcastTransaction",
+            "Codec",
+            "StacksTransaction",
+            "createClient"
           ]
         }
       ],
@@ -4731,7 +4880,9 @@
         {
           "file": "apps/extension/src/app/query/sbtc/sponsored-transactions.query.ts",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -4777,7 +4928,8 @@
         {
           "file": "apps/extension/src/app/query/stacks/transactions/raw-transaction-by-id.hooks.ts",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -4832,7 +4984,8 @@
           "symbol": [
             "createStacksPublicKey",
             "privateKeyToPublic",
-            "publicKeyToAddressSingleSig"
+            "publicKeyToAddressSingleSig",
+            "privateKeyToPublicKey"
           ]
         }
       ],
@@ -4896,7 +5049,8 @@
           "symbol": [
             "AddressVersion",
             "privateKeyToPublic",
-            "publicKeyToAddress"
+            "publicKeyToAddress",
+            "privateKeyToPublicKey"
           ]
         }
       ],
@@ -5093,7 +5247,8 @@
           "file": "apps/extension/src/app/store/transactions/post-conditions.hooks.ts",
           "symbol": [
             "FungiblePostConditionWire",
-            "addressToString"
+            "addressToString",
+            "PostCondition"
           ]
         }
       ],
@@ -5198,7 +5353,12 @@
             "someCV",
             "standardPrincipalCV",
             "standardPrincipalCVFromAddress",
-            "uintCV"
+            "uintCV",
+            "getNextNonce",
+            "Cl",
+            "StacksNetwork",
+            "createClient",
+            "publicKeyToAddress"
           ]
         }
       ],
@@ -5294,7 +5454,11 @@
           "file": "apps/extension/src/app/store/transactions/transaction.hooks.ts",
           "symbol": [
             "StacksTransactionWire",
-            "TransactionSigner"
+            "TransactionSigner",
+            "Codec",
+            "StacksTransaction",
+            "isTransaction",
+            "signInPlace"
           ]
         }
       ],
@@ -5394,7 +5558,8 @@
         {
           "file": "apps/extension/src/background/messaging/rpc-methods/sign-stacks-message.ts",
           "symbol": [
-            "serializeCV"
+            "serializeCV",
+            "Cl"
           ]
         }
       ],
@@ -5515,7 +5680,8 @@
             "ClarityValue",
             "StringAsciiCV",
             "TupleCV",
-            "UIntCV"
+            "UIntCV",
+            "Cl"
           ]
         }
       ],
@@ -5555,7 +5721,8 @@
           "file": "apps/extension/src/shared/utils/post-conditions.ts",
           "symbol": [
             "PostCondition",
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -5792,7 +5959,8 @@
           "symbol": [
             "FungiblePostConditionWire",
             "PostConditionPrincipalId",
-            "addressToString"
+            "addressToString",
+            "PostCondition"
           ]
         }
       ],
@@ -5840,7 +6008,8 @@
           "symbol": [
             "NonFungiblePostConditionWire",
             "PostConditionPrincipalId",
-            "addressToString"
+            "addressToString",
+            "PostCondition"
           ]
         }
       ],
@@ -5887,7 +6056,8 @@
           "file": "apps/mobile/src/features/approver/components/post-conditions/post-conditions-warning.tsx",
           "symbol": [
             "PostConditionMode",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -5944,7 +6114,11 @@
             "PostConditionWire",
             "PoxConditionCode",
             "PoxPostConditionWire",
-            "addressToString"
+            "addressToString",
+            "FungibleComparator",
+            "NonFungibleComparator",
+            "PostCondition",
+            "PoxComparator"
           ]
         }
       ],
@@ -6135,7 +6309,8 @@
           "file": "apps/mobile/src/features/approver/components/post-conditions/pox-post-condition.tsx",
           "symbol": [
             "PostConditionPrincipalId",
-            "PoxPostConditionWire"
+            "PoxPostConditionWire",
+            "PostCondition"
           ]
         }
       ],
@@ -6176,7 +6351,8 @@
           "file": "apps/mobile/src/features/approver/components/post-conditions/staking-post-condition.tsx",
           "symbol": [
             "PostConditionPrincipalId",
-            "StakingPostConditionWire"
+            "StakingPostConditionWire",
+            "PostCondition"
           ]
         }
       ],
@@ -6217,7 +6393,8 @@
           "file": "apps/mobile/src/features/approver/components/post-conditions/stx-post-condition.tsx",
           "symbol": [
             "PostConditionPrincipalId",
-            "STXPostConditionWire"
+            "STXPostConditionWire",
+            "PostCondition"
           ]
         }
       ],
@@ -6256,7 +6433,8 @@
         {
           "file": "apps/mobile/src/features/approver/components/sip10-recipient.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6304,7 +6482,8 @@
           "file": "apps/mobile/src/features/approver/contract-call-args.section.tsx",
           "symbol": [
             "cvToString",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6358,7 +6537,8 @@
           "file": "apps/mobile/src/features/approver/contract-call-post-conditions.section.tsx",
           "symbol": [
             "PostConditionType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6417,7 +6597,8 @@
         {
           "file": "apps/mobile/src/features/approver/contract-call-summary.section.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6462,7 +6643,8 @@
         {
           "file": "apps/mobile/src/features/approver/contract-deploy-code.section.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6507,7 +6689,8 @@
         {
           "file": "apps/mobile/src/features/approver/contract-deploy-summary.section.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6558,7 +6741,8 @@
             "AuthType",
             "PostConditionMode",
             "deserializeTransaction",
-            "isTokenTransferPayload"
+            "isTokenTransferPayload",
+            "Codec"
           ]
         }
       ],
@@ -6647,7 +6831,8 @@
           "file": "apps/mobile/src/features/approver/stacks-fees.section.tsx",
           "symbol": [
             "AuthType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -6712,7 +6897,8 @@
             "TupleCV",
             "UIntCV",
             "cvToString",
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -6801,7 +6987,8 @@
             "TokenTransferPayloadWire",
             "VersionedSmartContractPayloadWire",
             "addressToString",
-            "cvToString"
+            "cvToString",
+            "StacksTransaction"
           ]
         }
       ],
@@ -6954,7 +7141,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/call-contract/call-contract.tsx",
           "symbol": [
             "AuthType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7018,7 +7206,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/call-contract/hooks.ts",
           "symbol": [
             "bytesToHex",
-            "StacksNetwork"
+            "StacksNetwork",
+            "Codec"
           ]
         }
       ],
@@ -7071,7 +7260,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/deploy-contract/deploy-contract.tsx",
           "symbol": [
             "AuthType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7135,7 +7325,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/deploy-contract/hooks.ts",
           "symbol": [
             "bytesToHex",
-            "StacksNetwork"
+            "StacksNetwork",
+            "Codec"
           ]
         }
       ],
@@ -7230,7 +7421,8 @@
         {
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/sign-message/sign-message.tsx",
           "symbol": [
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -7281,7 +7473,8 @@
         {
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/sign-structured-message/sign-structured-message.tsx",
           "symbol": [
-            "deserializeCV"
+            "deserializeCV",
+            "Cl"
           ]
         }
       ],
@@ -7331,7 +7524,8 @@
         {
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/sign-transaction/sign-transaction.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7432,7 +7626,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/transfer-sip10-ft/transfer-sip10-ft.tsx",
           "symbol": [
             "AuthType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7503,7 +7698,9 @@
             "StacksNetwork",
             "Pc",
             "hexToCV",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "Codec"
           ]
         }
       ],
@@ -7586,7 +7783,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/transfer-sip9-nft/transfer-sip9-nft.tsx",
           "symbol": [
             "AuthType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7650,7 +7848,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/transfer-stx/hooks.ts",
           "symbol": [
             "bytesToHex",
-            "StacksNetwork"
+            "StacksNetwork",
+            "Codec"
           ]
         }
       ],
@@ -7703,7 +7902,8 @@
           "file": "apps/mobile/src/features/browser/approver-sheet/stx/transfer-stx/transfer-stx.tsx",
           "symbol": [
             "AuthType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7802,7 +8002,8 @@
         {
           "file": "apps/mobile/src/features/send/forms/stx/sip10-approver.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7847,7 +8048,8 @@
         {
           "file": "apps/mobile/src/features/send/forms/stx/stx-approver.tsx",
           "symbol": [
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -7933,7 +8135,8 @@
           "file": "apps/mobile/src/features/send/utils.ts",
           "symbol": [
             "PublicKey",
-            "StacksNetwork"
+            "StacksNetwork",
+            "Codec"
           ]
         }
       ],
@@ -8060,7 +8263,10 @@
           "symbol": [
             "StacksNetwork",
             "StacksTransactionWire",
-            "broadcastTransaction"
+            "broadcastTransaction",
+            "Codec",
+            "StacksTransaction",
+            "createClient"
           ]
         }
       ],
@@ -10252,7 +10458,9 @@
             "Pc",
             "PostConditionMode",
             "StacksTransactionWire",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "StacksTransaction"
           ]
         }
       ],
@@ -10330,7 +10538,26 @@
           "file": "apps/web/app/features/multisig/transactions/build-stx-transfer.ts",
           "symbol": [
             "STACKS_TESTNET",
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
+          ]
+        },
+        {
+          "file": "apps/web/app/features/multisig/transactions/transfer-contract.vectors-driver.ts",
+          "symbol": [
+            "Codec"
+          ]
+        },
+        {
+          "file": "apps/web/app/pages/multisig/account/components/propose-transaction-modal.tsx",
+          "symbol": [
+            "Codec"
+          ]
+        },
+        {
+          "file": "apps/web/app/pages/multisig/components/dev-tools/stx-propose-tool.tsx",
+          "symbol": [
+            "Codec"
           ]
         }
       ],
@@ -10377,7 +10604,8 @@
             "AddressVersion",
             "addressFromPublicKeys",
             "addressToString",
-            "createStacksPublicKey"
+            "createStacksPublicKey",
+            "publicKeysToAddress"
           ]
         }
       ],
@@ -10443,7 +10671,8 @@
           "file": "apps/web/app/features/multisig/transactions/signing/extract-stx-multisig-signature.ts",
           "symbol": [
             "StacksWireType",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -10487,7 +10716,8 @@
         {
           "file": "apps/web/app/features/multisig/transactions/signing/pre-sign-verification.ts",
           "symbol": [
-            "stringAsciiCV"
+            "stringAsciiCV",
+            "Cl"
           ]
         }
       ],
@@ -10589,7 +10819,8 @@
           "file": "apps/web/app/features/multisig/transactions/wallet-propose.ts",
           "symbol": [
             "serializeCV",
-            "stringAsciiCV"
+            "stringAsciiCV",
+            "Cl"
           ]
         }
       ],
@@ -11491,7 +11722,8 @@
           "file": "packages/queries/src/fees/stacks-transaction-fees.query-config.ts",
           "symbol": [
             "StacksTransactionWire",
-            "serializePayload"
+            "serializePayload",
+            "StacksTransaction"
           ]
         }
       ],
@@ -11560,7 +11792,8 @@
             "StringAsciiCV",
             "StringUtf8CV",
             "TrueCV",
-            "UIntCV"
+            "UIntCV",
+            "Cl"
           ]
         }
       ],
@@ -11710,7 +11943,8 @@
           "file": "packages/services/src/assets/sip9-asset.utils.ts",
           "symbol": [
             "ClarityType",
-            "hexToCV"
+            "hexToCV",
+            "Cl"
           ]
         }
       ],
@@ -11760,7 +11994,8 @@
         {
           "file": "packages/services/src/bns/bns.service.ts",
           "symbol": [
-            "standardPrincipalCV"
+            "standardPrincipalCV",
+            "Cl"
           ]
         }
       ],
@@ -11884,7 +12119,8 @@
         {
           "file": "packages/services/src/fees/stacks-transaction-fees.service.ts",
           "symbol": [
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -11917,7 +12153,8 @@
           "file": "packages/services/src/fees/stacks-transaction-fees.utils.ts",
           "symbol": [
             "PayloadType",
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "StacksTransaction"
           ]
         }
       ],
@@ -11980,7 +12217,33 @@
             "ClarityAbi",
             "ClarityValue",
             "cvToHex",
-            "hexToCV"
+            "hexToCV",
+            "Cl",
+            "ClarityAbiLike"
+          ]
+        },
+        {
+          "file": "packages/models/src/transactions/stacks-api.model.ts",
+          "symbol": [
+            "Client"
+          ]
+        },
+        {
+          "file": "apps/extension/src/app/query/stacks/contract-interface.query.ts",
+          "symbol": [
+            "ClarityAbiLike"
+          ]
+        },
+        {
+          "file": "apps/mobile/src/queries/stacks/contract-interface.query.ts",
+          "symbol": [
+            "ClarityAbiLike"
+          ]
+        },
+        {
+          "file": "packages/queries/src/stacks/stacks-contract-interface.query-config.ts",
+          "symbol": [
+            "ClarityAbiLike"
           ]
         }
       ],
@@ -12194,7 +12457,9 @@
             "bytesToHex",
             "hexToBytes",
             "Cl",
-            "Pc"
+            "Pc",
+            "PostCondition",
+            "Transaction"
           ]
         }
       ],
@@ -12291,7 +12556,10 @@
             "createSingleSigSpendingCondition",
             "createSmartContractPayload",
             "createStandardAuth",
-            "createTokenTransferPayload"
+            "createTokenTransferPayload",
+            "FlatPayload",
+            "StacksTransaction",
+            "publicKeyToAddress"
           ]
         }
       ],
@@ -12381,7 +12649,8 @@
           "file": "packages/services/src/yield/providers/granite/granite-v1-borrow.service.ts",
           "symbol": [
             "principalCV",
-            "standardPrincipalCV"
+            "standardPrincipalCV",
+            "Cl"
           ]
         }
       ],
@@ -12430,7 +12699,8 @@
         {
           "file": "packages/services/src/yield/providers/granite/granite-v1-earn.service.ts",
           "symbol": [
-            "standardPrincipalCV"
+            "standardPrincipalCV",
+            "Cl"
           ]
         }
       ],
@@ -12529,7 +12799,8 @@
           "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-lst.service.ts",
           "symbol": [
             "hexToCV",
-            "standardPrincipalCV"
+            "standardPrincipalCV",
+            "Cl"
           ]
         }
       ],
@@ -12584,7 +12855,8 @@
             "ClarityValue",
             "TupleCV",
             "cvToString",
-            "getCVTypeString"
+            "getCVTypeString",
+            "Cl"
           ]
         }
       ],
@@ -12630,7 +12902,8 @@
           "file": "packages/services/src/yield/providers/zest/zest-borrow.service.ts",
           "symbol": [
             "principalCV",
-            "standardPrincipalCV"
+            "standardPrincipalCV",
+            "Cl"
           ]
         }
       ],
@@ -12690,7 +12963,8 @@
             "ClarityValue",
             "TupleCV",
             "cvToString",
-            "getCVTypeString"
+            "getCVTypeString",
+            "Cl"
           ]
         }
       ],
@@ -12758,7 +13032,9 @@
             "addressToString",
             "createStacksPublicKey",
             "getAddressFromPrivateKey",
-            "makeRandomPrivKey"
+            "makeRandomPrivKey",
+            "privateKeyToAddress",
+            "publicKeysToAddress"
           ]
         }
       ],
@@ -12970,7 +13246,11 @@
             "publicKeyFromSignatureRsv",
             "publicKeyToHex",
             "signMessageHashRsv",
-            "signStructuredData"
+            "signStructuredData",
+            "Cl",
+            "privateKeyToPublicKey",
+            "signMessage",
+            "signStructuredMessage"
           ]
         }
       ],
@@ -13070,7 +13350,8 @@
             "TupleCV",
             "UIntCV",
             "stringAsciiCV",
-            "uintCV"
+            "uintCV",
+            "Cl"
           ]
         }
       ],
@@ -13124,7 +13405,8 @@
         {
           "file": "packages/stacks/src/schemas/clarity-contract.schema.ts",
           "symbol": [
-            "codeBodyString"
+            "codeBodyString",
+            "Codec"
           ]
         }
       ],
@@ -13222,7 +13504,11 @@
             "StacksTransactionWire",
             "TransactionSigner",
             "createStacksPublicKey",
-            "publicKeyToAddressSingleSig"
+            "publicKeyToAddressSingleSig",
+            "StacksTransaction",
+            "isTransaction",
+            "publicKeyToAddress",
+            "signInPlace"
           ]
         }
       ],
@@ -13300,7 +13586,8 @@
             "ContractIdString",
             "compressPrivateKey",
             "privateKeyToPublic",
-            "publicKeyToHex"
+            "publicKeyToHex",
+            "privateKeyToPublicKey"
           ]
         }
       ],
@@ -13389,7 +13676,9 @@
           "symbol": [
             "bytesToHex",
             "Pc",
-            "serializeCV"
+            "serializeCV",
+            "Cl",
+            "Codec"
           ]
         }
       ],
@@ -13465,7 +13754,8 @@
             "PayloadType",
             "addressToString",
             "cvToString",
-            "deserializeTransaction"
+            "deserializeTransaction",
+            "Codec"
           ]
         }
       ],
@@ -13550,7 +13840,13 @@
             "deserializeCV",
             "makeUnsignedContractCall",
             "makeUnsignedContractDeploy",
-            "makeUnsignedSTXTokenTransfer"
+            "makeUnsignedSTXTokenTransfer",
+            "Address",
+            "ConditionFields",
+            "Transaction",
+            "addressVersionFor",
+            "publicKeyToAddress",
+            "publicKeysToAddress"
           ]
         }
       ],
@@ -13634,7 +13930,8 @@
             "noneCV",
             "someCV",
             "standardPrincipalCVFromAddress",
-            "uintCV"
+            "uintCV",
+            "Cl"
           ]
         }
       ],
@@ -13778,7 +14075,8 @@
             "PostCondition",
             "PostConditionWire",
             "deserializePostConditionWire",
-            "postConditionToWire"
+            "postConditionToWire",
+            "Codec"
           ]
         }
       ],
@@ -13835,7 +14133,9 @@
             "StacksTransactionWire",
             "StacksWireType",
             "estimateTransactionByteLength",
-            "serializePayload"
+            "serializePayload",
+            "Codec",
+            "StacksTransaction"
           ]
         }
       ],
@@ -13927,7 +14227,9 @@
             "PostConditionPrincipalId",
             "PostConditionType",
             "StacksTransactionWire",
-            "addressToString"
+            "addressToString",
+            "ClarityAbiLike",
+            "StacksTransaction"
           ]
         }
       ],
@@ -14073,7 +14375,9 @@
             "ClarityAbi",
             "ClarityType",
             "ClarityValue",
-            "StacksTransactionWire"
+            "StacksTransactionWire",
+            "ClarityAbiLike",
+            "StacksTransaction"
           ]
         }
       ],
@@ -14143,7 +14447,9 @@
             "StakingPostCondition",
             "StxPostCondition",
             "deserializePostConditionWire",
-            "postConditionToHex"
+            "postConditionToHex",
+            "Codec",
+            "PostCondition"
           ]
         }
       ],
@@ -14236,7 +14542,11 @@
             "UnsignedMultiSigContractCallOptions",
             "UnsignedMultiSigContractDeployOptions",
             "UnsignedMultiSigTokenTransferOptions",
-            "UnsignedTokenTransferOptions"
+            "UnsignedTokenTransferOptions",
+            "NetworkName",
+            "PostCondition",
+            "StacksNetwork",
+            "Transaction"
           ]
         }
       ],
@@ -14273,7 +14583,8 @@
         {
           "file": "packages/stacks/src/validation/address-validation.ts",
           "symbol": [
-            "c32addressDecode"
+            "c32addressDecode",
+            "Codec"
           ]
         }
       ],
@@ -14610,7 +14921,16 @@
             "PostCondition",
             "PostConditionMode",
             "PostConditionWire",
-            "serializeCV"
+            "serializeCV",
+            "Cl"
+          ]
+        },
+        {
+          "file": "packages/models/src/swap/swap.model.ts",
+          "symbol": [
+            "ClarityValue",
+            "PostCondition",
+            "Transaction"
           ]
         }
       ],
@@ -14669,7 +14989,8 @@
           "symbol": [
             "StacksNetwork",
             "StacksTransactionWire",
-            "TxBroadcastResultOk"
+            "TxBroadcastResultOk",
+            "StacksTransaction"
           ]
         }
       ],
@@ -15275,6 +15596,76 @@
           "line": 13,
           "symbol": "decodeProposalPayload",
           "owner": "decodeProposalPayload"
+        }
+      ]
+    },
+    {
+      "id": "KIT-VENDOR-BOUNDARIES",
+      "file": "packages/services/src/infrastructure/api/alex/alex-sdk.client.ts",
+      "symbol": [
+        "Cl",
+        "ClarityValue",
+        "Codec",
+        "PostCondition",
+        "postConditionToHex",
+        "serializeCV"
+      ],
+      "sites": [
+        {
+          "file": "packages/services/src/infrastructure/api/alex/alex-sdk.client.ts",
+          "symbol": [
+            "Cl",
+            "ClarityValue",
+            "Codec",
+            "PostCondition",
+            "postConditionToHex",
+            "serializeCV"
+          ]
+        },
+        {
+          "file": "packages/services/src/infrastructure/api/bitflow/bitflow-sdk.client.ts",
+          "symbol": [
+            "Cl",
+            "Codec",
+            "PostCondition",
+            "postConditionToHex",
+            "serializeCV",
+            "ClarityValue"
+          ]
+        },
+        {
+          "file": "packages/services/src/infrastructure/api/velar/velar-sdk.client.ts",
+          "symbol": [
+            "Cl",
+            "ClarityValue",
+            "Codec",
+            "PostCondition",
+            "Transaction",
+            "postConditionToHex",
+            "serializeCV",
+            "PostConditionMode"
+          ]
+        }
+      ],
+      "flow": "Vendor swap outputs become native Kit Clarity values and post conditions at the existing SDK clients, preserving wire bytes.",
+      "proof": [
+        {
+          "test": {
+            "file": "packages/services/src/infrastructure/api/alex/alex-sdk.client.spec.ts",
+            "name": "normalizes vendor arguments and post conditions without changing their wire bytes"
+          }
+        },
+        {
+          "test": {
+            "file": "packages/services/src/infrastructure/api/alex/vendor-contract.vectors.spec.ts",
+            "name": "pins vendor swap argument order, bigint units and unknown currency rejection"
+          }
+        },
+        {
+          "test": {
+            "file": "packages/services/src/infrastructure/api/alex/vendor-contract.vectors.spec.ts",
+            "name": "preserves Velar and Bitflow swap wire values at their Kit boundaries"
+          }
         }
       ]
     }

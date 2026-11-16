@@ -1,16 +1,6 @@
-import type { StacksNetwork } from '@stacks/network';
-import {
-  type ClarityValue,
-  createAddress,
-  noneCV,
-  postConditionToWire,
-  serializeCV,
-  serializePostConditionWire,
-  standardPrincipalCVFromAddress,
-  uintCV,
-} from '@stacks/transactions';
+import { Cl, type ClarityValue, Codec, type StacksNetwork } from '@jannik-stacks/kit';
 
-import type { Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 import { createRequestEncoder, stxTransferSip10Ft } from '@leather.io/rpc';
 import { getAddressFromAssetIdentifier } from '@leather.io/services';
 import {
@@ -23,7 +13,7 @@ import { createMoney } from '@leather.io/utils';
 import { makeFtPostCondition } from '@shared/utils/post-conditions';
 
 import { initialSearchParams } from '@app/common/initial-search-params';
-import type { Nonce } from '@app/features/nonce-editor/nonce-editor.context';
+import { type Nonce } from '@app/features/nonce-editor/nonce-editor.context';
 
 export function getDecodedRpcStxTransferSip10FtRequest() {
   const { decode } = createRequestEncoder(stxTransferSip10Ft.request);
@@ -40,10 +30,10 @@ function getTransactionOptionsFromRpcRequest(address: string) {
   );
 
   const fnArgs: ClarityValue[] = [
-    uintCV(decodedRpcRequest.params.amount),
-    standardPrincipalCVFromAddress(createAddress(decodedRpcRequest.params.address ?? address)),
-    standardPrincipalCVFromAddress(createAddress(decodedRpcRequest.params.recipient)),
-    noneCV(),
+    Cl.uint(decodedRpcRequest.params.amount),
+    Cl.address(decodedRpcRequest.params.address ?? address),
+    Cl.address(decodedRpcRequest.params.recipient),
+    Cl.none(),
   ];
   const postConditionOptions = {
     amount: decodedRpcRequest.params.amount,
@@ -56,15 +46,13 @@ function getTransactionOptionsFromRpcRequest(address: string) {
   return {
     contractAddress: getAddressFromAssetIdentifier(decodedRpcRequest.params.asset),
     contractName,
-    functionArgs: fnArgs.map(arg => serializeCV(arg)),
+    functionArgs: fnArgs.map(arg => Cl.serialize(arg)),
     fee: decodedRpcRequest.params.fee
       ? createMoney(decodedRpcRequest.params.fee, 'STX')
       : undefined,
     nonce: decodedRpcRequest.params.nonce,
     sponsored: decodedRpcRequest.params.sponsored,
-    postConditions: [
-      serializePostConditionWire(postConditionToWire(makeFtPostCondition(postConditionOptions))),
-    ],
+    postConditions: [Codec.Raw.PostCondition.encode(makeFtPostCondition(postConditionOptions))],
   };
 }
 

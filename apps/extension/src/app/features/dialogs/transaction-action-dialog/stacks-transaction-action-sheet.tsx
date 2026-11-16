@@ -3,11 +3,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction as KitTransaction } from '@jannik-stacks/kit';
 import { ActivitySelectors } from '@tests/selectors/activity.selectors';
 import { Flex, Stack } from 'leather-styles/jsx';
 
-import type { StacksTransaction } from '@leather.io/models';
+import { type StacksTransaction } from '@leather.io/models';
 import { Caption, LoadingSpinner, Sheet, SheetHeader, Spinner } from '@leather.io/ui';
 import { microStxToStx, stxToMicroStx } from '@leather.io/utils';
 
@@ -32,16 +32,12 @@ interface StacksTransactionActionSheetProps {
   title: string;
   actionType: StacksTransactionActionType;
   txid: string;
-  rawTx: StacksTransactionWire;
+  rawTx: KitTransaction;
   tx: StacksTransaction;
 }
 
 interface StacksTransactionActionSheetLoaderProps {
-  children(args: {
-    txid: string;
-    rawTx: StacksTransactionWire;
-    tx: StacksTransaction;
-  }): React.ReactNode;
+  children(args: { txid: string; rawTx: KitTransaction; tx: StacksTransaction }): React.ReactNode;
 }
 
 export function StacksTransactionActionSheetLoader({
@@ -87,7 +83,8 @@ export function StacksTransactionActionSheet({
     txid,
   });
 
-  const initialTransactionFee = Number(rawTx.auth.spendingCondition?.fee);
+  const fee = rawTx.fee ?? 0n;
+  const initialTransactionFee = Number(fee);
 
   const isCancelTransactionAction = actionType === 'cancel';
 

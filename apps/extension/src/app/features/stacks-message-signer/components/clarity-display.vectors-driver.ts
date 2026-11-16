@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { deserializeCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { vi } from 'vitest';
 
 import { defaultNetworksKeyedById } from '@leather.io/models';
@@ -19,7 +19,7 @@ vi.mock('@app/store/networks/networks.hooks', () => ({
 export function display(hex: string, encoding: 'tryAscii' | 'hex') {
   const container = document.createElement('div');
   container.innerHTML = renderToStaticMarkup(
-    createElement(ClarityValueListDisplayer, { val: deserializeCV(hex), encoding })
+    createElement(ClarityValueListDisplayer, { val: Cl.deserialize(hex), encoding })
   );
   return container.textContent;
 }

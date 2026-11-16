@@ -1,5 +1,6 @@
-import { ClarityType, type ClarityValue, cvToString } from '@stacks/transactions';
+import { type ClarityValue } from '@jannik-stacks/kit';
 
+import { formatClarityValue } from '@leather.io/stacks';
 import { Box, Text, useTheme } from '@leather.io/ui/native';
 import { assertUnreachable } from '@leather.io/utils';
 
@@ -18,31 +19,31 @@ export function ClarityValueListDisplayer({
   const encoding = 'tryAscii';
 
   switch (val.type) {
-    case ClarityType.BoolTrue:
+    case 'true':
       return wrapText('true');
-    case ClarityType.BoolFalse:
+    case 'false':
       return wrapText('false');
-    case ClarityType.Int:
+    case 'int':
       return wrapText(val.value.toString());
-    case ClarityType.UInt:
+    case 'uint':
       return wrapText(`u${val.value.toString()}`);
-    case ClarityType.Buffer:
+    case 'buffer':
       if (/[ -~]/.test(val.value)) return wrapText(JSON.stringify(val.value));
       return wrapText(`0x${val.value}`);
-    case ClarityType.OptionalNone:
+    case 'none':
       return wrapText('none');
-    case ClarityType.OptionalSome:
-      return wrapText(`some ${cvToString(val.value, encoding)}`);
-    case ClarityType.ResponseErr:
-      return wrapText(`err ${cvToString(val.value, encoding)}`);
-    case ClarityType.ResponseOk:
-      return wrapText(`ok ${cvToString(val.value, encoding)}`);
-    case ClarityType.PrincipalStandard:
-    case ClarityType.PrincipalContract:
+    case 'some':
+      return wrapText(`some ${formatClarityValue(val.value, encoding)}`);
+    case 'err':
+      return wrapText(`err ${formatClarityValue(val.value, encoding)}`);
+    case 'ok':
+      return wrapText(`ok ${formatClarityValue(val.value, encoding)}`);
+    case 'address':
+    case 'contract':
       return wrapText(val.value);
-    case ClarityType.List:
-      return wrapText(`[${val.value.map(v => cvToString(v, encoding)).join(', ')}]`);
-    case ClarityType.Tuple:
+    case 'list':
+      return wrapText(`[${val.value.map(v => formatClarityValue(v, encoding)).join(', ')}]`);
+    case 'tuple':
       return (
         <Box>
           {Object.entries(val.value).map(([key, value]) => (
@@ -50,7 +51,7 @@ export function ClarityValueListDisplayer({
               style={{ paddingLeft: level * theme.spacing['3'] }}
               key={key}
               gap="2"
-              flexDirection={value.type === ClarityType.Tuple ? 'column' : 'row'}
+              flexDirection={value.type === 'tuple' ? 'column' : 'row'}
             >
               <Text>{key}:</Text>
               <Box flexDirection="row">
@@ -60,9 +61,9 @@ export function ClarityValueListDisplayer({
           ))}
         </Box>
       );
-    case ClarityType.StringASCII:
+    case 'ascii':
       return wrapText(`"${val.value}"`);
-    case ClarityType.StringUTF8:
+    case 'utf8':
       return wrapText(`u"${val.value}"`);
     default:
       assertUnreachable(val);

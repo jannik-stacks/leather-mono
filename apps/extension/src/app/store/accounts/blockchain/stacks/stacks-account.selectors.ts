@@ -1,11 +1,8 @@
+import { privateKeyToPublicKey } from '@jannik-stacks/kit';
 import { bytesToHex } from '@noble/hashes/utils';
 import { createSelector } from '@reduxjs/toolkit';
 import { HARDENED_OFFSET, type HDKey } from '@scure/bip32';
-import {
-  createStacksPublicKey,
-  privateKeyToPublic,
-  publicKeyToAddressSingleSig,
-} from '@stacks/transactions';
+import { createStacksPublicKey, publicKeyToAddressSingleSig } from '@stacks/transactions';
 import { mapValues } from 'remeda';
 
 import { bitcoinNetworkModeToCoreNetworkMode } from '@leather.io/bitcoin';
@@ -17,7 +14,7 @@ import {
   makeAccountIdentifer,
   softwareAccountCountFromHighestIndex,
 } from '@leather.io/crypto';
-import type { AccountId, NetworkModes } from '@leather.io/models';
+import { type AccountId, type NetworkModes } from '@leather.io/models';
 import {
   deriveStxPrivateKey,
   extractStacksDerivationPathAccountIndex,
@@ -29,7 +26,7 @@ import { DATA_DERIVATION_PATH, deriveStacksSalt } from '@shared/crypto/stacks/st
 import { logger } from '@shared/logger';
 import { assumedZeroFingerprint } from '@shared/utils';
 
-import type { StacksAppKeysResponseItem } from '@app/features/ledger/utils/stacks-ledger-utils';
+import { type StacksAppKeysResponseItem } from '@app/features/ledger/utils/stacks-ledger-utils';
 import { selectStacksChain } from '@app/store/chains/stx-chain.selectors';
 import { selectRootKeychainsAtVersion } from '@app/store/in-memory-key/in-memory-key.selectors';
 import {
@@ -38,9 +35,9 @@ import {
 } from '@app/store/in-memory-key/keychain-selector-cache';
 import { selectStacksKeychains } from '@app/store/keychains/keychain.selectors';
 import { selectCurrentNetwork } from '@app/store/networks/networks.selectors';
-import type { RootState } from '@app/store/store';
+import { type RootState } from '@app/store/store';
 
-import type { HardwareStacksAccount, SoftwareStacksAccount } from './stacks-account.models';
+import { type HardwareStacksAccount, type SoftwareStacksAccount } from './stacks-account.models';
 
 function publicKeyToHex(publicKey: string | Uint8Array) {
   return typeof publicKey === 'string' ? publicKey : bytesToHex(publicKey);
@@ -65,8 +62,8 @@ function initalizeSoftwareStacksAccount(
   const appsKey = identityKeychain.deriveChild(0 + HARDENED_OFFSET).privateExtendedKey;
   const salt = deriveStacksSalt(identitiesKeychain);
 
-  const stxPublicKey = publicKeyToHex(privateKeyToPublic(stxPrivateKey));
-  const dataPublicKey = publicKeyToHex(privateKeyToPublic(dataPrivateKey));
+  const stxPublicKey = publicKeyToHex(privateKeyToPublicKey(stxPrivateKey));
+  const dataPublicKey = publicKeyToHex(privateKeyToPublicKey(dataPrivateKey));
   const address = publicKeyToAddressSingleSig(stxPublicKey, network);
 
   return {

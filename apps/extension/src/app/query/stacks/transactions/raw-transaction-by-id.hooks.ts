@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { isUndefined } from '@leather.io/utils';
 
@@ -14,8 +14,8 @@ export function useStacksRawTransaction(txid: string) {
   return useMemo(() => {
     if (isUndefined(rawTxData)) return { isLoadingRawTx, rawTx: undefined };
     const match = rawTxCache.get(txid);
-    if (match) return { isLoadingRawTx, rawTx: deserializeTransaction(match) };
+    if (match) return { isLoadingRawTx, rawTx: Codec.Transaction.decode(match) };
     rawTxCache.set(txid, rawTxData.raw_tx);
-    return { isLoadingRawTx, rawTx: deserializeTransaction(rawTxData.raw_tx) };
+    return { isLoadingRawTx, rawTx: Codec.Transaction.decode(rawTxData.raw_tx) };
   }, [isLoadingRawTx, rawTxData, txid]);
 }

@@ -1,16 +1,17 @@
 import { type FtMetadataResponse, type Metadata } from '@hirosystems/token-metadata-api-client';
+import { type ClarityValue } from '@jannik-stacks/kit';
+
 import {
-  type AddressAssetsListResponse,
-  type AddressBalanceResponse,
-  type AddressTransactionWithTransfers,
-  type AddressTransactionsWithTransfersListResponse,
-  type MempoolTransaction,
-  type ServerStatusResponse,
-  type Transaction,
-  type TransactionEvent,
-  type TransactionFeeEstimateResponse,
-} from '@stacks/stacks-blockchain-api-types';
-import { type ClarityValue } from '@stacks/transactions';
+  type StacksApiAddressAssetsListResponse,
+  type StacksApiAddressBalanceResponse,
+  type StacksApiAddressTransactionWithTransfers,
+  type StacksApiAddressTransactionsWithTransfersListResponse,
+  type StacksApiMempoolTransaction,
+  type StacksApiServerStatusResponse,
+  type StacksApiTransaction,
+  type StacksApiTransactionEvent,
+  type StacksApiTransactionFeeEstimateResponse,
+} from '@leather.io/models';
 
 export interface HiroPageRequest {
   limit: number;
@@ -23,9 +24,9 @@ export interface HiroPageResponse<T> {
   results: T[];
 }
 
-export type HiroAddressTransactionsResponse = AddressTransactionsWithTransfersListResponse;
-export type HiroAddressTransactionWithTransfers = AddressTransactionWithTransfers;
-export type HiroAddressTransaction = AddressTransactionWithTransfers;
+export type HiroAddressTransactionsResponse = StacksApiAddressTransactionsWithTransfersListResponse;
+export type HiroAddressTransactionWithTransfers = StacksApiAddressTransactionWithTransfers;
+export type HiroAddressTransaction = StacksApiAddressTransactionWithTransfers;
 
 // Hiro v3 `/extended/v3/principals/{principal}/transactions` — slim, cursor-paged tx data.
 export type HiroPrincipalTxStatus = 'success' | 'abort_by_response' | 'abort_by_post_condition';
@@ -207,18 +208,18 @@ export type HiroTransactionIncludeField =
   | 'source_code'
   | 'post_conditions'
   | 'result';
-export type HiroAddressBalanceResponse = AddressBalanceResponse;
+export type HiroAddressBalanceResponse = StacksApiAddressBalanceResponse;
 export type HiroMetadata = Metadata;
 export type HiroFtMetadata = FtMetadataResponse;
-export type HiroTransactionEvent = TransactionEvent;
-export type HiroTransactionEventsResponse = AddressAssetsListResponse;
-export type HiroStacksTransaction = Transaction;
-export type HiroStacksMempoolTransaction = MempoolTransaction;
+export type HiroTransactionEvent = StacksApiTransactionEvent;
+export type HiroTransactionEventsResponse = StacksApiAddressAssetsListResponse;
+export type HiroStacksTransaction = StacksApiTransaction;
+export type HiroStacksMempoolTransaction = StacksApiMempoolTransaction;
 export type HiroReadOnlyFunctionResponse =
   | { okay: true; result: string }
   | { okay: false; cause: string };
-export type HiroTransactionFeeEstimateResponse = TransactionFeeEstimateResponse;
-export type HiroServerStatusResponse = ServerStatusResponse;
+export type HiroTransactionFeeEstimateResponse = StacksApiTransactionFeeEstimateResponse;
+export type HiroServerStatusResponse = StacksApiServerStatusResponse;
 
 export interface HiroAddressStxBalanceResponse {
   balance: string;

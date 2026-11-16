@@ -1,9 +1,10 @@
 import type * as ReactModule from 'react';
 
-import { makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
+import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 import { SwapSigningCancelledError } from '@leather.io/state/swap';
+import { createMoney } from '@leather.io/utils';
 
 import { useSwapDependencies } from './use-swap-dependencies';
 
@@ -121,13 +122,14 @@ describe(useSwapDependencies.name, () => {
   describe('stacks signer', () => {
     test('rejects with a swap signing cancellation when Ledger signing is dismissed', async () => {
       mocks.signStacksTx.mockResolvedValue(null);
-      const unsignedTx = await makeUnsignedSTXTokenTransfer({
+      const unsignedTx = await generateStacksUnsignedTransaction({
         recipient: 'ST000000000000000000002AMW42H',
-        amount: 1n,
-        fee: 0,
+        amount: createMoney(1n, 'STX'),
+        fee: createMoney(0, 'STX'),
         nonce: 0,
         publicKey,
         network: 'testnet',
+        txType: 'token_transfer',
       });
 
       await expect(

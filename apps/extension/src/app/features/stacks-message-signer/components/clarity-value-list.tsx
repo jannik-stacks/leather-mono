@@ -1,5 +1,6 @@
-import { ClarityType, type ClarityValue, cvToString } from '@stacks/transactions';
+import { type ClarityValue } from '@jannik-stacks/kit';
 
+import { formatClarityValue } from '@leather.io/stacks';
 import { assertUnreachable } from '@leather.io/utils';
 
 import {
@@ -23,33 +24,33 @@ export function ClarityValueListDisplayer(props: ClarityValueListDisplayerProps)
 
   const valType = val.type;
   switch (valType) {
-    case ClarityType.BoolTrue:
+    case 'true':
       return wrapText('true');
-    case ClarityType.BoolFalse:
+    case 'false':
       return wrapText('false');
-    case ClarityType.Int:
+    case 'int':
       return wrapText(val.value.toString());
-    case ClarityType.UInt:
+    case 'uint':
       return wrapText(`u${val.value.toString()}`);
-    case ClarityType.Buffer:
+    case 'buffer':
       if (encoding === 'tryAscii') {
         if (/[ -~]/.test(val.value)) return wrapText(JSON.stringify(val.value));
       }
       return wrapText(`0x${val.value}`);
-    case ClarityType.OptionalNone:
+    case 'none':
       return wrapText('none');
-    case ClarityType.OptionalSome:
-      return wrapText(`some ${cvToString(val.value, encoding)}`);
-    case ClarityType.ResponseErr:
-      return wrapText(`err ${cvToString(val.value, encoding)}`);
-    case ClarityType.ResponseOk:
-      return wrapText(`ok ${cvToString(val.value, encoding)}`);
-    case ClarityType.PrincipalStandard:
-    case ClarityType.PrincipalContract:
+    case 'some':
+      return wrapText(`some ${formatClarityValue(val.value, encoding)}`);
+    case 'err':
+      return wrapText(`err ${formatClarityValue(val.value, encoding)}`);
+    case 'ok':
+      return wrapText(`ok ${formatClarityValue(val.value, encoding)}`);
+    case 'address':
+    case 'contract':
       return wrapText(val.value);
-    case ClarityType.List:
-      return wrapText(`[${val.value.map(v => cvToString(v, encoding)).join(', ')}]`);
-    case ClarityType.Tuple:
+    case 'list':
+      return wrapText(`[${val.value.map(v => formatClarityValue(v, encoding)).join(', ')}]`);
+    case 'tuple':
       return (
         <TupleDisplayer isRoot={isRoot}>
           {Object.entries(val.value).map(([key, value]) => (
@@ -62,9 +63,9 @@ export function ClarityValueListDisplayer(props: ClarityValueListDisplayerProps)
           ))}
         </TupleDisplayer>
       );
-    case ClarityType.StringASCII:
+    case 'ascii':
       return wrapText(`"${val.value}"`);
-    case ClarityType.StringUTF8:
+    case 'utf8':
       return wrapText(`u"${val.value}"`);
     default:
       assertUnreachable(valType);

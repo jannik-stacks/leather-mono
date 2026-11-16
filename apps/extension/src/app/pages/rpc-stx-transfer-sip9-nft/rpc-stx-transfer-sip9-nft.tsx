@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 
 import { stxTransferSip9Nft } from '@leather.io/rpc';
-import {
-  ensurePostConditionWireFormat,
-  generateStacksUnsignedTransaction,
-} from '@leather.io/stacks';
+import { generateStacksUnsignedTransaction, getPostCondition } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
 import { useConvertCryptoCurrencyToFiatAmount } from '@app/common/hooks/use-convert-to-fiat-amount';
@@ -54,7 +51,7 @@ export function RpcStxTransferSip9Nft() {
 
   async function onApproveTransaction() {
     const unsignedTx = await generateStacksUnsignedTransaction(txOptionsForBroadcast);
-    if (isSponsored) unsignedTx.setFee(0);
+    if (isSponsored) unsignedTx.fee = BigInt(0);
     await signAndBroadcastTransaction(unsignedTx);
   }
   const onApprove = useStacksRpcTransactionRequestApproval(onApproveTransaction);
@@ -81,7 +78,7 @@ export function RpcStxTransferSip9Nft() {
       />
       <PostConditionsDetailsLayout
         postConditions={(txOptionsForBroadcast.postConditions ?? []).map(pc =>
-          ensurePostConditionWireFormat(pc)
+          getPostCondition(pc)
         )}
         postConditionMode={txOptionsForBroadcast.postConditionMode}
       />

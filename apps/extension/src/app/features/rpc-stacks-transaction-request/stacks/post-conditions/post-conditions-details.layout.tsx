@@ -1,10 +1,5 @@
-import {
-  PostConditionMode,
-  type PostConditionModeName,
-  type PostConditionWire,
-} from '@stacks/transactions';
+import { type PostCondition, type Transaction } from '@jannik-stacks/kit';
 
-import { ensurePostConditionWireFormat } from '@leather.io/stacks';
 import { Approver } from '@leather.io/ui';
 
 import { NoPostConditions } from './no-post-conditions';
@@ -12,23 +7,20 @@ import { PostConditionList } from './post-condition-list';
 import { PostConditionModeWarning } from './post-condition-mode-warning';
 
 interface PostConditionsDetailsLayoutProps {
-  postConditions: PostConditionWire[];
-  postConditionMode?: PostConditionMode | PostConditionModeName;
+  postConditions: PostCondition[];
+  postConditionMode?: 'allow' | 'deny' | 'originator' | Transaction['postConditionMode'];
 }
 export function PostConditionsDetailsLayout({
   postConditions,
-  postConditionMode = PostConditionMode.Deny,
+  postConditionMode = 'deny',
 }: PostConditionsDetailsLayoutProps) {
-  if (postConditionMode === PostConditionMode.Allow || postConditionMode === 'allow')
-    return <PostConditionModeWarning />;
+  if (postConditionMode === 'allow') return <PostConditionModeWarning />;
 
   return (
     <Approver.Section>
       <Approver.Subheader>Post conditions</Approver.Subheader>
       {postConditions.length ? (
-        <PostConditionList
-          postConditions={postConditions.map(pc => ensurePostConditionWireFormat(pc))}
-        />
+        <PostConditionList postConditions={postConditions} />
       ) : (
         <NoPostConditions />
       )}

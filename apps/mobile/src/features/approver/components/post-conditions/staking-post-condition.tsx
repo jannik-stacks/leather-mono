@@ -1,4 +1,4 @@
-import { PostConditionPrincipalId, type StakingPostConditionWire } from '@stacks/transactions';
+import { type PostCondition } from '@jannik-stacks/kit';
 
 import { Approver, Box, CircledFunctionIcon } from '@leather.io/ui/native';
 import { createMoney } from '@leather.io/utils';
@@ -8,11 +8,11 @@ import { formatPostConditionMessage } from './post-conditions.utils';
 
 interface StakingPostConditionProps {
   stacksAddress: string;
-  postCondition: StakingPostConditionWire;
+  postCondition: Extract<PostCondition, { type: 'staking-postcondition' }>;
 }
 
 export function StakingPostCondition({ stacksAddress, postCondition }: StakingPostConditionProps) {
-  const isContractPrincipal = postCondition.principal.prefix === PostConditionPrincipalId.Contract;
+  const isContractPrincipal = postCondition.address.includes('.');
 
   const title = formatPostConditionMessage({
     stacksAddress,

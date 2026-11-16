@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
-import type { PrivateKey } from '@stacks/common';
-import { type ClarityValue, type TupleCV } from '@stacks/transactions';
+import { type Cl, type ClarityValue } from '@jannik-stacks/kit';
+import { type PrivateKey } from '@stacks/common';
 
 import { signMessage, signStructuredDataMessage } from '@leather.io/stacks';
 import { delay, isString } from '@leather.io/utils';
@@ -15,7 +15,7 @@ export async function improveUxWithShortDelayAsStacksSigningIsSoFast() {
 export function useMessageSignerStacksSoftwareWallet() {
   const account = useCurrentStacksAccount();
   return useCallback(
-    ({ message, domain }: { message: string | ClarityValue; domain?: TupleCV }) => {
+    ({ message, domain }: { message: string | ClarityValue; domain?: Cl.Types.Tuple }) => {
       if (!account || account.type === 'ledger') return null;
 
       const privateKey: PrivateKey = account.stxPrivateKey;

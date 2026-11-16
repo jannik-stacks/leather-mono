@@ -1,10 +1,11 @@
 import {
   type ClarityValue,
-  type StacksTransactionWire,
-  TransactionSigner,
-  createStacksPublicKey,
-  publicKeyToAddressSingleSig,
-} from '@stacks/transactions';
+  type StacksTransaction,
+  isTransaction,
+  publicKeyToAddress,
+  signInPlace,
+} from '@jannik-stacks/kit';
+import { hexToBytes } from '@noble/hashes/utils';
 
 import {
   type Signer,
@@ -18,13 +19,13 @@ import { type SignatureData, signMessage, signStructuredDataMessage } from '../m
 import { deriveStxPrivateKey, extractStacksDerivationPathAccountIndex } from '../stacks.utils';
 
 // Warning: mutative. Ideally there would be a tx.clone() method
-export function signStacksTransaction(tx: StacksTransactionWire, privateKey: string) {
-  const signer = new TransactionSigner(tx);
-  signer.signOrigin(privateKey);
+export function signStacksTransaction(tx: StacksTransaction, privateKey: string) {
+  if (!isTransaction(tx)) throw new Error('Unsupported transaction payload');
+  signInPlace(tx, privateKey);
   return tx;
 }
 
-export type StacksSignerFn = (tx: StacksTransactionWire) => Promise<StacksTransactionWire>;
+export type StacksSignerFn = (tx: StacksTransaction) => Promise<StacksTransaction>;
 export type StacksSignMessageFn = (message: string) => Promise<SignatureData>;
 export type StacksSignStructuredMessageFn = (
   message: ClarityValue,
@@ -58,7 +59,7 @@ export function createSignFnFromMnemonic(
   keyOrigin: string,
   getMnemonicFn: () => Promise<{ mnemonic: string; passphrase?: string }>
 ) {
-  return async (tx: StacksTransactionWire) => {
+  return async (tx: StacksTransaction) => {
     const privateKey = await getPrivateKey(keyOrigin, getMnemonicFn);
     return signStacksTransaction(tx, privateKey);
   };
@@ -93,7 +94,7 @@ interface InitalizeStacksSignerArgs {
 export function initalizeStacksSigner(args: InitalizeStacksSignerArgs): StacksSigner {
   const { descriptor, network, signFn, signMessageFn, signStructuredMessageFn } = args;
 
-  const publicKey = createStacksPublicKey(extractKeyFromDescriptor(descriptor)).data;
+  const publicKey = hexToBytes(extractKeyFromDescriptor(descriptor));
 
   return {
     ...decomposeDescriptor(descriptor),
@@ -101,7 +102,7 @@ export function initalizeStacksSigner(args: InitalizeStacksSignerArgs): StacksSi
     accountIndex: extractStacksDerivationPathAccountIndex(descriptor),
     publicKey,
     network,
-    address: publicKeyToAddressSingleSig(publicKey, network),
+    address: publicKeyToAddress(extractKeyFromDescriptor(descriptor), { network }),
     sign: signFn,
     signMessage: signMessageFn,
     signStructuredMessage: signStructuredMessageFn,

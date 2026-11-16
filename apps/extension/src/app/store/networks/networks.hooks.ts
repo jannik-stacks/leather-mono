@@ -1,24 +1,18 @@
 import { useMemo } from 'react';
 
-import {
-  ChainId,
-  STACKS_MAINNET,
-  STACKS_TESTNET,
-  type StacksNetwork,
-  TransactionVersion,
-} from '@stacks/network';
+import { STACKS_MAINNET, STACKS_TESTNET, type StacksNetwork } from '@jannik-stacks/kit';
 
 import {
   HIRO_API_BASE_URL_NAKAMOTO_TESTNET,
   bitcoinNetworkToNetworkMode,
 } from '@leather.io/models';
-import { stacksChainIdToCoreNetworkMode, whenStacksChainId } from '@leather.io/stacks';
+import { stacksChainIdToCoreNetworkMode } from '@leather.io/stacks';
 
 import { useAppDispatch } from '@app/store/store';
 
 import { networksActions, userEditsNetwork, userRemovesNetwork } from './networks.actions';
 import { useCurrentNetwork } from './networks.selectors';
-import type { PersistedNetworkConfiguration } from './networks.slice';
+import { type PersistedNetworkConfiguration } from './networks.slice';
 
 export function getStacksNetworkFromChainId(chainId: number) {
   if (stacksChainIdToCoreNetworkMode(chainId) === 'mainnet') return STACKS_MAINNET;
@@ -44,10 +38,6 @@ export function useCurrentStacksNetworkState(): StacksNetwork {
   return useMemo(
     () => ({
       ...getStacksNetworkFromChainId(currentNetwork.chain.stacks.chainId),
-      transactionVersion: whenStacksChainId(currentNetwork.chain.stacks.chainId)({
-        [ChainId.Mainnet]: TransactionVersion.Mainnet,
-        [ChainId.Testnet]: TransactionVersion.Testnet,
-      }),
       client: {
         baseUrl: currentNetwork.chain.stacks.url,
       },

@@ -48,3 +48,4 @@ export * from './yield/providers/zest-position.model';
 export * from './yield/yield-position.base.model';
 export * from './yield/yield-position.model';
 export * from './yield/yield-product.model';
+export * from './transactions/stacks-api.model';

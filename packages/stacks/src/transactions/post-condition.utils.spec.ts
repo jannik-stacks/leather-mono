@@ -1,4 +1,3 @@
-import { PostConditionType, postConditionToWire } from '@stacks/transactions';
 import { describe, expect, it, vi } from 'vitest';
 
 import { isString } from '@leather.io/utils';
@@ -56,7 +55,7 @@ describe('getPostCondition', () => {
   it('should return post condition directly if already a PostCondition object', () => {
     vi.mocked(isString).mockReturnValue(false);
     const result = PostConditionModule.getPostCondition(mockStxPostCondition);
-    expect(result).toStrictEqual(postConditionToWire(mockStxPostCondition));
+    expect(result).toStrictEqual(mockStxPostCondition);
   });
 });
 
@@ -64,13 +63,13 @@ describe('SIP-044 post conditions', () => {
   it('round-trips a staking post condition', () => {
     const result = PostConditionModule.getPostConditionFromString(mockStakingPostConditionHex);
     expect(result).toStrictEqual(mockDeserializedStakingPostCondition);
-    expect(result.conditionType).toBe(PostConditionType.Staking);
+    expect(result.type).toBe('staking-postcondition');
   });
 
   it('round-trips a pox post condition that carries no amount or asset', () => {
     const result = PostConditionModule.getPostConditionFromString(mockPoxPostConditionHex);
     expect(result).toStrictEqual(mockDeserializedPoxPostCondition);
-    expect(result.conditionType).toBe(PostConditionType.PoX);
+    expect(result.type).toBe('pox-postcondition');
     expect('amount' in result).toBe(false);
     expect('asset' in result).toBe(false);
   });

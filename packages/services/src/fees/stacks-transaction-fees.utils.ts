@@ -1,4 +1,4 @@
-import { PayloadType, type StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 
 import { type StacksTransactionFeeQuote, type TransactionFeeTier } from '@leather.io/models';
 import { isSip9TransferContactCall, isSip10TransferContactCall } from '@leather.io/stacks';
@@ -12,7 +12,7 @@ import { calculateFeeRate, enforceFeeBounds, enforceFeeMinimum } from './transac
   Takes default fees for each tier for given Tx payload type.
 */
 export function getStacksTxFeeDefaultAmounts(
-  unsignedTx: StacksTransactionWire,
+  unsignedTx: StacksTransaction,
   config: StacksFeeConfig,
   estimatedTxSize: number
 ): Record<TransactionFeeTier, number> {
@@ -30,19 +30,15 @@ export function getStacksMinimumFeeAmount(estimatedTxSize: number, config: Stack
   return Math.ceil(minimumRelayFeeRate * estimatedTxSize);
 }
 
-export function getStacksTxPayloadTypeFees(
-  unsignedTx: StacksTransactionWire,
-  config: StacksFeeConfig
-) {
-  switch (unsignedTx.payload.payloadType) {
-    case PayloadType.TokenTransfer:
+export function getStacksTxPayloadTypeFees(unsignedTx: StacksTransaction, config: StacksFeeConfig) {
+  switch (unsignedTx.type) {
+    case 'transfer':
       return config.transfers;
-    case PayloadType.ContractCall:
+    case 'call':
       return isSip10TransferContactCall(unsignedTx) || isSip9TransferContactCall(unsignedTx)
         ? config.sipTokenSends
         : config.contractCalls;
-    case PayloadType.SmartContract:
-    case PayloadType.VersionedSmartContract:
+    case 'deploy':
       return config.contractDeployments;
     default:
       return config.transfers;
@@ -57,7 +53,7 @@ export function getStacksTxPayloadTypeFees(
 export function getStacksTxFeeBoundedEstimates(
   feeApiEstimates: HiroTransactionFeeEstimateResponse,
   estimatedTxSize: number,
-  unsignedTx: StacksTransactionWire,
+  unsignedTx: StacksTransaction,
   config: StacksFeeConfig
 ): Record<TransactionFeeTier, number> {
   const payloadTypeConfig = getStacksTxPayloadTypeFees(unsignedTx, config);

@@ -1,13 +1,7 @@
+import { Cl, Codec, STACKS_MAINNET, type StacksTransaction } from '@jannik-stacks/kit';
+import { sha512_256 } from '@noble/hashes/sha512';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 import * as btc from '@scure/btc-signer';
-import { hexToBytes } from '@stacks/common';
-import { STACKS_MAINNET } from '@stacks/network';
-import {
-  BytesReader,
-  type StacksTransactionWire,
-  deserializeCV,
-  deserializePostConditionWire,
-  wireToPostCondition,
-} from '@stacks/transactions';
 import { readFileSync } from 'node:fs';
 import { describe, expect, test, vi } from 'vitest';
 import z from 'zod';
@@ -126,7 +120,7 @@ function createExecutionDependencies(
 describe('stacksContractCallStrategy', () => {
   describe('submitSwap', () => {
     test('signs the built transaction, broadcasts it and resolves with the txid', async () => {
-      const sign = vi.fn((tx: StacksTransactionWire) => Promise.resolve(tx));
+      const sign = vi.fn((tx: StacksTransaction) => Promise.resolve(tx));
       const broadcast = vi.fn().mockResolvedValue({ txid: 'stacks-txid' });
       const dependencies = createExecutionDependencies();
       dependencies.stacks.stacksSigner = { ...createStubStacksSigner(), sign };
@@ -426,7 +420,7 @@ describe('Stacks migration vectors: swap transaction builder', () => {
       contractAddress: input.contractAddress,
       contractName: input.contractName,
       functionName: input.functionName,
-      functionArgs: input.functionArgs.map(deserializeCV),
+      functionArgs: input.functionArgs.map(Cl.deserialize),
       postConditions: input.postConditions,
     };
     const signer = { ...createStubStacksSigner(), publicKey: hexToBytes(input.publicKey) };
@@ -434,8 +428,8 @@ describe('Stacks migration vectors: swap transaction builder', () => {
     for (const format of ['hex', 'wire', 'object']) {
       const postConditions = input.postConditions.map(hex => {
         if (format === 'hex') return hex;
-        const wire = deserializePostConditionWire(new BytesReader(hexToBytes(hex)));
-        return format === 'wire' ? wire : wireToPostCondition(wire);
+        const wire = Codec.Raw.PostCondition.decode(hex);
+        return format === 'wire' ? wire : wire;
       });
       const tx = await buildStacksTx(
         { ...executionData, postConditions },
@@ -444,28 +438,31 @@ describe('Stacks migration vectors: swap transaction builder', () => {
         createMoney(BigInt(input.fee), 'STX'),
         input.nonce
       );
-      outputs.push({ format, hex: tx.serialize(), txid: tx.txid() });
+      outputs.push({
+        format,
+        hex: Codec.Transaction.encode(tx),
+        txid: bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(tx)))),
+      });
     }
     const defaults = await buildStacksTx(executionData, STACKS_MAINNET, signer);
-    expect({ outputs, defaults: { hex: defaults.serialize(), txid: defaults.txid() } }).toEqual(
-      stacksSwapVector.expected
-    );
+    expect({
+      outputs,
+      defaults: {
+        hex: Codec.Transaction.encode(defaults),
+        txid: bytesToHex(sha512_256(hexToBytes(Codec.Transaction.encode(defaults)))),
+      },
+    }).toEqual(stacksSwapVector.expected);
   });
 
   test('pins buildStacksTx rejection of malformed swap arguments and post conditions', async () => {
     const signer = createStubStacksSigner();
     for (const vector of stacksSwapVector.invalid) {
-      await expect(
-        buildStacksTx(
-          {
-            ...stacksContractCallExecutionData,
-            functionArgs: vector.functionArgs,
-            postConditions: vector.postConditions,
-          },
-          STACKS_MAINNET,
-          signer
-        )
-      ).rejects.toThrow(vector.error);
+      const executionData = { ...stacksContractCallExecutionData };
+      Reflect.set(executionData, 'functionArgs', vector.functionArgs);
+      Reflect.set(executionData, 'postConditions', vector.postConditions);
+      await expect(buildStacksTx(executionData, STACKS_MAINNET, signer)).rejects.toThrow(
+        vector.error
+      );
     }
   });
 });

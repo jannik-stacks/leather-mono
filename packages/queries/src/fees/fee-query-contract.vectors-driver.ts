@@ -1,4 +1,4 @@
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { defaultNetworksKeyedById } from '@leather.io/models';
 
@@ -6,7 +6,7 @@ import { createStacksTransactionFeesQueryConfig } from './stacks-transaction-fee
 
 export function query(hex: string, signerCount?: number) {
   const config = createStacksTransactionFeesQueryConfig(
-    deserializeTransaction(hex),
+    Codec.Transaction.decode(hex),
     { network: defaultNetworksKeyedById.mainnet, quoteCurrency: 'USD', assetVisibility: {} },
     signerCount
   );

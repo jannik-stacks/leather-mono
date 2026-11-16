@@ -3,7 +3,7 @@ import { useAccounts } from '@/store/accounts/accounts.read';
 import { type App } from '@/store/apps/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
-import { deserializeCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 
 import {
   type RpcRequest,
@@ -48,8 +48,8 @@ export function StxSignMessageApprover({
       submit(signatureData);
     } else if (request.params.messageType === 'structured') {
       const signatureData = await signer.signStructuredMessage(
-        deserializeCV(request.params.message),
-        deserializeCV(request.params.domain)
+        Cl.deserialize(request.params.message),
+        Cl.deserialize(request.params.domain)
       );
       submit(signatureData);
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { STACKS_MAINNET } from '@jannik-stacks/kit';
 import * as btc from '@scure/btc-signer';
-import { STACKS_MAINNET } from '@stacks/network';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';

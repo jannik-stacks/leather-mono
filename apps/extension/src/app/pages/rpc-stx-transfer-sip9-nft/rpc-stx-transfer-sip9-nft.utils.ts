@@ -1,15 +1,6 @@
-import type { StacksNetwork } from '@stacks/network';
-import {
-  type ClarityValue,
-  createAddress,
-  deserializeCV,
-  postConditionToWire,
-  serializeCV,
-  serializePostConditionWire,
-  standardPrincipalCVFromAddress,
-} from '@stacks/transactions';
+import { Cl, type ClarityValue, Codec, type StacksNetwork } from '@jannik-stacks/kit';
 
-import type { Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 import { createRequestEncoder, stxTransferSip9Nft } from '@leather.io/rpc';
 import { getAddressFromAssetIdentifier } from '@leather.io/services';
 import {
@@ -22,7 +13,7 @@ import { createMoney } from '@leather.io/utils';
 import { makeNftPostCondition } from '@shared/utils/post-conditions';
 
 import { initialSearchParams } from '@app/common/initial-search-params';
-import type { Nonce } from '@app/features/nonce-editor/nonce-editor.context';
+import { type Nonce } from '@app/features/nonce-editor/nonce-editor.context';
 
 export function getDecodedRpcStxTransferSip9NftRequest() {
   const { decode } = createRequestEncoder(stxTransferSip9Nft.request);
@@ -39,9 +30,9 @@ function getTransactionOptionsFromRpcRequest(address: string) {
   );
 
   const fnArgs: ClarityValue[] = [
-    deserializeCV(decodedRpcRequest.params.assetId),
-    standardPrincipalCVFromAddress(createAddress(decodedRpcRequest.params.address ?? address)),
-    standardPrincipalCVFromAddress(createAddress(decodedRpcRequest.params.recipient)),
+    Cl.deserialize(decodedRpcRequest.params.assetId),
+    Cl.address(decodedRpcRequest.params.address ?? address),
+    Cl.address(decodedRpcRequest.params.recipient),
   ];
   const postConditionOptions = {
     assetId: decodedRpcRequest.params.assetId,
@@ -54,15 +45,13 @@ function getTransactionOptionsFromRpcRequest(address: string) {
   return {
     contractAddress: getAddressFromAssetIdentifier(decodedRpcRequest.params.asset),
     contractName,
-    functionArgs: fnArgs.map(arg => serializeCV(arg)),
+    functionArgs: fnArgs.map(arg => Cl.serialize(arg)),
     fee: decodedRpcRequest.params.fee
       ? createMoney(decodedRpcRequest.params.fee, 'STX')
       : undefined,
     nonce: decodedRpcRequest.params.nonce,
     sponsored: decodedRpcRequest.params.sponsored,
-    postConditions: [
-      serializePostConditionWire(postConditionToWire(makeNftPostCondition(postConditionOptions))),
-    ],
+    postConditions: [Codec.Raw.PostCondition.encode(makeNftPostCondition(postConditionOptions))],
   };
 }
 

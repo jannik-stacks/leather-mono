@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { StacksTransactionWire } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 import z from 'zod';
 
 import { isString } from '@leather.io/utils';
@@ -26,8 +26,9 @@ export function useAnalyticsOnlyStacksNonceTracker() {
 
   return {
     nonceCalculation: context ?? {},
-    trackIfNonceError(unsignedTx: StacksTransactionWire, error: Error | string) {
-      const txNonce = Number(unsignedTx.auth.spendingCondition.nonce);
+    trackIfNonceError(unsignedTx: StacksTransaction, error: Error | string) {
+      const nonce = unsignedTx.nonce ?? 0n;
+      const txNonce = Number(nonce);
 
       if (!('nonceType' in context)) return;
       if (isString(error)) return;

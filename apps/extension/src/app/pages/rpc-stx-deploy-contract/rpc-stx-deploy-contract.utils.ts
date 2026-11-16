@@ -1,18 +1,18 @@
-import type { StacksNetwork } from '@stacks/network';
+import { type StacksNetwork } from '@jannik-stacks/kit';
 
-import type { Money } from '@leather.io/models';
+import { type Money } from '@leather.io/models';
 import { createRequestEncoder, stxDeployContract } from '@leather.io/rpc';
 import {
   type StacksUnsignedContractDeployOptions,
   TransactionTypes,
-  ensurePostConditionWireFormat,
+  getPostCondition,
   getPostConditions,
 } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
 import { initialSearchParams } from '@app/common/initial-search-params';
 import { rpcPostConditionModeToEnum } from '@app/common/transactions/stacks/post-condition.utils';
-import type { Nonce } from '@app/features/nonce-editor/nonce-editor.context';
+import { type Nonce } from '@app/features/nonce-editor/nonce-editor.context';
 
 function getDecodedRpcStxDeployContractRequest() {
   const { decode } = createRequestEncoder(stxDeployContract.request);
@@ -34,7 +34,7 @@ function getTransactionOptionsFromRpcRequest() {
     nonce: decodedRpcRequest.params.nonce,
     postConditionMode: rpcPostConditionModeToEnum(decodedRpcRequest.params.postConditionMode),
     postConditions: getPostConditions(
-      decodedRpcRequest.params.postConditions?.map(pc => ensurePostConditionWireFormat(pc))
+      decodedRpcRequest.params.postConditions?.map(pc => getPostCondition(pc))
     ),
   };
 }

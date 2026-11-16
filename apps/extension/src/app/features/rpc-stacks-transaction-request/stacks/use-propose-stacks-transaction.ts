@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { type StacksTransactionWire } from '@stacks/transactions';
+import { Codec, type StacksTransaction } from '@jannik-stacks/kit';
 
 import { type RpcMethodNames, createRpcSuccessResponse } from '@leather.io/rpc';
 import { getErrorDetail } from '@leather.io/services';
@@ -44,7 +44,7 @@ export function useProposeStacksTransaction(method: RpcMethodNames) {
   const { proposeMultisigTransaction } = useProposeMultisigTransaction();
 
   return useCallback(
-    async (unsignedTx: StacksTransactionWire) => {
+    async (unsignedTx: StacksTransaction) => {
       if (policy?.chain !== 'stacks')
         throw new Error('No active Stacks policy to propose the transaction from');
 
@@ -59,8 +59,8 @@ export function useProposeStacksTransaction(method: RpcMethodNames) {
       if (derivedAddress !== policy.address)
         throw new Error('Derived multisig sender does not match the policy address');
 
-      unsignedTx.setNonce(placeholderNonce);
-      const rawPayload = unsignedTx.serialize();
+      unsignedTx.nonce = BigInt(placeholderNonce);
+      const rawPayload = Codec.Transaction.encode(unsignedTx);
       onSetTransactionStatus('broadcasting');
 
       try {

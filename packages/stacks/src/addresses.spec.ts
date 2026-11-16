@@ -1,5 +1,6 @@
-import { ChainId } from '@stacks/network';
 import { describe, expect, it } from 'vitest';
+
+import { ChainId } from '@leather.io/models';
 
 import { randomAddress } from './accounts.vectors-driver';
 import { deriveStxMultisigAddress } from './addresses';

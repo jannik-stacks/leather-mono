@@ -1,5 +1,5 @@
-import { bytesToHex } from '@stacks/common';
-import { Pc, serializeCV } from '@stacks/transactions';
+import { Cl, Codec, Pc } from '@jannik-stacks/kit';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import { type Money } from '@leather.io/models';
 
@@ -46,7 +46,7 @@ export async function createTransferSip10TxHex({
     publicKey: bytesToHex(signer.publicKey),
     contractAddress,
     contractName,
-    functionArgs: fnArgs.map(arg => serializeCV(arg)),
+    functionArgs: fnArgs.map(arg => Cl.serialize(arg)),
     functionName: 'transfer',
     nonce,
     fee,
@@ -54,10 +54,10 @@ export async function createTransferSip10TxHex({
     postConditions: [
       Pc.principal(currentStacksAddress)
         .willSendEq(amount)
-        .ft(formatContractIdString({ contractAddress, contractName }), contractAssetName),
+        .ft(`${formatContractIdString({ contractAddress, contractName })}::${contractAssetName}`),
     ],
   });
 
-  const txHex = tx.serialize();
+  const txHex = Codec.Transaction.encode(tx);
   return txHex;
 }

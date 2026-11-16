@@ -1,6 +1,8 @@
-import { type ClarityValue, type TupleCV, cvToString, getCVTypeString } from '@stacks/transactions';
+import { type Cl, type ClarityValue } from '@jannik-stacks/kit';
 
 import {
+  formatClarityType,
+  formatClarityValue,
   getClarityPrincipal,
   isClarityList,
   isClarityOptionalNone,
@@ -34,7 +36,7 @@ export function parseZestGetUserAssetsReadResponseCV(
 
   throw new Error('Unexpected Zest get-user-assets-read Clarity Value type');
 
-  function parseGetUserAssetsTuple(tuple: TupleCV): ZestGetUserAssetsReadResponse {
+  function parseGetUserAssetsTuple(tuple: Cl.Types.Tuple): ZestGetUserAssetsReadResponse {
     const borrowed = tuple.value['assets-borrowed'];
     const supplied = tuple.value['assets-supplied'];
 
@@ -59,7 +61,7 @@ export function parseZestProtocolGetUserAssetBorrowBalanceResponseCV(
   response: ClarityValue
 ): ZestUserAssetBorrowBalanceResponse {
   if (isClarityResponseError(response)) {
-    throw new Error(cvToString(response.value));
+    throw new Error(formatClarityValue(response.value));
   }
 
   if (isClarityResponseOk(response)) {
@@ -87,13 +89,13 @@ export function parseZestProtocolGetUserAssetBorrowBalanceResponseCV(
   }
 
   throw new Error(
-    `Unexpected Zest get-user-borrow-balance Clarity Value type: ${getCVTypeString(response)}`
+    `Unexpected Zest get-user-borrow-balance Clarity Value type: ${formatClarityType(response)}`
   );
 }
 
 export function parseZestGetZTokenBalanceResponseCV(response: ClarityValue): bigint {
   if (isClarityResponseError(response)) {
-    throw new Error(cvToString(response.value));
+    throw new Error(formatClarityValue(response.value));
   }
 
   if (isClarityResponseOk(response)) {
@@ -103,6 +105,6 @@ export function parseZestGetZTokenBalanceResponseCV(response: ClarityValue): big
   }
 
   throw new Error(
-    `Unexpected Zest get-z-token-balance Clarity Value type: ${getCVTypeString(response)}`
+    `Unexpected Zest get-z-token-balance Clarity Value type: ${formatClarityType(response)}`
   );
 }

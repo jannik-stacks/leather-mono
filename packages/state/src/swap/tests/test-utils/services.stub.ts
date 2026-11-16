@@ -108,7 +108,7 @@ export function createStubStacksSigner(): StacksSigner {
     keyOrigin: 'test-origin',
     derivationPath: "m/44'/5757'/0'/0/0",
     address: 'SP2ADDRESS',
-    publicKey: new Uint8Array(33),
+    publicKey: Uint8Array.from([2, ...new Array<number>(32).fill(1)]),
     accountIndex: 0,
     network: 'mainnet',
     sign: tx => Promise.resolve(tx),

@@ -1,7 +1,7 @@
-import { serializeCV, stringAsciiCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 import { multisigLeather } from '~/features/multisig/extension/multisig-leather-client';
 
-import type { AuthNetworkId } from '@leather.io/models';
+import { type AuthNetworkId } from '@leather.io/models';
 import {
   type ProposeTransactionRequest,
   walletPropose as buildSharedProposeRequest,
@@ -48,8 +48,8 @@ async function signProposalCommitment(
   }
   const signed = await multisigLeather.stxSignMessage({
     messageType: 'structured',
-    domain: serializeCV(buildStxProposalDomain(resolveStxChainId(network))),
-    message: serializeCV(stringAsciiCV(proposalHash)),
+    domain: Cl.serialize(buildStxProposalDomain(resolveStxChainId(network))),
+    message: Cl.serialize(Cl.ascii(proposalHash)),
     network: rpcNetwork,
   });
   return signed.signature;

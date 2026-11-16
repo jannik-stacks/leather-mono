@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { useCalculateStacksTxFees } from '@/queries/stacks/fees/fees.hooks';
-import { AuthType, deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { FeeTypes } from '@leather.io/models';
 import { Approver, type SheetInstance } from '@leather.io/ui/native';
@@ -19,9 +19,9 @@ interface StacksFeesSectionProps {
 }
 
 export function StacksFeesSection({ txHex, onChangeFee, disabled }: StacksFeesSectionProps) {
-  const tx = deserializeTransaction(txHex);
+  const tx = Codec.Transaction.decode(txHex);
   const { data: stxFees } = useCalculateStacksTxFees(tx);
-  const fee = tx.auth.spendingCondition.fee;
+  const fee = tx.fee ?? 0n;
   function getFeeType() {
     const options = stxFees?.options;
     if (Number(fee) === options?.standard.value.amount.toNumber()) {
@@ -49,7 +49,7 @@ export function StacksFeesSection({ txHex, onChangeFee, disabled }: StacksFeesSe
   };
   const feeMoney = getTxFeeMoney(tx);
 
-  if (tx.auth.authType === AuthType.Sponsored) {
+  if (tx.sponsor !== undefined) {
     return (
       <Approver.Section>
         <SponsoredFeeCard />

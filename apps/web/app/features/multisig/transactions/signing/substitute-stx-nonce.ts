@@ -1,8 +1,7 @@
 import { bytesToHex, hexToBytes } from '@stacks/common';
-import { AddressHashMode, AuthType } from '@stacks/transactions';
 
-const standardAuthType: number = AuthType.Standard;
-const p2shNonSequentialHashMode: number = AddressHashMode.P2SHNonSequential;
+const standardAuthType = 4;
+const p2shNonSequentialHashMode = 5;
 
 // Leather multisig STX transfers are always StandardAuth, P2SHNonSequential
 // multisig, which fixes the serialized spending-condition prefix:

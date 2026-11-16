@@ -1,4 +1,4 @@
-import { serializeCV } from '@stacks/transactions';
+import { Cl } from '@jannik-stacks/kit';
 
 import {
   RpcErrorCode,
@@ -122,13 +122,13 @@ export const stxSignStructuredMessageHandler = defineRpcRequestHandler(
         'message',
         isString(request.params.message)
           ? request.params.message
-          : serializeCV(request.params.message),
+          : Cl.serialize(request.params.message),
       ],
       [
         'domain',
         isString(request.params.domain)
           ? request.params.domain
-          : serializeCV(request.params.domain),
+          : Cl.serialize(request.params.domain),
       ],
     ];
 

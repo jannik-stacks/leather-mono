@@ -1,17 +1,11 @@
-import {
-  AddressHashMode,
-  AddressVersion,
-  addressFromPublicKeys,
-  addressToString,
-  createStacksPublicKey,
-} from '@stacks/transactions';
+import { publicKeysToAddress } from '@jannik-stacks/kit';
 
 import {
   compileWshDescriptor,
   getAddressFromOutScript,
   getBtcSignerLibNetworkConfigByMode,
 } from '@leather.io/bitcoin';
-import type { VaultAccount } from '@leather.io/models';
+import { type VaultAccount } from '@leather.io/models';
 
 import { resolveBtcNetworkMode } from '../network/resolve-btc-network-mode';
 import { getMultisigDescriptor } from './btc-multisig-descriptor';
@@ -33,17 +27,9 @@ function deriveBtcMultisigAddress(account: VaultAccount): string {
 }
 
 function deriveStxMultisigAddress(account: VaultAccount): string {
-  const version =
-    account.network === 'stx:mainnet'
-      ? AddressVersion.MainnetMultiSig
-      : AddressVersion.TestnetMultiSig;
-  return addressToString(
-    addressFromPublicKeys(
-      version,
-      AddressHashMode.P2SHNonSequential,
-      account.threshold,
-      getOrderedSigningPubkeys(account).map(createStacksPublicKey)
-    )
+  return publicKeysToAddress(
+    { publicKeys: getOrderedSigningPubkeys(account), threshold: account.threshold },
+    { network: account.network === 'stx:mainnet' ? 'mainnet' : 'testnet' }
   );
 }
 

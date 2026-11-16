@@ -9,7 +9,7 @@ import { useAccounts } from '@/store/accounts/accounts.read';
 import { type App } from '@/store/apps/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
-import { AuthType, deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import {
   type RpcRequest,
@@ -54,18 +54,18 @@ export function DeployContractApprover({
 
   const txOptions = getTxOptions(signer, network);
 
-  const tx = deserializeTransaction(txHex);
+  const tx = Codec.Transaction.decode(txHex);
 
   async function onApprove() {
     assertStacksSigner(signer);
 
     const signedTx = await signer?.sign(tx);
 
-    if (signedTx.auth.authType === AuthType.Sponsored) {
+    if (signedTx.sponsor !== undefined) {
       sendResult(
         createRpcSuccessResponse('stx_deployContract', {
           id: request.id,
-          result: { transaction: signedTx.serialize() },
+          result: { transaction: Codec.Transaction.encode(signedTx) },
         })
       );
       return null;
@@ -76,7 +76,7 @@ export function DeployContractApprover({
       const response = createRpcSuccessResponse('stx_deployContract', {
         id: request.id,
         result: {
-          transaction: signedTx.serialize(),
+          transaction: Codec.Transaction.encode(signedTx),
           txid: broadcastResult.txid,
         },
       });

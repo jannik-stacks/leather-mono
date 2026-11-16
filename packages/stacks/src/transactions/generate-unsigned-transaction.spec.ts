@@ -1,11 +1,4 @@
-import {
-  AuthType,
-  ClarityVersion,
-  type FungiblePostCondition,
-  PayloadType,
-  PostConditionMode,
-  deserializeTransaction,
-} from '@stacks/transactions';
+import { Codec, type PostCondition } from '@jannik-stacks/kit';
 import BigNumber from 'bignumber.js';
 import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { assert, describe, expect, it } from 'vitest';
@@ -22,7 +15,7 @@ import {
   TransactionTypes,
 } from './transaction.types';
 
-const testPublicKey = '8721c6a5237f5e8d361161a7855aa56885a3e19e2ea6ee268fb14eabc5e2ed9001';
+const testPublicKey = '0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352';
 
 describe('initNonce', () => {
   it('should initialize nonce as BigNumber', () => {
@@ -49,17 +42,18 @@ describe('generateStacksUnsignedTransaction', () => {
 
     const result = await generateStacksUnsignedTransaction(options);
     expect(result).toBeDefined();
-    expect(result.payload.payloadType).toEqual(PayloadType.ContractCall);
-    expect(result.auth.spendingCondition.fee).toBe(BigInt('1000'));
-    expect(result.auth.spendingCondition.nonce).toBe(BigInt('1'));
+    expect(result).toMatchObject({ type: 'call', fee: 1000n, nonce: 1n });
+    expect(result.type).toEqual('call');
+    expect(result.fee).toBe(BigInt('1000'));
+    expect(result.nonce).toBe(BigInt('1'));
   });
 
   it('should keep the post condition mode and encode post conditions of a contract call', async () => {
-    const postCondition: FungiblePostCondition = {
+    const postCondition: Extract<PostCondition, { type: 'ft-postcondition' }> = {
       type: 'ft-postcondition',
       address: 'ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH',
       condition: 'gte',
-      amount: '100',
+      amount: BigInt('100'),
       asset: formatAssetString({
         contractAddress: 'ST34RKEJKQES7MXQFBT29KSJZD73QK3YNT5N56C6X',
         contractName: 'test-asset-contract',
@@ -74,14 +68,14 @@ describe('generateStacksUnsignedTransaction', () => {
       fee: createMoney(new BigNumber(0), 'STX'),
       functionArgs: [],
       nonce: 0,
-      postConditionMode: PostConditionMode.Allow,
+      postConditionMode: 'allow',
       postConditions: [postCondition],
       publicKey: testPublicKey,
     };
 
     const result = await generateStacksUnsignedTransaction(options);
-    expect(result.postConditionMode).toEqual(PostConditionMode.Allow);
-    const postConditionValue = result.postConditions.values[0];
+    expect(result.postConditionMode).toEqual('allow');
+    const postConditionValue = (result.postConditions ?? [])[0];
     expect('amount' in postConditionValue && postConditionValue.amount).toEqual(100n);
   });
 
@@ -97,15 +91,15 @@ describe('generateStacksUnsignedTransaction', () => {
 
     const result = await generateStacksUnsignedTransaction(options);
     expect(result).toBeDefined();
-    expect(result.payload.payloadType).toEqual(PayloadType.SmartContract);
-    expect(result.auth.spendingCondition.fee).toBe(BigInt('1000'));
-    expect(result.auth.spendingCondition.nonce).toBe(BigInt('1'));
+    expect(result.type).toEqual('deploy');
+    expect(result.fee).toBe(BigInt('1000'));
+    expect(result.nonce).toBe(BigInt('1'));
   });
 
   it('should generate a versioned contract deploy when a released clarity version is specified', async () => {
     const options: StacksUnsignedContractDeployOptions = {
       txType: TransactionTypes.ContractDeploy,
-      clarityVersion: ClarityVersion.Clarity2,
+      clarityVersion: 2,
       codeBody: 'code',
       contractName: 'hello-world',
       fee: createMoney(new BigNumber(1000), 'STX'),
@@ -114,17 +108,16 @@ describe('generateStacksUnsignedTransaction', () => {
     };
 
     const result = await generateStacksUnsignedTransaction(options);
-    if (result.payload.payloadType !== PayloadType.VersionedSmartContract)
-      throw new Error('Expected versioned smart contract payload');
-    expect(result.payload.clarityVersion).toEqual(ClarityVersion.Clarity2);
-    expect(result.payload.contractName.content).toEqual('hello-world');
-    expect(result.payload.codeBody.content).toEqual('code');
+    if (result.type !== 'deploy') throw new Error('Expected versioned smart contract payload');
+    expect(result.clarityVersion).toEqual(2);
+    expect(result.name).toEqual('hello-world');
+    expect(result.code).toEqual('code');
   });
 
   it('should omit the clarity version when Clarity 6 is specified', async () => {
     const options: StacksUnsignedContractDeployOptions = {
       txType: TransactionTypes.ContractDeploy,
-      clarityVersion: ClarityVersion.Clarity6,
+      clarityVersion: 6,
       codeBody: 'code',
       contractName: 'hello-world',
       fee: createMoney(new BigNumber(1000), 'STX'),
@@ -133,12 +126,11 @@ describe('generateStacksUnsignedTransaction', () => {
     };
 
     const result = await generateStacksUnsignedTransaction(options);
-    const roundTripped = deserializeTransaction(result.serialize());
-    if (roundTripped.payload.payloadType !== PayloadType.SmartContract)
-      throw new Error('Expected smart contract payload');
-    expect('clarityVersion' in roundTripped.payload).toEqual(false);
-    expect(roundTripped.payload.contractName.content).toEqual('hello-world');
-    expect(roundTripped.payload.codeBody.content).toEqual('code');
+    const roundTripped = Codec.Transaction.decode(Codec.Transaction.encode(result));
+    if (roundTripped.type !== 'deploy') throw new Error('Expected smart contract payload');
+    expect('clarityVersion' in roundTripped).toEqual(false);
+    expect(roundTripped.name).toEqual('hello-world');
+    expect(roundTripped.code).toEqual('code');
   });
 
   it('should generate unsigned STX token transfer', async () => {
@@ -153,12 +145,12 @@ describe('generateStacksUnsignedTransaction', () => {
 
     const result = await generateStacksUnsignedTransaction(options);
     expect(result).toBeDefined();
-    expect(result.payload.payloadType).toEqual(PayloadType.TokenTransfer);
-    expect(result.auth.spendingCondition.fee).toBe(BigInt('1000'));
-    expect(result.auth.spendingCondition.nonce).toBe(BigInt('1'));
-    assert(result.payload.payloadType === PayloadType.TokenTransfer);
-    expect(result.payload.recipient.value).toBe('ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH');
-    expect(result.payload.amount).toBe(BigInt('100'));
+    expect(result.type).toEqual('transfer');
+    expect(result.fee).toBe(BigInt('1000'));
+    expect(result.nonce).toBe(BigInt('1'));
+    assert(result.type === 'transfer');
+    expect(result.recipient).toBe('ST1EXHZSN8MJSJ9DSG994G1V8CNKYXGMK7Z4SA6DH');
+    expect(result.amount).toBe(BigInt('100'));
   });
 
   it('should generate a sponsored STX token transfer with sponsored auth', async () => {
@@ -173,8 +165,8 @@ describe('generateStacksUnsignedTransaction', () => {
     };
 
     const result = await generateStacksUnsignedTransaction(options);
-    expect(result.auth.authType).toEqual(AuthType.Sponsored);
-    expect(result.auth.spendingCondition.fee).toBe(BigInt('0'));
+    expect(result.sponsor === undefined ? 'standard' : 'sponsored').toEqual('sponsored');
+    expect(result.fee).toBe(BigInt('0'));
   });
 
   it('should generate a sponsored contract call with sponsored auth', async () => {
@@ -192,8 +184,8 @@ describe('generateStacksUnsignedTransaction', () => {
     };
 
     const result = await generateStacksUnsignedTransaction(options);
-    expect(result.auth.authType).toEqual(AuthType.Sponsored);
-    expect(result.auth.spendingCondition.fee).toBe(BigInt('0'));
+    expect(result.sponsor === undefined ? 'standard' : 'sponsored').toEqual('sponsored');
+    expect(result.fee).toBe(BigInt('0'));
   });
 });
 
@@ -235,10 +227,18 @@ describe('Stacks migration vectors: transaction-contract', () => {
         ...base,
         kind: 'sip10',
         memo: 'hello',
-        mode: 2,
+        mode: 'deny',
       }),
-      sip9: await transactionContractVectorDriver.transaction({ ...base, kind: 'sip9', mode: 1 }),
-      call: await transactionContractVectorDriver.transaction({ ...base, kind: 'call', mode: 3 }),
+      sip9: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'sip9',
+        mode: 'allow',
+      }),
+      call: await transactionContractVectorDriver.transaction({
+        ...base,
+        kind: 'call',
+        mode: 'originator',
+      }),
       defaultDeploy: await transactionContractVectorDriver.transaction({ ...base, kind: 'deploy' }),
       clarity2: await transactionContractVectorDriver.transaction({
         ...base,

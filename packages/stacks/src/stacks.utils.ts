@@ -1,12 +1,6 @@
+import { privateKeyToPublicKey } from '@jannik-stacks/kit';
+import { bytesToHex } from '@noble/hashes/utils';
 import { type HDKey } from '@scure/bip32';
-import { ChainId } from '@stacks/network';
-import {
-  type AssetString,
-  type ContractIdString,
-  compressPrivateKey,
-  privateKeyToPublic,
-  publicKeyToHex,
-} from '@stacks/transactions';
 
 import {
   DerivationPathDepth,
@@ -16,7 +10,7 @@ import {
   extractAddressIndexFromPath,
   fingerprintAsNumberToHex,
 } from '@leather.io/crypto';
-import type { NetworkModes } from '@leather.io/models';
+import { ChainId, type NetworkModes } from '@leather.io/models';
 import { assertIsTruthy, isString, toHexString } from '@leather.io/utils';
 
 export const stxDerivationWithAccount = `m/44'/5757'/0'/0/{account}`;
@@ -94,7 +88,7 @@ export function deriveStxPrivateKey({ keychain, index }: { keychain: HDKey; inde
   if (keychain.depth !== DerivationPathDepth.Root) throw new Error('Root keychain must be depth 0');
   const accountKeychain = keychain.derive(makeStxDerivationPath(index));
   assertIsTruthy(accountKeychain.privateKey);
-  return compressPrivateKey(accountKeychain.privateKey);
+  return bytesToHex(accountKeychain.privateKey) + '01';
 }
 
 export function deriveStxPublicKey({
@@ -104,7 +98,7 @@ export function deriveStxPublicKey({
   keychain: HDKey;
   index: number;
 }): string {
-  return publicKeyToHex(privateKeyToPublic(deriveStxPrivateKey({ keychain, index })));
+  return privateKeyToPublicKey(deriveStxPrivateKey({ keychain, index }));
 }
 
 /**
@@ -128,7 +122,7 @@ export function stacksRootKeychainToAccountDescriptorV2(keychain: HDKey, account
   );
 }
 
-export function getStacksBurnAddress(chainIdChainId: ChainId): string {
+export function getStacksBurnAddress(chainIdChainId: number): string {
   switch (chainIdChainId) {
     case ChainId.Mainnet:
       return 'SP00000000000003SCNSJTCSE62ZF4MSE';
@@ -162,7 +156,7 @@ export function formatAssetString({
   contractAddress,
   contractName,
   assetName,
-}: FormatAssetStringArgs): AssetString {
+}: FormatAssetStringArgs): string {
   return `${contractAddress}.${contractName}::${assetName}`;
 }
 
@@ -173,7 +167,7 @@ interface FormatContractIdStringArgs {
 export function formatContractIdString({
   contractAddress,
   contractName,
-}: FormatContractIdStringArgs): ContractIdString {
+}: FormatContractIdStringArgs): string {
   return `${contractAddress}.${contractName}`;
 }
 

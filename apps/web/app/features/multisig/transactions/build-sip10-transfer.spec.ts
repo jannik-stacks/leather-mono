@@ -1,18 +1,7 @@
-import {
-  AddressHashMode,
-  AddressVersion,
-  FungibleConditionCode,
-  PayloadType,
-  PostConditionMode,
-  PostConditionType,
-  addressFromPublicKeys,
-  addressToString,
-  createStacksPublicKey,
-  cvToString,
-} from '@stacks/transactions';
+import { publicKeysToAddress } from '@jannik-stacks/kit';
 
-import type { VaultAccount, VaultAccountSigner } from '@leather.io/models';
-import { isSip10TransferContactCall } from '@leather.io/stacks';
+import { type VaultAccount, type VaultAccountSigner } from '@leather.io/models';
+import { formatClarityValue, isSip10TransferContactCall } from '@leather.io/stacks';
 import { createMoney } from '@leather.io/utils';
 
 import { buildUnsignedMultisigSip10Transfer } from './build-sip10-transfer';
@@ -27,14 +16,7 @@ const recipient = 'ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG';
 const assetId = 'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT.sbtc-token::sbtc-token';
 
 function deriveTestnetAddress(threshold: number, keys: string[]) {
-  return addressToString(
-    addressFromPublicKeys(
-      AddressVersion.TestnetMultiSig,
-      AddressHashMode.P2SHNonSequential,
-      threshold,
-      keys.map(createStacksPublicKey)
-    )
-  );
+  return publicKeysToAddress({ publicKeys: keys, threshold }, { network: 'testnet' });
 }
 
 function makeSigner(signerIndex: number, signingPubkey: string): VaultAccountSigner {
@@ -86,8 +68,8 @@ describe(buildUnsignedMultisigSip10Transfer.name, () => {
   test('builds a non-sequential multisig contract call with placeholder nonce 0', async () => {
     const tx = await buildTransfer({ fee: createMoney(3000, 'STX') });
 
-    const { spendingCondition } = tx.auth;
-    expect(spendingCondition.hashMode).toEqual(AddressHashMode.P2SHNonSequential);
+    const spendingCondition = tx;
+    expect(spendingCondition.signer?.hashMode).toEqual('p2sh-non-sequential');
     expect(Number(spendingCondition.nonce)).toEqual(0);
     expect(Number(spendingCondition.fee)).toEqual(3000);
     expect(
@@ -99,39 +81,36 @@ describe(buildUnsignedMultisigSip10Transfer.name, () => {
     const tx = await buildTransfer();
 
     if (!isSip10TransferContactCall(tx)) throw new Error('Expected a SIP-10 transfer call');
-    if (tx.payload.payloadType !== PayloadType.ContractCall)
-      throw new Error('Expected a SIP-10 transfer call');
-    expect(addressToString(tx.payload.contractAddress)).toEqual(
-      'ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT'
-    );
-    expect(tx.payload.contractName.content).toEqual('sbtc-token');
-    expect(tx.payload.functionName.content).toEqual('transfer');
-    expect(cvToString(tx.payload.functionArgs[0])).toEqual('u2500000');
-    expect(cvToString(tx.payload.functionArgs[1])).toEqual(makeAccount().multisigAddress);
-    expect(cvToString(tx.payload.functionArgs[2])).toEqual(recipient);
-    expect(cvToString(tx.payload.functionArgs[3])).toEqual('none');
+    if (tx.type !== 'call') throw new Error('Expected a SIP-10 transfer call');
+    expect(tx.contract.split('.')[0]).toEqual('ST1F7QA2MDF17S807EPA36TSS8AMEFY4KA9TVGWXT');
+    expect(tx.contract.split('.')[1]).toEqual('sbtc-token');
+    expect(tx.functionName).toEqual('transfer');
+    expect(formatClarityValue(tx.args[0])).toEqual('u2500000');
+    expect(formatClarityValue(tx.args[1])).toEqual(makeAccount().multisigAddress);
+    expect(formatClarityValue(tx.args[2])).toEqual(recipient);
+    expect(formatClarityValue(tx.args[3])).toEqual('none');
   });
 
   test('attaches a deny-mode FT post condition for the exact amount from the vault', async () => {
     const tx = await buildTransfer();
 
-    expect(tx.postConditionMode).toEqual(PostConditionMode.Deny);
-    expect(tx.postConditions.values).toHaveLength(1);
-    const postCondition = tx.postConditions.values[0];
-    if (postCondition.conditionType !== PostConditionType.Fungible)
+    expect(tx.postConditionMode).toEqual('deny');
+    expect(tx.postConditions ?? []).toHaveLength(1);
+    const postCondition = (tx.postConditions ?? [])[0];
+    if (postCondition.type !== 'ft-postcondition')
       throw new Error('Expected a fungible token post condition');
-    expect(postCondition.conditionCode).toEqual(FungibleConditionCode.Equal);
+    expect(postCondition.condition).toEqual('eq');
     expect(Number(postCondition.amount)).toEqual(2_500_000);
-    expect(postCondition.asset.assetName.content).toEqual('sbtc-token');
-    if (!('address' in postCondition.principal))
+    expect(postCondition.asset.split('::')[1]).toEqual('sbtc-token');
+    if (postCondition.address === 'origin')
       throw new Error('Expected a standard principal post condition');
-    expect(addressToString(postCondition.principal.address)).toEqual(makeAccount().multisigAddress);
+    expect(postCondition.address).toEqual(makeAccount().multisigAddress);
   });
 
   test('defaults the fee to zero for the estimation pass', async () => {
     const tx = await buildTransfer();
 
-    expect(Number(tx.auth.spendingCondition.fee)).toEqual(0);
+    expect(Number(tx.fee)).toEqual(0);
   });
 
   test('throws when the derived sender does not match the vault address', async () => {

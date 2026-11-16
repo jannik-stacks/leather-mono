@@ -1,17 +1,17 @@
 import { CodeCard } from '@/features/approver/components/code-card';
-import { deserializeTransaction } from '@stacks/transactions';
+import { Codec } from '@jannik-stacks/kit';
 
 import { Approver } from '@leather.io/ui/native';
 
 import { assertContractDeployPayload } from './utils';
 
 export function ContractDeployCodeSection({ txHex }: { txHex: string }) {
-  const tx = deserializeTransaction(txHex);
-  assertContractDeployPayload(tx.payload);
+  const tx = Codec.Transaction.decode(txHex);
+  assertContractDeployPayload(tx);
 
   return (
     <Approver.Section>
-      <CodeCard codeBody={tx.payload.codeBody.content} />
+      <CodeCard codeBody={tx.code} />
     </Approver.Section>
   );
 }
