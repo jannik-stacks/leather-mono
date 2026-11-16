@@ -7,7 +7,7 @@ import { userConnectsApp } from '@/store/apps/apps.write';
 import { type App } from '@/store/apps/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { useAppDispatch } from '@/store/utils';
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import { makeAccountIdentifer } from '@leather.io/crypto';
 import { type AccountId } from '@leather.io/models';

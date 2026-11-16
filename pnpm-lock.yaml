@@ -655,18 +655,6 @@ importers:
       '@shopify/restyle':
         specifier: 2.4.2
         version: 2.4.2(react-native@0.81.5(@babel/core@7.27.1)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
-      '@stacks/common':
-        specifier: 7.0.2
-        version: 7.0.2
-      '@stacks/network':
-        specifier: 7.0.2
-        version: 7.0.2(encoding@0.1.13)
-      '@stacks/stacks-blockchain-api-types':
-        specifier: 7.14.1
-        version: 7.14.1
-      '@stacks/transactions':
-        specifier: 7.5.0
-        version: 7.5.0(encoding@0.1.13)
       '@tanstack/react-query':
         specifier: 5.85.5
         version: 5.85.5(react@19.1.0)
