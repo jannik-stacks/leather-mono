@@ -4,7 +4,7 @@ import { getApproverFee } from '@/features/approver/utils';
 import { useStacksSigners } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
 import { Codec, type StacksNetwork } from '@jannik-stacks/kit';
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import { type RpcRequest, type stxTransferStx } from '@leather.io/rpc';
 import { TransactionTypes, generateStacksUnsignedTransaction } from '@leather.io/stacks';

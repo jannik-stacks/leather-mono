@@ -1,7 +1,7 @@
 // TODO: ENG-8 replace this test with integration tests
-import { type AddressTransactionsWithTransfersListResponse } from '@stacks/stacks-blockchain-api-types';
 import { describe, expect, it, vi } from 'vitest';
 
+import { type StacksApiAddressTransactionsWithTransfersListResponse } from '@leather.io/models';
 import { createStacksAddressTransactionsQueryConfig } from '@leather.io/queries';
 
 import { useGetAccountTransactionsWithTransfersQueries } from './use-transactions-with-transfers.query';
@@ -20,7 +20,7 @@ vi.mock('@/hooks/use-user-settings', () => ({
 
 describe('useGetAccountTransactionsWithTransfersQueries', () => {
   const mockAddress = 'SP2417H88DQFN7FNDMSKM9N0B3Q6GNGEM40W7ZAZW';
-  const mockTransactionData: AddressTransactionsWithTransfersListResponse = {
+  const mockTransactionData: StacksApiAddressTransactionsWithTransfersListResponse = {
     results: [
       {
         tx: {

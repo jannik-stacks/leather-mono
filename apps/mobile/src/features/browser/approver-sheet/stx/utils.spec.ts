@@ -1,5 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 
+import { type BaseStacksTransactionRpcParams } from '@leather.io/rpc';
+
 import { getStxRequestParams } from './utils';
 
 vi.mock('@/features/approver/utils', async () => {
@@ -74,6 +76,27 @@ describe(getStxRequestParams.name, () => {
 
     expect(result.nonce).toEqual(7);
   });
+
+  test('preserves the account nonce fallback for a zero request nonce', () => {
+    expect(getStxRequestParams({ nonce: 0 }, 7).nonce).toEqual(7);
+  });
+
+  const postConditionModes: BaseStacksTransactionRpcParams['postConditionMode'][] = [
+    'allow',
+    'deny',
+    'originator',
+  ];
+
+  test.each(postConditionModes)(
+    'passes the %s post-condition mode and serialized conditions to the Kit builder',
+    postConditionMode => {
+      const postConditions = ['0301030000000002625a00'];
+      const result = getStxRequestParams({ postConditionMode, postConditions }, 7);
+
+      expect(result.postConditionMode).toEqual(postConditionMode);
+      expect(result.postConditions).toEqual(postConditions);
+    }
+  );
 
   test('prefers the request nonce over the provided one', () => {
     const result = getStxRequestParams({ nonce: 3 }, 7);

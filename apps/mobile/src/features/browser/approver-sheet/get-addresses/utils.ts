@@ -1,4 +1,4 @@
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex } from '@noble/hashes/utils';
 
 import { ecdsaPublicKeyToSchnorr } from '@leather.io/bitcoin';
 import { type BtcAddress, type StxAddress, getAddresses } from '@leather.io/rpc';

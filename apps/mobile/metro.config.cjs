@@ -34,6 +34,17 @@ config.resolver.nodeModulesPaths = [
 ];
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === '@jannik-stacks/kit') {
+    return context.resolveRequest(
+      {
+        ...context,
+        unstable_conditionNames: ['import'],
+      },
+      moduleName,
+      platform
+    );
+  }
+
   // Handle @noble/hashes internal imports that aren't in exports field
   // These work via file-based resolution but SDK 54 warns about them
   if (moduleName === '@noble/hashes/crypto' || moduleName === '@noble/hashes/cryptoBrowser') {

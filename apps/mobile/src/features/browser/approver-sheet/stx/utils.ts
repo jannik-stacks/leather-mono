@@ -3,7 +3,7 @@ import { type App, assertAppIsConnected } from '@/store/apps/utils';
 import { stacksSignerFromAddress } from '@/store/keychains/stacks/stacks-keychains.read';
 import { assertStacksSigner } from '@/store/keychains/stacks/utils';
 import { makeStacksAccountIdentiferFromDescriptor } from '@/store/utils';
-import { type PostConditionModeName } from '@stacks/transactions';
+import { type StacksTransaction } from '@jannik-stacks/kit';
 
 import { type Money } from '@leather.io/models';
 import { type BaseStacksTransactionRpcParams } from '@leather.io/rpc';
@@ -49,7 +49,7 @@ export interface StxRequestParams {
   fee: Money;
   nonce: number;
   postConditions?: string[];
-  postConditionMode?: PostConditionModeName;
+  postConditionMode?: StacksTransaction['postConditionMode'];
   sponsored?: boolean;
 }
 export function getStxRequestParams(

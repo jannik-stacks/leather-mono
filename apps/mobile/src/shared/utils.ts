@@ -1,7 +1,6 @@
 import { useNetworkPreferenceStacksNetwork, useSettings } from '@/store/settings/settings';
 import { getStacksNetworkFromName } from '@/store/settings/settings.read';
 import { type StacksNetwork } from '@jannik-stacks/kit';
-import { StacksNetworks } from '@stacks/network';
 
 import { type NetworkConfiguration, defaultNetworksKeyedById } from '@leather.io/models';
 
@@ -45,9 +44,13 @@ function getStxNetworkFromRequestParams({
   defaultNetwork,
 }: GetStxNetworkFromRequestParams) {
   if (paramsNetwork) {
-    const stacksNetworkName = StacksNetworks.find(n => n === paramsNetwork);
-    if (stacksNetworkName) {
-      return getStacksNetworkFromName(stacksNetworkName);
+    if (
+      paramsNetwork === 'mainnet' ||
+      paramsNetwork === 'testnet' ||
+      paramsNetwork === 'devnet' ||
+      paramsNetwork === 'mocknet'
+    ) {
+      return getStacksNetworkFromName(paramsNetwork);
     }
     throw new Error('Wrong network supplied in the rpc request params: ' + paramsNetwork);
   }
