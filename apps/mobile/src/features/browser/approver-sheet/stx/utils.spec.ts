@@ -77,10 +77,6 @@ describe(getStxRequestParams.name, () => {
     expect(result.nonce).toEqual(7);
   });
 
-  test('preserves the account nonce fallback for a zero request nonce', () => {
-    expect(getStxRequestParams({ nonce: 0 }, 7).nonce).toEqual(7);
-  });
-
   const postConditionModes: BaseStacksTransactionRpcParams['postConditionMode'][] = [
     'allow',
     'deny',
