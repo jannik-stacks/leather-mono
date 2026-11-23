@@ -4842,7 +4842,9 @@
             "hexToBytes",
             "BytesReader",
             "addressToString",
-            "deserializeAddress"
+            "deserializeAddress",
+            "Address",
+            "Codec"
           ]
         }
       ],
@@ -5003,7 +5005,8 @@
             "createStacksPublicKey",
             "privateKeyToPublic",
             "publicKeyToAddressSingleSig",
-            "privateKeyToPublicKey"
+            "privateKeyToPublicKey",
+            "publicKeyToAddress"
           ]
         }
       ],
@@ -5068,7 +5071,8 @@
             "AddressVersion",
             "privateKeyToPublic",
             "publicKeyToAddress",
-            "privateKeyToPublicKey"
+            "privateKeyToPublicKey",
+            "NetworkName"
           ]
         }
       ],
@@ -5634,6 +5638,13 @@
             "decryptMnemonic",
             "encryptMnemonic"
           ]
+        },
+        {
+          "file": "apps/extension/src/shared/crypto/mnemonic-cipher.ts",
+          "symbol": [
+            "encryptMnemonicBytes",
+            "decryptMnemonicBytes"
+          ]
         }
       ],
       "flow": "fixed salted/legacy ciphertext, decrypt/re-encrypt outputs and session restoration",
@@ -5674,6 +5685,18 @@
           "test": {
             "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
             "name": "pins fixed-entropy mnemonic encryption and decrypts salted and legacy ciphertext"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
+            "name": "encrypts 24-word entropy with a Unicode password to the legacy wire bytes"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/extension/src/shared/crypto/mnemonic-contract.vectors.spec.ts",
+            "name": "rejects a modified MAC even when the ciphertext has valid padding"
           }
         }
       ]
@@ -5781,7 +5804,11 @@
           "file": "apps/extension/tests/utils.ts",
           "symbol": [
             "TokenTransferOptions",
-            "makeUnsignedSTXTokenTransfer"
+            "makeUnsignedSTXTokenTransfer",
+            "Codec",
+            "NetworkName",
+            "publicKeyToAddress",
+            "publicKeysToAddress"
           ]
         }
       ],

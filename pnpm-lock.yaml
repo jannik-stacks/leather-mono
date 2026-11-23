@@ -231,21 +231,12 @@ importers:
       '@sentry/browser':
         specifier: 9.30.0
         version: 9.30.0
-      '@stacks/common':
-        specifier: 7.0.2
-        version: 7.0.2
-      '@stacks/encryption':
-        specifier: 7.0.2
-        version: 7.0.2
       '@stacks/network':
         specifier: 7.0.2
         version: 7.0.2(encoding@0.1.13)
       '@stacks/transactions':
         specifier: 7.5.0
         version: 7.5.0(encoding@0.1.13)
-      '@stacks/wallet-sdk':
-        specifier: 7.1.2
-        version: 7.1.2(encoding@0.1.13)
       '@tanstack/query-async-storage-persister':
         specifier: 5.85.5
         version: 5.85.5
@@ -263,7 +254,7 @@ importers:
         version: 2.0.0(encoding@0.1.13)
       alex-sdk:
         specifier: 3.1.0
-        version: 3.1.0(@stacks/common@7.0.2)(@stacks/network@7.0.2(encoding@0.1.13))(@stacks/transactions@7.5.0(encoding@0.1.13))
+        version: 3.1.0(@stacks/common@7.5.0)(@stacks/network@7.0.2(encoding@0.1.13))(@stacks/transactions@7.5.0(encoding@0.1.13))
       are-passive-events-supported:
         specifier: 1.1.1
         version: 1.1.1
@@ -7811,9 +7802,6 @@ packages:
   '@scure/base@2.4.0':
     resolution: {integrity: sha512-thZ1TuJwFwBblOhgsjDKvvGirBxNp+wSvY/DR6tJBJOTDhdAAcHJ8Vbr2eFnqaxeca4+t0i9KBf+uHYGWwZORg==}
 
-  '@scure/bip32@1.1.3':
-    resolution: {integrity: sha512-dSH3+LCWONlSNQuF34xZrG6Xas7tp2jSSqHb/pMfXWM0vKE4JZOtK3uJfoWouUVW5IGlls75HkXmYLldZ8ySgQ==}
-
   '@scure/bip32@1.6.2':
     resolution: {integrity: sha512-t96EPDMbtGgtb7onKKqxRLfE5g05k7uHnHRM2xdE6BP/ZmxaLtPek4J4KfVn/90IQNrU1IOAqMgiDtUdtbe3nw==}
 
@@ -8262,17 +8250,11 @@ packages:
     resolution: {integrity: sha512-65hvhXxC+EUqHJAQsqlBCqXB+zwfxZICSKYJugdg6BCp9I9qniyfz5XyQeC4RMVo0tgEoRdS/b5ZCFo5kLWmxA==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
-  '@stacks/storage@7.2.0':
-    resolution: {integrity: sha512-aBfHhfhIom/xMseJSArH0xWqOAhN7waY255s4PfxmRdCsE6GKeXxIdZvgNYcHXrSiIPH3spk00UDA4+8xiRAQA==}
-
   '@stacks/transactions@6.17.0':
     resolution: {integrity: sha512-FUah2BRgV66ApLcEXGNGhwyFTRXqX5Zco3LpiM3essw8PF0NQlHwwdPgtDko5RfrJl3LhGXXe/30nwsfNnB3+g==}
 
   '@stacks/transactions@7.5.0':
     resolution: {integrity: sha512-PhKe8ZIaVWvTbsTDE/26z9Dm6oYYZ2Cfhpg7xabE97bCE59KwuujBkvLVCJKEdlUn/P187120Go79UbGf9BywA==}
-
-  '@stacks/wallet-sdk@7.1.2':
-    resolution: {integrity: sha512-LQNCu3aj5SsAEn1pTDTo4CDjEXFfgpN/ssF9evWdHOTQlyFK3E8lnEDbnD+Ulyjyak0aGz7ut+G93z2Y448mrQ==}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -27797,12 +27779,6 @@ snapshots:
 
   '@scure/base@2.4.0': {}
 
-  '@scure/bip32@1.1.3':
-    dependencies:
-      '@noble/hashes': 1.1.5
-      '@noble/secp256k1': 1.7.2
-      '@scure/base': 1.1.9
-
   '@scure/bip32@1.6.2':
     dependencies:
       '@noble/curves': 1.8.2
@@ -28555,17 +28531,6 @@ snapshots:
 
   '@stacks/stacks-blockchain-api-types@7.14.1': {}
 
-  '@stacks/storage@7.2.0(encoding@0.1.13)':
-    dependencies:
-      '@stacks/auth': 7.2.0(encoding@0.1.13)
-      '@stacks/common': 7.0.2
-      '@stacks/encryption': 7.4.0
-      '@stacks/network': 7.5.0(encoding@0.1.13)
-      base64-js: 1.5.1
-      jsontokens: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-
   '@stacks/transactions@6.17.0(encoding@0.1.13)':
     dependencies:
       '@noble/hashes': 1.1.5
@@ -28585,23 +28550,6 @@ snapshots:
       '@stacks/network': 7.5.0(encoding@0.1.13)
       c32check: 2.0.0
       lodash.clonedeep: 4.5.0
-    transitivePeerDependencies:
-      - encoding
-
-  '@stacks/wallet-sdk@7.1.2(encoding@0.1.13)':
-    dependencies:
-      '@scure/bip32': 1.1.3
-      '@scure/bip39': 1.1.0
-      '@stacks/auth': 7.2.0(encoding@0.1.13)
-      '@stacks/common': 7.0.2
-      '@stacks/encryption': 7.4.0
-      '@stacks/network': 7.0.2(encoding@0.1.13)
-      '@stacks/profile': 7.2.0(encoding@0.1.13)
-      '@stacks/storage': 7.2.0(encoding@0.1.13)
-      '@stacks/transactions': 7.5.0(encoding@0.1.13)
-      c32check: 2.0.0
-      jsontokens: 4.0.1
-      zone-file: 2.0.0-beta.3
     transitivePeerDependencies:
       - encoding
 
@@ -30772,16 +30720,6 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  alex-sdk@3.1.0(@stacks/common@7.0.2)(@stacks/network@7.0.2(encoding@0.1.13))(@stacks/transactions@7.5.0(encoding@0.1.13)):
-    dependencies:
-      '@stacks/network': 7.0.2(encoding@0.1.13)
-      '@stacks/transactions': 7.5.0(encoding@0.1.13)
-      clarity-codegen: 1.0.0-beta.1(@stacks/common@7.0.2)(@stacks/transactions@7.5.0(encoding@0.1.13))
-    transitivePeerDependencies:
-      - '@stacks/common'
-      - debug
-      - supports-color
-
   alex-sdk@3.1.0(@stacks/common@7.5.0)(@stacks/network@7.0.2(encoding@0.1.13))(@stacks/transactions@7.5.0(encoding@0.1.13)):
     dependencies:
       '@stacks/network': 7.0.2(encoding@0.1.13)
@@ -31881,19 +31819,6 @@ snapshots:
       safe-buffer: 5.2.1
 
   cjs-module-lexer@1.4.3: {}
-
-  clarity-codegen@1.0.0-beta.1(@stacks/common@7.0.2)(@stacks/transactions@7.5.0(encoding@0.1.13)):
-    dependencies:
-      '@stacks/common': 7.0.2
-      '@stacks/stacks-blockchain-api-types': 7.14.1
-      '@stacks/transactions': 7.5.0(encoding@0.1.13)
-      axios: 1.20.0
-      lodash: 4.18.1
-      yargs: 17.7.2
-      yqueue: 1.0.1
-    transitivePeerDependencies:
-      - debug
-      - supports-color
 
   clarity-codegen@1.0.0-beta.1(@stacks/common@7.5.0)(@stacks/transactions@7.5.0(encoding@0.1.13)):
     dependencies:

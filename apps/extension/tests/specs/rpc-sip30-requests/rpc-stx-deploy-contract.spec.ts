@@ -1,5 +1,4 @@
 import { type BrowserContext, type Page } from '@playwright/test';
-import { ClarityVersion } from '@stacks/transactions';
 import { requestLeatherProvider } from '@tests/leather-provider';
 import { mockStacksTokenContract } from '@tests/mocks/mock-stacks-contract';
 import { getConnectedTestAppPermissionsState } from '@tests/page-object-models/onboarding.page';
@@ -60,7 +59,7 @@ test.describe('RPC: stx_deployContract', () => {
       initiateSip30RpcDeployContract(page)({
         name: `mock-contract-name`,
         clarityCode: mockStacksTokenContract,
-        clarityVersion: ClarityVersion.Clarity3,
+        clarityVersion: 3,
       }),
       checkVisibleContent(context)('Cancel'),
     ]);

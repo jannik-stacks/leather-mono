@@ -1,5 +1,3 @@
-import { AddressVersion } from '@stacks/transactions';
-
 import { deriveRootKeychainFromMnemonicSync } from '@leather.io/crypto';
 import {
   type getBnsV2ApiClient,
@@ -63,10 +61,7 @@ function createAccountActivityChecker({
   mnemonic,
 }: AccountActivityCheckerArgs) {
   const rootKeychain = deriveRootKeychainFromMnemonicSync(mnemonic);
-  const deriveStacksAddress = getStacksAddressByIndex(
-    rootKeychain,
-    AddressVersion.MainnetSingleSig
-  );
+  const deriveStacksAddress = getStacksAddressByIndex(rootKeychain, 'mainnet');
   const deriveNativeSegwitAddress = getNativeSegwitMainnetAddressFromRootKeychain(rootKeychain);
   const deriveTaprootAddress = getTaprootMainnetAddressFromRootKeychain(rootKeychain);
 

@@ -1,4 +1,4 @@
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex } from '@noble/hashes/utils';
 import { css } from 'leather-styles/css';
 import { Box } from 'leather-styles/jsx';
 

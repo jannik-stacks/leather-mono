@@ -1,11 +1,5 @@
+import { Cl, type ClarityValue } from '@jannik-stacks/kit';
 import { type Page } from '@playwright/test';
-import {
-  type ClarityValue,
-  bufferCVFromString,
-  noneCV,
-  serializeCV,
-  standardPrincipalCV,
-} from '@stacks/transactions';
 import type { TestRpcResponse } from '@tests/leather-provider';
 import { TEST_ACCOUNT_1_STX_ADDRESS } from '@tests/mocks/constants';
 import { mockFundedStacksAddress } from '@tests/mocks/mock-multisig';
@@ -33,15 +27,15 @@ const stacksPolicy = makeStacksPolicy({
 
 function makeCallContractParams(recipient: string) {
   const args: ClarityValue[] = [
-    bufferCVFromString('id'),
-    bufferCVFromString('test'),
-    standardPrincipalCV(recipient),
-    noneCV(),
+    Cl.buffer(new TextEncoder().encode('id')),
+    Cl.buffer(new TextEncoder().encode('test')),
+    Cl.principal(recipient),
+    Cl.none(),
   ];
   return {
     contract: 'SP000000000000000000002Q6VF78.bns',
     functionName: 'name-transfer',
-    functionArgs: args.map(arg => serializeCV(arg)),
+    functionArgs: args.map(arg => Cl.serialize(arg)),
   };
 }
 

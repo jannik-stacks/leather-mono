@@ -1,5 +1,4 @@
-import { bytesToHex } from '@stacks/common';
-import { hashMessage } from '@stacks/encryption';
+import { hashMessage } from '@jannik-stacks/kit';
 
 import { ChainId } from '@leather.io/models';
 
@@ -26,10 +25,7 @@ export function StacksSignatureRequestMessageContent({
 }: SignatureRequestMessageContentProps) {
   return (
     <>
-      <MessagePreviewBox
-        message={payload.message}
-        hash={bytesToHex(hashMessage(payload.message))}
-      />
+      <MessagePreviewBox message={payload.message} hash={hashMessage(payload.message)} />
       <NoFeesWarningRow chainId={payload.network?.chainId ?? ChainId.Mainnet} />
       <SignMessageActions
         isLoading={isLoading}

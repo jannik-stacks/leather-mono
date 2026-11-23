@@ -1,4 +1,4 @@
-import { bytesToHex } from '@stacks/common';
+import { bytesToHex } from '@noble/hashes/utils';
 import { values } from 'remeda';
 import { z } from 'zod';
 

@@ -1,10 +1,9 @@
 import { sha256 } from '@noble/hashes/sha256';
-import { hexToBytes } from '@noble/hashes/utils';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
 import { type BrowserContext, type Page, type Route } from '@playwright/test';
 import { HDKey } from '@scure/bip32';
 import { mnemonicToSeedSync } from '@scure/bip39';
 import * as btc from '@scure/btc-signer';
-import { bytesToHex } from '@stacks/common';
 import { requestLeatherProvider } from '@tests/leather-provider';
 import { exampleMultisigTransactionId, makeMultisigTransaction } from '@tests/mocks/mock-multisig';
 import { makeBitcoinPolicy, policyStateOverrides } from '@tests/mocks/mock-policies';

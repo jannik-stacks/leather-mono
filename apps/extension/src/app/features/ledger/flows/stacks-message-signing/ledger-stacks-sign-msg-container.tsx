@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import { Cl } from '@jannik-stacks/kit';
-import { signatureVrsToRsv } from '@stacks/common';
 import { LedgerError } from '@zondax/ledger-stacks';
 
 import { delay } from '@leather.io/utils';
@@ -155,7 +154,10 @@ function LedgerSignStacksMsg({ account, request }: LedgerSignMsgProps) {
       ledgerNavigate.settleLedgerAction(request, {
         status: 'signed',
         value: {
-          signature: signatureVrsToRsv(resp.signatureVRS.toString('hex')),
+          signature: Buffer.concat([
+            resp.signatureVRS.subarray(1),
+            resp.signatureVRS.subarray(0, 1),
+          ]).toString('hex'),
           publicKey: account.stxPublicKey,
         },
       });

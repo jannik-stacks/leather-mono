@@ -1,11 +1,13 @@
-import { bytesToHex } from '@stacks/common';
-import { decryptMnemonic as decrypt, encryptMnemonic as encrypt } from '@stacks/encryption';
-import crypto from 'node:crypto';
+import { bytesToHex } from '@noble/hashes/utils';
 import { vi } from 'vitest';
 
 import * as inMemoryStorage from '@app/store/in-memory-key/in-memory-storage';
 import { initalizeWalletSession, restoreWalletSession } from '@app/store/session-restore';
 
+import {
+  decryptMnemonicBytes as decrypt,
+  encryptMnemonicBytes as encrypt,
+} from './mnemonic-cipher';
 import { decryptMnemonic, encryptMnemonic } from './mnemonic-encryption';
 
 const derive = vi.hoisted(() => vi.fn());
@@ -82,19 +84,12 @@ export async function encryptLegacy(secretKey: string, password: string, randomB
 }
 
 function fixedEntropy() {
-  return vi
-    .spyOn(crypto, 'randomBytes')
-    .mockImplementation(
-      (size: number, callback?: (error: Error | null, buffer: Buffer) => void) => {
-        if (size !== random.bytes.length) throw new Error('Unexpected mnemonic salt length');
-        const bytes = Buffer.from(random.bytes);
-        if (callback) {
-          callback(null, bytes);
-          return;
-        }
-        return bytes;
-      }
-    );
+  return vi.spyOn(globalThis.crypto, 'getRandomValues').mockImplementation(array => {
+    if (!(array instanceof Uint8Array) || array.length !== random.bytes.length)
+      throw new Error('Unexpected mnemonic salt length');
+    array.set(random.bytes);
+    return array;
+  });
 }
 
 export async function restoreExistingSession(ciphertext: string, encryptionKey: string) {
