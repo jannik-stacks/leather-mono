@@ -1,0 +1,2677 @@
+[
+  {
+    "id": "granite-borrow-position",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "granite-v1-borrow",
+          "provider": "granite",
+          "product": "granite-v1-borrow",
+          "totalBalance": {
+            "amount": "8000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 4.5,
+          "marketAsset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "marketAssetBorrowBalance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "marketAssetBorrowBalanceQuote": {
+            "amount": "2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "collateral": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              },
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              }
+            },
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              },
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              }
+            }
+          ],
+          "collateralBalanceQuote": {
+            "amount": "10000000",
+            "symbol": "USD",
+            "decimals": 2
+          }
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-borrow-ok-position",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "070c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "070c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "granite-v1-borrow",
+          "provider": "granite",
+          "product": "granite-v1-borrow",
+          "totalBalance": {
+            "amount": "8000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 4.5,
+          "marketAsset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "marketAssetBorrowBalance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "marketAssetBorrowBalanceQuote": {
+            "amount": "2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "collateral": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              },
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              }
+            },
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              },
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              }
+            }
+          ],
+          "collateralBalanceQuote": {
+            "amount": "10000000",
+            "symbol": "USD",
+            "decimals": 2
+          }
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-position-none",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "09",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-position-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "080100000000000000000000000000000063",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-position-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "03",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-user-position Clarity Value type: bool",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-position-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c00000000",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "error": "Cannot read properties of undefined (reading 'type')",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-position-collaterals",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c7301000000000000000000000000000000010b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-user-position response: expected List for collaterals",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-collateral-none",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "09"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "granite-v1-borrow",
+          "provider": "granite",
+          "product": "granite-v1-borrow",
+          "totalBalance": {
+            "amount": "-2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 4.5,
+          "marketAsset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "marketAssetBorrowBalance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "marketAssetBorrowBalanceQuote": {
+            "amount": "2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "collateral": [],
+          "collateralBalanceQuote": {
+            "amount": "0",
+            "symbol": "USD",
+            "decimals": 2
+          }
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-collateral-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "080100000000000000000000000000000063"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "granite-v1-borrow",
+          "provider": "granite",
+          "product": "granite-v1-borrow",
+          "totalBalance": {
+            "amount": "-2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 4.5,
+          "marketAsset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "marketAssetBorrowBalance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "marketAssetBorrowBalanceQuote": {
+            "amount": "2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "collateral": [],
+          "collateralBalanceQuote": {
+            "amount": "0",
+            "symbol": "USD",
+            "decimals": 2
+          }
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-collateral-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "0100000000000000000000000000000001"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-user-collateral Clarity Value type: uint",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-collateral-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000f42400e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "070c0000000106616d6f756e740000000000000000000000000000000001"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-user-collateral response: expected UInt for amount",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-collateral",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-borrow-zero",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000000000e626f72726f7765642d626c6f636b010000000000000000000000000000007b0b636f6c6c61746572616c730b00000003061600000000000000000000000000000000000000000a636f6c6c61746572616c0100000000000000000000000000000009051600000000000000000000000000000000000000000b646562742d7368617265730100000000000000000020000000000001",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-no-account",
+    "input": {
+      "responses": {},
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "result": [],
+      "calls": []
+    }
+  },
+  {
+    "id": "granite-earn-large",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-balance": "070100000000000000000020000000000001"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteEarn"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "granite-v1-earn",
+          "provider": "granite",
+          "product": "granite-v1-earn",
+          "totalBalance": {
+            "amount": "18014398509481986",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 3.25,
+          "marketAsset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "marketAssetSupplyBalance": {
+            "amount": "9007199254740993",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "marketAssetSupplyBalanceQuote": {
+            "amount": "18014398509481986",
+            "symbol": "USD",
+            "decimals": 2
+          }
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-earn-zero",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-balance": "070100000000000000000000000000000000"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteEarn"
+    },
+    "expected": {
+      "result": [],
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-earn-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-balance": "080100000000000000000000000000000063"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteEarn"
+    },
+    "expected": {
+      "error": "Granite get-balance error: u99",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-earn-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-balance": "0100000000000000000000000000000001"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteEarn"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-balance Clarity Value type: uint",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-earn-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-balance": "0703"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteEarn"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-balance response: expected UInt in ok",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-earn-no-account",
+    "input": {
+      "responses": {},
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteEarn"
+    },
+    "expected": {
+      "result": [],
+      "calls": []
+    }
+  },
+  {
+    "id": "zest-position",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "zest-borrow-market",
+          "provider": "zest",
+          "product": "zest-borrow-market",
+          "totalBalance": {
+            "amount": "2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 0,
+          "supplyBalance": {
+            "amount": "5000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "borrowBalance": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "ltvPercentage": 60,
+          "borrowAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "apy": 4.5,
+              "balance": {
+                "amount": "1500000",
+                "symbol": "TEST",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "3000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ],
+          "supplyAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "apy": 3.25,
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-bare-assets",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "zest-borrow-market",
+          "provider": "zest",
+          "product": "zest-borrow-market",
+          "totalBalance": {
+            "amount": "2000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 0,
+          "supplyBalance": {
+            "amount": "5000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "borrowBalance": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "ltvPercentage": 60,
+          "borrowAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "apy": 4.5,
+              "balance": {
+                "amount": "1500000",
+                "symbol": "TEST",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "3000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ],
+          "supplyAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "apy": 3.25,
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-assets-none",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "09",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [],
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-assets-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0100000000000000000000000000000001",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Unexpected Zest get-user-assets-read Clarity Value type",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-assets-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0c000000020f6173736574732d626f72726f77656401000000000000000000000000000000010f6173736574732d737570706c6965640b00000000",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Unexpected Zest get-user-assets-read response: expected List values",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-borrow-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "080100000000000000000000000000000063",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "u99",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-borrow-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "03",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Unexpected Zest get-user-borrow-balance Clarity Value type: bool",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-borrow-tuple",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070100000000000000000000000000000001",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Unexpected Zest get-user-borrow-balance response: expected Tuple",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-borrow-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070c00000000",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Cannot read properties of undefined (reading 'type')",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-supply-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "080100000000000000000000000000000063"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "u99",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-supply-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0100000000000000000000000000000001"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Unexpected Zest get-z-token-balance Clarity Value type: uint",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-supply-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0a0c000000020f6173736574732d626f72726f7765640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c01000000000000000000000000000000070f6173736574732d737570706c6965640b00000002061600000000000000000000000000000000000000000a636f6c6c61746572616c04",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0703"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "error": "Unexpected get-balance ok payload",
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-no-account",
+    "input": {
+      "responses": {},
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [],
+      "calls": []
+    }
+  },
+  {
+    "id": "dao-reward-positive",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-pending-rewards": "0701000000000000000000000000000f4240"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "reward"
+    },
+    "expected": {
+      "result": {
+        "asset": {
+          "chain": "stacks",
+          "category": "fungible",
+          "protocol": "sip10",
+          "name": "Test Token",
+          "symbol": "TEST",
+          "decimals": 6,
+          "hasMemo": true,
+          "canTransfer": true,
+          "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+          "contractId": "SP000000000000000000002Q6VF78.test-token",
+          "imageCanonicalUri": ""
+        },
+        "balance": {
+          "amount": "1000000",
+          "symbol": "TEST",
+          "decimals": 6
+        },
+        "balanceQuote": {
+          "amount": "2000000",
+          "symbol": "USD",
+          "decimals": 2
+        }
+      },
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "ststxbtc-tracking-v2",
+          "functionName": "get-pending-rewards",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-reward-bare",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-pending-rewards": "01000000000000000000000000000f4240"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "reward"
+    },
+    "expected": {
+      "result": {
+        "asset": {
+          "chain": "stacks",
+          "category": "fungible",
+          "protocol": "sip10",
+          "name": "Test Token",
+          "symbol": "TEST",
+          "decimals": 6,
+          "hasMemo": true,
+          "canTransfer": true,
+          "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+          "contractId": "SP000000000000000000002Q6VF78.test-token",
+          "imageCanonicalUri": ""
+        },
+        "balance": {
+          "amount": "1000000",
+          "symbol": "TEST",
+          "decimals": 6
+        },
+        "balanceQuote": {
+          "amount": "2000000",
+          "symbol": "USD",
+          "decimals": 2
+        }
+      },
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "ststxbtc-tracking-v2",
+          "functionName": "get-pending-rewards",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-reward-large",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-pending-rewards": "070100000000000000000020000000000001"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "reward"
+    },
+    "expected": {
+      "result": {
+        "asset": {
+          "chain": "stacks",
+          "category": "fungible",
+          "protocol": "sip10",
+          "name": "Test Token",
+          "symbol": "TEST",
+          "decimals": 6,
+          "hasMemo": true,
+          "canTransfer": true,
+          "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+          "contractId": "SP000000000000000000002Q6VF78.test-token",
+          "imageCanonicalUri": ""
+        },
+        "balance": {
+          "amount": "9007199254740992",
+          "symbol": "TEST",
+          "decimals": 6
+        },
+        "balanceQuote": {
+          "amount": "18014398509481984",
+          "symbol": "USD",
+          "decimals": 2
+        }
+      },
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "ststxbtc-tracking-v2",
+          "functionName": "get-pending-rewards",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-reward-zero",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-pending-rewards": "070100000000000000000000000000000000"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "reward"
+    },
+    "expected": {
+      "result": {
+        "undefined": true
+      },
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "ststxbtc-tracking-v2",
+          "functionName": "get-pending-rewards",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-reward-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-pending-rewards": "080100000000000000000000000000000063"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "reward"
+    },
+    "expected": {
+      "error": "Invalid Clarity response format",
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "ststxbtc-tracking-v2",
+          "functionName": "get-pending-rewards",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-reward-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-pending-rewards": "0703"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "reward"
+    },
+    "expected": {
+      "error": "Invalid Clarity response format",
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "ststxbtc-tracking-v2",
+          "functionName": "get-pending-rewards",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "05160000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-ok",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "070c000000030c73747374782d616d6f756e7401000000000000000000000000000f42400a7374782d616d6f756e74010000000000000000000000000016e36012756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003e8"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "result": [
+        {
+          "asset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "balance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "balanceStx": {
+            "amount": "1500000",
+            "symbol": "STX",
+            "decimals": 6
+          },
+          "balanceQuote": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "unlockBurnHeight": 1000,
+          "burnBlocksUntilUnlock": 10
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-some",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "0a0c000000030c73747374782d616d6f756e7401000000000000000000000000000f42400a7374782d616d6f756e74010000000000000000000000000016e36012756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003e8"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "result": [
+        {
+          "asset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "balance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "balanceStx": {
+            "amount": "1500000",
+            "symbol": "STX",
+            "decimals": 6
+          },
+          "balanceQuote": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "unlockBurnHeight": 1000,
+          "burnBlocksUntilUnlock": 10
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-bare",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "0c000000030c73747374782d616d6f756e7401000000000000000000000000000f42400a7374782d616d6f756e74010000000000000000000000000016e36012756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003e8"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "result": [
+        {
+          "asset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "balance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "balanceStx": {
+            "amount": "1500000",
+            "symbol": "STX",
+            "decimals": 6
+          },
+          "balanceQuote": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "unlockBurnHeight": 1000,
+          "burnBlocksUntilUnlock": 10
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-err",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "080100000000000000000000000000000063"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "error": "u99",
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-outer",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "09"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "error": "Unexpected get-withdrawals-by-nft Clarity Value type: (optional none)",
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-fields",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "0c000000020a7374782d616d6f756e740412756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003e8"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "error": "Unexpected get-withdrawals-by-nft response: expected UInt for stx-amount and unlock-burn-height",
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-stx-fallback-and-past-height",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "0c000000020a7374782d616d6f756e74010000000000000000002000000000000112756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003d4"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "result": [
+        {
+          "asset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "balance": {
+            "amount": "9007199254740992",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "balanceStx": {
+            "amount": "9007199254740992",
+            "symbol": "STX",
+            "decimals": 6
+          },
+          "balanceQuote": {
+            "amount": "18014398509481984",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "unlockBurnHeight": 980,
+          "burnBlocksUntilUnlock": -10
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-ststxbtc",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-ststxbtc-withdrawals-by-nft": "0a0c000000030c73747374782d616d6f756e7401000000000000000000000000000f42400a7374782d616d6f756e74010000000000000000000000000016e36012756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003e8"
+      },
+      "lst": "ststxbtc",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststxbtc-withdraw-nft::ststxbtc-withdraw",
+          "hex": "0100000000000000000000000000000002"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "result": [
+        {
+          "asset": {
+            "chain": "stacks",
+            "category": "fungible",
+            "protocol": "sip10",
+            "name": "Test Token",
+            "symbol": "TEST",
+            "decimals": 6,
+            "hasMemo": true,
+            "canTransfer": true,
+            "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+            "contractId": "SP000000000000000000002Q6VF78.test-token",
+            "imageCanonicalUri": ""
+          },
+          "balance": {
+            "amount": "1000000",
+            "symbol": "TEST",
+            "decimals": 6
+          },
+          "balanceStx": {
+            "amount": "1500000",
+            "symbol": "STX",
+            "decimals": 6
+          },
+          "balanceQuote": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "unlockBurnHeight": 1000,
+          "burnBlocksUntilUnlock": 10
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v2",
+          "functionName": "get-ststxbtc-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000000000000000002"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-no-chain-tip",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-withdrawals-by-nft": "0c000000030c73747374782d616d6f756e7401000000000000000000000000000f42400a7374782d616d6f756e74010000000000000000000000000016e36012756e6c6f636b2d6275726e2d68656967687401000000000000000000000000000003e8"
+      },
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "0100000000000000000020000000000001"
+        },
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "error": "Hiro API status is missing the chain tip",
+      "calls": [
+        {
+          "contractAddress": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG",
+          "contractName": "data-core-v1",
+          "functionName": "get-withdrawals-by-nft",
+          "functionArgs": ["0100000000000000000020000000000001"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "dao-withdrawal-unrelated-nft",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {},
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "ignored.asset::nft",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "result": [],
+      "calls": []
+    }
+  },
+  {
+    "id": "dao-withdrawal-malformed-nft",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {},
+      "lst": "ststx",
+      "nfts": [
+        {
+          "assetIdentifier": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.ststx-withdraw-nft-v2::ststx-withdraw",
+          "hex": "ff"
+        }
+      ],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "withdrawal"
+    },
+    "expected": {
+      "error": "Cannot recognize Clarity Type: 255",
+      "calls": []
+    }
+  },
+  {
+    "id": "zest-no-supply",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0c000000020f6173736574732d626f72726f7765640b00000001061600000000000000000000000000000000000000000a636f6c6c61746572616c0f6173736574732d737570706c6965640b00000000",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "zest-borrow-market",
+          "provider": "zest",
+          "product": "zest-borrow-market",
+          "totalBalance": {
+            "amount": "-3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 0,
+          "supplyBalance": {
+            "amount": "0",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "borrowBalance": {
+            "amount": "3000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "ltvPercentage": {
+            "nonFiniteNumber": "Infinity"
+          },
+          "borrowAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "apy": 4.5,
+              "balance": {
+                "amount": "1500000",
+                "symbol": "TEST",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "3000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ],
+          "supplyAssets": []
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-0-reserve-v2-0",
+          "functionName": "get-user-borrow-balance",
+          "functionArgs": [
+            "05160000000000000000000000000000000000000000",
+            "061600000000000000000000000000000000000000000a636f6c6c61746572616c"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-no-borrow",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0c000000020f6173736574732d626f72726f7765640b000000000f6173736574732d737570706c6965640b00000001061600000000000000000000000000000000000000000a636f6c6c61746572616c",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "zest-borrow-market",
+          "provider": "zest",
+          "product": "zest-borrow-market",
+          "totalBalance": {
+            "amount": "5000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 0,
+          "supplyBalance": {
+            "amount": "5000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "borrowBalance": {
+            "amount": "0",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "ltvPercentage": 0,
+          "borrowAssets": [],
+          "supplyAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "category": "fungible",
+                "protocol": "sip10",
+                "name": "Test Token",
+                "symbol": "TEST",
+                "decimals": 6,
+                "hasMemo": true,
+                "canTransfer": true,
+                "assetId": "SP000000000000000000002Q6VF78.test-token::test-token",
+                "contractId": "SP000000000000000000002Q6VF78.test-token",
+                "imageCanonicalUri": ""
+              },
+              "apy": 3.25,
+              "balance": {
+                "amount": "2500000",
+                "symbol": "TEST",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "zest-wstx-supply",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-assets-read": "0c000000020f6173736574732d626f72726f7765640b000000000f6173736574732d737570706c6965640b00000001061600000000000000000000000000000000000000000477737478",
+        "get-user-borrow-balance": "070c000000031062616c616e63652d696e637265617365010000000000000000000000000007a12012636f6d706f756e6465642d62616c616e6365010000000000000000000000000016e360097072696e636970616c01000000000000000000000000000f4240",
+        "get-balance": "0701000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "zest"
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "zest-borrow-market",
+          "provider": "zest",
+          "product": "zest-borrow-market",
+          "totalBalance": {
+            "amount": "5000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "apy": 0,
+          "supplyBalance": {
+            "amount": "5000000",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "borrowBalance": {
+            "amount": "0",
+            "symbol": "USD",
+            "decimals": 2
+          },
+          "ltvPercentage": 0,
+          "borrowAssets": [],
+          "supplyAssets": [
+            {
+              "asset": {
+                "chain": "stacks",
+                "protocol": "nativeStx",
+                "symbol": "STX",
+                "category": "fungible",
+                "name": "Stacks",
+                "decimals": 6,
+                "hasMemo": false
+              },
+              "apy": 3.25,
+              "balance": {
+                "amount": "2500000",
+                "symbol": "STX",
+                "decimals": 6
+              },
+              "balanceQuote": {
+                "amount": "5000000",
+                "symbol": "USD",
+                "decimals": 2
+              }
+            }
+          ]
+        }
+      ],
+      "calls": [
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "pool-reserve-data",
+          "functionName": "get-user-assets-read",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        },
+        {
+          "contractAddress": "SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N",
+          "contractName": "z-token",
+          "functionName": "get-balance",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "granite-position-non-uint",
+    "input": {
+      "address": "SP000000000000000000002Q6VF78",
+      "responses": {
+        "get-user-position": "0a0c000000040f626f72726f7765642d616d6f756e7401000000000000000000000000000000010e626f72726f7765642d626c6f636b01000000000000000000000000000000010b636f6c6c61746572616c730b000000000b646562742d73686172657304",
+        "get-user-collateral": "0a0c0000000106616d6f756e7401000000000000000000000000002625a0"
+      },
+      "lst": "ststx",
+      "nfts": [],
+      "burnHeight": 990,
+      "priceMicroUsd": "2000000",
+      "borrowApy": 4.5,
+      "earnApy": 3.25,
+      "zTokenPrincipal": "SP000000000000000000002Q6VF78.z-token",
+      "kind": "graniteBorrow"
+    },
+    "expected": {
+      "error": "Unexpected Granite get-user-position response: expected UInt fields",
+      "calls": [
+        {
+          "contractAddress": "SP35E2BBMDT2Y1HB0NTK139YBGYV3PAPK3WA8BRNA",
+          "contractName": "state-v1",
+          "functionName": "get-user-position",
+          "functionArgs": ["05160000000000000000000000000000000000000000"]
+        }
+      ]
+    }
+  }
+]

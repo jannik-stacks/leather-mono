@@ -1,0 +1,90 @@
+{
+  "leather0": {
+    "path": "m/44'/5757'/0'/0/0",
+    "privateKey": "f879c6966d5726984ee69fb0ebdabe1e2689ee97a1882cd16ba3c450784445c7",
+    "publicKey": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec",
+    "leatherPrivateKey": "f879c6966d5726984ee69fb0ebdabe1e2689ee97a1882cd16ba3c450784445c701",
+    "leatherPublicKey": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec",
+    "descriptor": "[3442193e/44'/5757'/0'/0/0]029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec",
+    "mainnet": "SP3AY1C3P9AJGDA6DSWCTFRGD1APH62BA4WJ3VBHW",
+    "testnet": "ST3AY1C3P9AJGDA6DSWCTFRGD1APH62BA4XY9PRM6",
+    "compressed": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec"
+  },
+  "leather3": {
+    "path": "m/44'/5757'/0'/0/3",
+    "privateKey": "f1de3de5f5df09b313e72e734c2b4a8ecb322d9c2f6678fff49e469ee63079c2",
+    "publicKey": "0265cdf12b6776299464ed3be61190d5984662ecb962ca3d90a9f66bb36d173d8d",
+    "leatherPrivateKey": "f1de3de5f5df09b313e72e734c2b4a8ecb322d9c2f6678fff49e469ee63079c201",
+    "leatherPublicKey": "0265cdf12b6776299464ed3be61190d5984662ecb962ca3d90a9f66bb36d173d8d",
+    "descriptor": "[3442193e/44'/5757'/0'/0/3]0265cdf12b6776299464ed3be61190d5984662ecb962ca3d90a9f66bb36d173d8d",
+    "mainnet": "SP1TFE1JA5J8V8Y7AJEGWSPCAEQ346FT264GSB3TK",
+    "testnet": "ST1TFE1JA5J8V8Y7AJEGWSPCAEQ346FT267J7SHQW",
+    "compressed": "0265cdf12b6776299464ed3be61190d5984662ecb962ca3d90a9f66bb36d173d8d"
+  },
+  "ledger0": {
+    "path": "m/44'/5757'/0'/0/0",
+    "privateKey": "f879c6966d5726984ee69fb0ebdabe1e2689ee97a1882cd16ba3c450784445c7",
+    "publicKey": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec",
+    "leatherPrivateKey": "f879c6966d5726984ee69fb0ebdabe1e2689ee97a1882cd16ba3c450784445c701",
+    "leatherPublicKey": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec",
+    "descriptor": "[3442193e/44'/5757'/0'/0/0]029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec",
+    "mainnet": "SP3AY1C3P9AJGDA6DSWCTFRGD1APH62BA4WJ3VBHW",
+    "testnet": "ST3AY1C3P9AJGDA6DSWCTFRGD1APH62BA4XY9PRM6",
+    "compressed": "029dbc41eec542d022f8650466e8de5b4fd451c5a94f3847e372f080c4700b92ec"
+  },
+  "ledger3": {
+    "path": "m/44'/5757'/3'/0/0",
+    "privateKey": "8928f7bd3548e291ade5985abed2358b2b36dcdd276b5446b3ade4dbdaaeef9b",
+    "publicKey": "02b0ce8324f0c1f4c15d8f38e0f43eb7ecdcfd989be95cbec334face79dc095425",
+    "leatherPrivateKey": "f1de3de5f5df09b313e72e734c2b4a8ecb322d9c2f6678fff49e469ee63079c201",
+    "leatherPublicKey": "0265cdf12b6776299464ed3be61190d5984662ecb962ca3d90a9f66bb36d173d8d",
+    "descriptor": "[3442193e/44'/5757'/0'/0/3]0265cdf12b6776299464ed3be61190d5984662ecb962ca3d90a9f66bb36d173d8d",
+    "mainnet": "SP2XH5SYH606YPV735HDJP5WGQMVJ2D4TXN4ZAFSW",
+    "testnet": "ST2XH5SYH606YPV735HDJP5WGQMVJ2D4TXPAV1HC5",
+    "compressed": "02b0ce8324f0c1f4c15d8f38e0f43eb7ecdcfd989be95cbec334face79dc095425"
+  },
+  "addresses": [
+    {
+      "one": {
+        "address": "SM3KNYF4E1B0ZF815FAJJ4KXWMWDE81QHQSYE95T8",
+        "network": "mainnet"
+      },
+      "two": {
+        "address": "SM3CFXKD81GREH6MYFW4P9VKSSR2N525W3KDRH3P1",
+        "network": "mainnet"
+      },
+      "reversed": {
+        "address": "SM3JWFD0D3WA58B62RYGNG6EY12537J7QQ8DDZT2K",
+        "network": "mainnet"
+      }
+    },
+    {
+      "one": {
+        "address": "SN3KNYF4E1B0ZF815FAJJ4KXWMWDE81QHQT1BPPFA",
+        "network": "testnet"
+      },
+      "two": {
+        "address": "SN3CFXKD81GREH6MYFW4P9VKSSR2N525W3K30KYER",
+        "network": "testnet"
+      },
+      "reversed": {
+        "address": "SN3JWFD0D3WA58B62RYGNG6EY12537J7QQBBMKNSZ",
+        "network": "testnet"
+      }
+    },
+    {
+      "one": {
+        "address": "SN3KNYF4E1B0ZF815FAJJ4KXWMWDE81QHQT1BPPFA",
+        "network": "testnet"
+      },
+      "two": {
+        "address": "SN3CFXKD81GREH6MYFW4P9VKSSR2N525W3K30KYER",
+        "network": "testnet"
+      },
+      "reversed": {
+        "address": "SN3JWFD0D3WA58B62RYGNG6EY12537J7QQBBMKNSZ",
+        "network": "testnet"
+      }
+    }
+  ]
+}

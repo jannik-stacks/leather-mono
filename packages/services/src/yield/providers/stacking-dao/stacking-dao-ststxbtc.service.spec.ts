@@ -1,4 +1,6 @@
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import z from 'zod';
 
 import type { AccountAddresses } from '@leather.io/models';
 
@@ -10,6 +12,8 @@ import { createMock } from '../../../test/create-mock';
 import type { StackingDaoLstService } from './stacking-dao-lst.service';
 import { StackingDaoStStxBtcService } from './stacking-dao-ststxbtc.service';
 import { ststxbtcWithdrawNftIdentifier } from './stacking-dao.constants';
+import { yieldConsumerVector, yieldConsumerVectorSchema } from './yield-consumers.vectors-driver';
+import * as yieldContractVectorDriver from './yield-contract.vectors-driver';
 
 describe(StackingDaoStStxBtcService.name, () => {
   const account: AccountAddresses = {
@@ -65,4 +69,52 @@ describe(StackingDaoStStxBtcService.name, () => {
     expect(positions).toEqual([]);
     expect(getPrincipalNftBalances).not.toHaveBeenCalled();
   });
+});
+
+describe('Stacks migration vectors: yield-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/yield-contract.json', 'utf8')
+  );
+
+  test('pins yield read-only arguments and Clarity response validation', async () => {
+    const results = await Promise.all(
+      [
+        '070100000000000000000000000000000000',
+        '0100000000000000000000000000000000',
+        '080100000000000000000000000000000001',
+        '0703',
+      ].map(response => yieldContractVectorDriver.reward('ST000000000000000000002AMW42H', response))
+    );
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('Stacks migration vectors: yield consumers', () => {
+  const vectors = z
+    .array(yieldConsumerVectorSchema)
+    .parse(
+      JSON.parse(readStacksVectorFileSync(__dirname + '/vectors/yield-consumers.json', 'utf8'))
+    );
+  test.each(['graniteBorrow', 'graniteEarn', 'zest', 'reward', 'withdrawal'])(
+    'pins %s production requests, amounts and errors',
+    async kind => {
+      const cases = vectors.filter(vector => vector.input.kind === kind);
+      const results = await Promise.all(cases.map(vector => yieldConsumerVector(vector.input)));
+      const actual: unknown = JSON.parse(
+        JSON.stringify(results, (_, value: unknown) => {
+          if (typeof value === 'bigint') return value.toString();
+          if (typeof value === 'number' && !Number.isFinite(value)) {
+            return { nonFiniteNumber: String(value) };
+          }
+          return value;
+        })
+      );
+      expect(actual).toEqual(cases.map(vector => vector.expected));
+    }
+  );
 });

@@ -1,6 +1,9 @@
 import { responseOkCV, serializeCV, uintCV } from '@stacks/transactions';
 
 import { createGetPox5DelegatedAmountQueryOptions } from './create-get-pox5-delegated-amount-query-options';
+import { readPox5Query } from './pox5-read-only.vectors-driver';
+import delegatedAmountVector from './vectors/delegated-amount.json';
+import readOnlyVectors from './vectors/read-only.json';
 
 const signerManagerContractId = 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager';
 const pox5ContractId = 'SP000000000000000000002Q6VF78.pox-5';
@@ -96,5 +99,52 @@ describe(createGetPox5DelegatedAmountQueryOptions.name, () => {
       client: makeClient({ okay: true, result: `0x${serializeCV(responseOkCV(uintCV(1)))}` }),
     });
     await expect(nonUint.queryFn(makeContext())).resolves.toBeNull();
+  });
+});
+
+describe('Stacks migration vectors: delegated amount', () => {
+  test('pins delegated-amount request bytes, cache key, decoded amounts and failures', async () => {
+    const results = await Promise.all(
+      delegatedAmountVector.responses.map(async response => {
+        const calls: unknown[] = [];
+        const context = makeContext();
+        const options = createGetPox5DelegatedAmountQueryOptions({
+          ...delegatedAmountVector.input,
+          client: {
+            callReadOnlyFunction({ signal, ...request }) {
+              expect(signal).toBe(context.signal);
+              calls.push(request);
+              return Promise.resolve(response);
+            },
+          },
+        });
+        try {
+          const amount = await options.queryFn(context);
+          return {
+            queryKey: options.queryKey,
+            enabled: options.enabled,
+            calls,
+            amount: amount?.toString() ?? null,
+          };
+        } catch (error) {
+          if (!(error instanceof Error)) throw error;
+          return { calls, error: error.message };
+        }
+      })
+    );
+    expect(results).toEqual(delegatedAmountVector.expected);
+  });
+});
+
+describe('Stacks migration vectors: PoX read-only queries', () => {
+  test('pins each PoX query through its production request and response mapping', async () => {
+    const outputs = [];
+    for (const vector of readOnlyVectors) outputs.push(await readPox5Query(vector.input));
+    const actual: unknown = JSON.parse(
+      JSON.stringify(outputs, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(readOnlyVectors.map(vector => vector.expected));
   });
 });

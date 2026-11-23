@@ -1,9 +1,14 @@
 import type * as ReactModule from 'react';
 
-import { makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
+import { STACKS_TESTNET } from '@stacks/network';
+import { deserializeTransaction, makeUnsignedSTXTokenTransfer } from '@stacks/transactions';
+import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import z from 'zod';
 
 import { SwapSigningCancelledError } from '@leather.io/state/swap';
+
+import { hiroFetchWrapper } from '@app/query/stacks/stacks-client';
 
 import { useSwapDependencies } from './use-swap-dependencies';
 
@@ -142,5 +147,51 @@ describe(useSwapDependencies.name, () => {
     expect(
       dependencies.isSigningCancelledError?.(new Error('User cancelled the signing operation'))
     ).toBe(true);
+  });
+});
+
+describe('Stacks migration vectors: swap broadcast', () => {
+  test('pins swap broadcast request bytes, success, rejection and missing txid', async () => {
+    const vector = z
+      .object({
+        hex: z.string(),
+        apiUrl: z.string(),
+        cases: z.array(
+          z.object({
+            id: z.string(),
+            status: z.number(),
+            body: z.string(),
+            transportError: z.string().optional(),
+            expected: z.unknown(),
+          })
+        ),
+      })
+      .parse(JSON.parse(readFileSync(__dirname + '/vectors/swap-broadcast.json', 'utf8')));
+    const { broadcast } = useSwapDependencies().stacks;
+    const outputs = [];
+    for (const response of vector.cases) {
+      const calls: unknown[] = [];
+      vi.mocked(hiroFetchWrapper).mockImplementation((url, init) => {
+        calls.push({
+          url: url instanceof Request ? url.url : url.toString(),
+          method: init?.method,
+          contentType: new Headers(init?.headers).get('Content-Type'),
+          body: init?.body,
+        });
+        if (response.transportError) return Promise.reject(new Error(response.transportError));
+        return Promise.resolve(new Response(response.body, { status: response.status }));
+      });
+      try {
+        const result = await broadcast({
+          tx: deserializeTransaction(vector.hex),
+          stacksNetwork: { ...STACKS_TESTNET, client: { baseUrl: vector.apiUrl } },
+        });
+        outputs.push({ result, calls });
+      } catch (error) {
+        if (!(error instanceof Error)) throw error;
+        outputs.push({ error: error.message, calls });
+      }
+    }
+    expect(outputs).toEqual(vector.cases.map(response => response.expected));
   });
 });

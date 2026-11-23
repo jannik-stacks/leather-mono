@@ -1,0 +1,31 @@
+[
+  {
+    "route": [],
+    "fee": "300",
+    "output": "12345678901234567890",
+    "transaction": {
+      "contractAddress": "ST000000000000000000002AMW42H",
+      "contractName": "swap",
+      "functionName": "swap",
+      "functionArgs": [],
+      "postConditions": []
+    },
+    "calls": {
+      "route": [["token-wstx", "token-alex"]],
+      "fee": [["token-wstx", "token-alex"]],
+      "amount": [["token-wstx", "9007199254740993", "token-alex", []]],
+      "swap": [
+        [
+          "ST000000000000000000002AMW42H",
+          "token-wstx",
+          "token-alex",
+          "9007199254740993",
+          "1234567890123456789"
+        ]
+      ]
+    }
+  },
+  {
+    "error": "Unknown ALEX currency: unknown"
+  }
+]

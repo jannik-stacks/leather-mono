@@ -1,0 +1,746 @@
+[
+  {
+    "id": "earned-0",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "earned",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x0c00000002066561726e656401ffffffffffffffffffffffffffffffff04666565730100000000000000000000000000000271"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-earned-rewards",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "value": {
+        "cycle": 113,
+        "earned": "340282366920938463463374607431768211455",
+        "fees": "625"
+      },
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-earned-staker-rewards",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x051683ed66860315e334010bbfb76eb3eef887efee0a",
+              "0x0100000000000000000000000000000071",
+              "0x09"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "earned-1",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "earned",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x070c00000002066561726e656401000000000000000000000000000030d404666565730100000000000000000000000000000271"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-earned-rewards",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "value": {
+        "cycle": 113,
+        "earned": "12500",
+        "fees": "625"
+      },
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-earned-staker-rewards",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x051683ed66860315e334010bbfb76eb3eef887efee0a",
+              "0x0100000000000000000000000000000071",
+              "0x09"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "earned-2",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "earned",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x03"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-earned-rewards",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "value": null,
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-earned-staker-rewards",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x051683ed66860315e334010bbfb76eb3eef887efee0a",
+              "0x0100000000000000000000000000000071",
+              "0x09"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "payout-3",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "payout",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x09"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-payout-preference",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        "mainnet"
+      ],
+      "enabled": true,
+      "value": {
+        "preference": null,
+        "supportsMinClaim": true
+      },
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-payout-config",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "payout-4",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "payout",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x03"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-payout-preference",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        "mainnet"
+      ],
+      "enabled": true,
+      "value": {
+        "preference": null,
+        "supportsMinClaim": true
+      },
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-payout-config",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "validation-5",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "validation",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x0a0100000000000000000000000000000001"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-signer-manager-validation",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager"
+      ],
+      "enabled": true,
+      "value": {
+        "status": "valid"
+      },
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-signer-info",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "validation-6",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "validation",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x09"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-signer-manager-validation",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager"
+      ],
+      "enabled": true,
+      "value": {
+        "status": "invalid",
+        "reason": "not-registered"
+      },
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-signer-info",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "validation-7",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "validation",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0xff"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-signer-manager-validation",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager"
+      ],
+      "enabled": true,
+      "error": "Cannot recognize Clarity Type: 255",
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-signer-info",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "staker-8",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "staker",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x09"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-staker-info",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5"
+      ],
+      "enabled": true,
+      "value": null,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-staker-info",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "staker-9",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "staker",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x03"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-staker-info",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5"
+      ],
+      "enabled": true,
+      "value": null,
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-staker-info",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "staker-10",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "staker",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x0a0c000000040b616d6f756e742d7573747801ffffffffffffffffffffffffffffffff1266697273742d7265776172642d6379636c6501000000000000000000000000000000710a6e756d2d6379636c6573010000000000000000000000000000000c067369676e6572061683ed66860315e334010bbfb76eb3eef887efee0a15637573746f6d2d7369676e65722d6d616e61676572"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-staker-info",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5"
+      ],
+      "enabled": true,
+      "value": {
+        "amountMicroStx": "340282366920938463463374607431768211455",
+        "firstRewardCycle": 113,
+        "numCycles": 12,
+        "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager"
+      },
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-staker-info",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "poolFee-11",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "poolFee",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x0c000000030b6163746976652d62697073010000000000000000000000000000012c1061637469766174696f6e2d6379636c65010000000000000000000000000000008e0c70656e64696e672d6269707301000000000000000000000000000001c2"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-pool-fee-bips",
+        "https://stacks.example",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager"
+      ],
+      "enabled": true,
+      "value": {
+        "activeFeeBips": 300,
+        "pendingFeeBips": 450,
+        "pendingActivationCycle": 142
+      },
+      "calls": [
+        {
+          "url": "https://stacks.example/v2/contracts/call-read/SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP/custom-signer-manager/get-pending-fees",
+          "body": "{\"sender\":\"SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP\",\"arguments\":[]}"
+        }
+      ]
+    }
+  },
+  {
+    "id": "earned-native",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.native-pool-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "earned",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x010000000000000000000000000000017b"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-earned-rewards",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5",
+        "SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.native-pool-signer-manager",
+        113
+      ],
+      "enabled": true,
+      "value": {
+        "cycle": 113,
+        "earned": "379",
+        "fees": "0"
+      },
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-earned-staker-rewards",
+          "readOnlyFunctionArgs": {
+            "arguments": [
+              "0x0616099fb88926d82f30b2f40eaf3ee423cb725bdb3b1a6e61746976652d706f6f6c2d7369676e65722d6d616e61676572",
+              "0x0100000000000000000000000000000071",
+              "0x09",
+              "0x051683ed66860315e334010bbfb76eb3eef887efee0a"
+            ],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "payout-v2",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "payout",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0x0a0c00000003076d61782d66656501000000000000000000000000000009c4096d696e2d636c61696d010000000000000000000000000000271008706f782d616464720c00000002096861736862797465730200000014751e76e8199196d454941c45d1b3a323f1433bd60776657273696f6e020000000104"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-payout-preference",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        "mainnet"
+      ],
+      "enabled": true,
+      "value": {
+        "preference": {
+          "btcRewardAddress": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+          "maxFeeSats": "2500",
+          "minClaimSats": "10000"
+        },
+        "supportsMinClaim": true
+      },
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-payout-config",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "payout-v1",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "payout",
+      "responses": [
+        {
+          "okay": false,
+          "cause": "UndefinedFunction"
+        },
+        {
+          "okay": true,
+          "result": "0x0a0c00000003076d61782d66656501000000000000000000000000000009c4096d696e2d636c61696d010000000000000000000000000000271008706f782d616464720c00000002096861736862797465730200000014751e76e8199196d454941c45d1b3a323f1433bd60776657273696f6e020000000104"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-payout-preference",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        "mainnet"
+      ],
+      "enabled": true,
+      "value": {
+        "preference": {
+          "btcRewardAddress": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+          "maxFeeSats": "2500",
+          "minClaimSats": "10000"
+        },
+        "supportsMinClaim": false
+      },
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-payout-config",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        },
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-pox-addr",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "payout-error",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "payout",
+      "responses": [
+        {
+          "okay": false,
+          "cause": "NoSuchContract"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-payout-preference",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+        "mainnet"
+      ],
+      "enabled": true,
+      "error": "NoSuchContract",
+      "calls": [
+        {
+          "contractAddress": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+          "contractName": "custom-signer-manager",
+          "functionName": "get-payout-config",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "poolFee-legacy",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "poolFee",
+      "responses": [
+        {
+          "okay": false
+        },
+        {
+          "okay": true,
+          "data": "0x01000000000000000000000000000001c2"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-pool-fee-bips",
+        "https://stacks.example",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager"
+      ],
+      "enabled": true,
+      "value": {
+        "activeFeeBips": 450,
+        "pendingFeeBips": null,
+        "pendingActivationCycle": null
+      },
+      "calls": [
+        {
+          "url": "https://stacks.example/v2/contracts/call-read/SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP/custom-signer-manager/get-pending-fees",
+          "body": "{\"sender\":\"SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP\",\"arguments\":[]}"
+        },
+        {
+          "url": "https://stacks.example/v2/data_var/SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP/custom-signer-manager/fees-bips?proof=0",
+          "body": null
+        }
+      ]
+    }
+  },
+  {
+    "id": "staker-malformed",
+    "input": {
+      "address": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+      "signerManagerContractId": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.custom-signer-manager",
+      "pox5ContractId": "SP000000000000000000002Q6VF78.pox-5",
+      "cycle": 113,
+      "kind": "staker",
+      "responses": [
+        {
+          "okay": true,
+          "result": "0xff"
+        }
+      ]
+    },
+    "expected": {
+      "queryKey": [
+        "pox5-staker-info",
+        "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP",
+        "SP000000000000000000002Q6VF78.pox-5"
+      ],
+      "enabled": true,
+      "error": "Cannot recognize Clarity Type: 255",
+      "calls": [
+        {
+          "contractAddress": "SP000000000000000000002Q6VF78",
+          "contractName": "pox-5",
+          "functionName": "get-staker-info",
+          "readOnlyFunctionArgs": {
+            "arguments": ["0x051683ed66860315e334010bbfb76eb3eef887efee0a"],
+            "sender": "SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP"
+          }
+        }
+      ]
+    }
+  }
+]

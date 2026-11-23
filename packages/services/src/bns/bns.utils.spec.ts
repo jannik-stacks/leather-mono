@@ -1,7 +1,10 @@
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
+
 import {
   type BnsV2ApiZoneFilResponse,
   type BnsV2ApiZoneFileAddress,
 } from '../infrastructure/api/bns-v2/bns-v2-api.schema';
+import * as bnsContractVectorDriver from './bns-contract.vectors-driver';
 import { mapBnsProfileDataAddresses, mapBnsProfileDataFromZoneFile } from './bns.utils';
 
 describe(mapBnsProfileDataAddresses.name, () => {
@@ -84,5 +87,43 @@ describe(mapBnsProfileDataFromZoneFile.name, () => {
     expect(mapBnsProfileDataFromZoneFile({ bio })).toEqual({
       bio,
     });
+  });
+});
+
+describe('Stacks migration vectors: bns-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/bns-contract.json', 'utf8')
+  );
+
+  test('pins BNS Clarity responses and profile mapping', () => {
+    const results = {
+      primary: [
+        '070c00000002046e616d650200000005616c696365096e616d6573706163650200000003627463',
+        '070a0c00000002046e616d650200000005616c696365096e616d6573706163650200000003627463',
+        '080100000000000000000000000000000083',
+        '080100000000000000000000000000000001',
+        '0709',
+        '03',
+      ].map(bnsContractVectorDriver.primary),
+      profiles: [
+        {},
+        {
+          name: 'alice',
+          bio: 'hello',
+          btc: 'legacy',
+          addresses: [
+            { network: 'btc', type: 'payment', address: 'bc1payment' },
+            { network: 'eth', type: 'wallet', address: '0x123' },
+          ],
+        },
+        { name: '', bio: '', btc: 'legacy' },
+      ].map(bnsContractVectorDriver.profile),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });

@@ -1,0 +1,41 @@
+[
+  {
+    "key": [
+      "stacks-transaction-fees-service--get-stacks-transaction-fees",
+      "00051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000",
+      1,
+      5,
+      2,
+      "mainnet"
+    ],
+    "refetchOnWindowFocus": false,
+    "refetchInterval": 120000,
+    "refetchOnMount": true
+  },
+  {
+    "key": [
+      "stacks-transaction-fees-service--get-stacks-transaction-fees",
+      "00051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000",
+      2,
+      5,
+      2,
+      "mainnet"
+    ],
+    "refetchOnWindowFocus": false,
+    "refetchInterval": 120000,
+    "refetchOnMount": true
+  },
+  {
+    "key": [
+      "stacks-transaction-fees-service--get-stacks-transaction-fees",
+      "00051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000",
+      3,
+      5,
+      2,
+      "mainnet"
+    ],
+    "refetchOnWindowFocus": false,
+    "refetchInterval": 120000,
+    "refetchOnMount": true
+  }
+]

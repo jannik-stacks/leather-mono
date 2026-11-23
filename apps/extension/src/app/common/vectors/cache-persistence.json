@@ -1,0 +1,11 @@
+{
+  "written": "{\"json\":{\"buster\":\"stacks-vector\",\"timestamp\":1700000000000,\"clientState\":{\"mutations\":[],\"queries\":[{\"dehydratedAt\":1700000000000,\"state\":{\"data\":{\"rawTx\":\"80800000000400fc7250a211deddc70ee5a2738de5f07817351cef00200000000000010000000000000141000095bbc94fe2da3984b423a94e28e5a8c5c1be262b6949c9b9f9a24264ad930f9a793a154c3932c5079f346ffde11f0d769fbaf6f7fa625aa7c52e24cb42420a0d03020000000000051a00000000000000000000000000000000000000000020000000000001f09f8c9f000000000000000000000000000000000000000000000000000000000000\",\"cv\":{\"type\":\"uint\",\"value\":\"340282366920938463463374607431768211455\"},\"balance\":\"9007199254740993\",\"amount\":\"9007199254740993.125\",\"poxAddress\":[0,7,255]},\"dataUpdateCount\":1,\"dataUpdatedAt\":1700000000000,\"error\":null,\"errorUpdateCount\":0,\"errorUpdatedAt\":0,\"fetchFailureCount\":0,\"fetchFailureReason\":null,\"fetchMeta\":null,\"isInvalidated\":false,\"status\":\"success\",\"fetchStatus\":\"idle\"},\"queryKey\":[\"stacks-vector-cache\"],\"queryHash\":\"[\\\"stacks-vector-cache\\\"]\"}]}},\"meta\":{\"values\":{\"clientState.queries.0.state.data.cv.value\":[\"bigint\"],\"clientState.queries.0.state.data.balance\":[\"bigint\"],\"clientState.queries.0.state.data.amount\":[[\"custom\",\"BigNumber\"]],\"clientState.queries.0.state.data.poxAddress\":[[\"typed-array\",\"Uint8Array\"]]}}}",
+  "loaded": {
+    "rawTx": "80800000000400fc7250a211deddc70ee5a2738de5f07817351cef00200000000000010000000000000141000095bbc94fe2da3984b423a94e28e5a8c5c1be262b6949c9b9f9a24264ad930f9a793a154c3932c5079f346ffde11f0d769fbaf6f7fa625aa7c52e24cb42420a0d03020000000000051a00000000000000000000000000000000000000000020000000000001f09f8c9f000000000000000000000000000000000000000000000000000000000000",
+    "txid": "dd6a57f0b047c7873208a658066244bbe55c9a8215659948026277a871c60686",
+    "clarity": "01ffffffffffffffffffffffffffffffff",
+    "balance": "9007199254740993",
+    "amount": "9007199254740993.125",
+    "poxAddress": "0007ff"
+  }
+}

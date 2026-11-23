@@ -6,12 +6,14 @@ import {
   makeUnsignedSTXTokenTransfer,
 } from '@stacks/transactions';
 import { LedgerError } from '@zondax/ledger-stacks';
+import { readFileSync as readStacksVectorFileSync } from 'node:fs';
 
 import {
   isLedgerDeviceDisconnectedError,
   isLedgerDeviceLockedError,
 } from '../dmk/ledger-dmk-errors';
 import { makeFakeLedgerStacksApp } from './ledger-app.mocks';
+import * as ledgerContractVectorDriver from './ledger-contract.vectors-driver';
 import {
   MINIMUM_STACKS_APP_VERSION,
   getStacksAppVersion,
@@ -226,5 +228,28 @@ describe(validateStacksAppVersion.name, () => {
     expect(validateStacksAppVersion({ major: 0, minor: 26, patch: 20 }).meetsMinimum).toBe(true);
     expect(validateStacksAppVersion({ major: 0, minor: 27, patch: 0 }).meetsMinimum).toBe(true);
     expect(validateStacksAppVersion({ major: 1, minor: 0, patch: 0 }).meetsMinimum).toBe(true);
+  });
+});
+
+describe('Stacks migration vectors: ledger-contract', () => {
+  const expected: unknown = JSON.parse(
+    readStacksVectorFileSync(__dirname + '/vectors/ledger-contract.json', 'utf8')
+  );
+
+  test('pins Ledger VRS transaction fields and RSV message signature layout', () => {
+    const unsigned =
+      '8080000000040563859964ea29ad5a0916500860e2c4adec0a6b270020000000000001000000000000014100000000000203020000000000051a0000000000000000000000000000000000000000002000000000000100000000000000000000000000000000000000000000000000000000000000000000';
+    const signature =
+      '00c97448cd7db4c5a7a782c1a7fd5c975cbc67087e09c95a5c09aa6b45d045000b09261a8270ab63586e4385166eb6aa22fc0327448ae9e58a586267b627a0777f';
+    const results = {
+      multisig: ledgerContractVectorDriver.sign(unsigned, signature),
+      addressVersions: [1, 2147483648, 256].map(ledgerContractVectorDriver.addressVersion),
+    };
+    const actual: unknown = JSON.parse(
+      JSON.stringify(results, (_, value: unknown) =>
+        typeof value === 'bigint' ? value.toString() : value
+      )
+    );
+    expect(actual).toEqual(expected);
   });
 });
