@@ -4198,6 +4198,12 @@
             "Codec",
             "StacksTransaction"
           ]
+        },
+        {
+          "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/replies.vectors.spec.ts",
+          "symbol": [
+            "Codec"
+          ]
         }
       ],
       "flow": "actual extension approval handlers -> signed transaction hex, broadcast wire request and JSON RPC sign/broadcast/sponsored/message replies",
@@ -4237,6 +4243,18 @@
           "test": {
             "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/replies.vectors.spec.ts",
             "name": "pins broadcast and sponsored dapp reply bytes through the real SDK transport"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/replies.vectors.spec.ts",
+            "name": "recognizes decoded non-sequential multisig transactions without an explicit hash mode"
+          }
+        },
+        {
+          "test": {
+            "file": "apps/extension/src/app/features/rpc-stacks-transaction-request/stacks/replies.vectors.spec.ts",
+            "name": "preserves multisig fee and nonce on RPC approval (legacy: %s)"
           }
         }
       ]

@@ -22,7 +22,8 @@ export function getUnsignedStacksTransactionFromRpcRequest() {
 }
 
 export function checkUnsignedStacksTransactionHashMode(tx: StacksTransaction) {
-  const hashMode = tx.signer?.hashMode ?? 'p2pkh';
+  const hashMode =
+    tx.signer?.hashMode ?? (tx.signaturesRequired === undefined ? 'p2pkh' : 'p2sh-non-sequential');
   return (
     hashMode === 'p2sh' ||
     hashMode === 'p2wsh' ||
