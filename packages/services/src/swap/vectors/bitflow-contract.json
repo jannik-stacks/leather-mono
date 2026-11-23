@@ -1,0 +1,302 @@
+[
+  {
+    "id": "post-condition-forms",
+    "input": {
+      "kind": "postConditions",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [
+        {
+          "amount": "9007199254740993",
+          "sender_address": "tx-sender",
+          "condition_code": "less_than_or_equal_to",
+          "token_contract": "SP000000000000000000002Q6VF78.token::coin",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "standard_stx"
+        },
+        {
+          "amount": "9007199254740993",
+          "sender_address": "SP000000000000000000002Q6VF78.vault",
+          "condition_code": "greater_than_or_equal_to",
+          "token_contract": "SP000000000000000000002Q6VF78.token::coin",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "contract_stx"
+        },
+        {
+          "amount": "9007199254740993",
+          "sender_address": "tx-sender",
+          "condition_code": "less_than_or_equal_to",
+          "token_contract": "SP000000000000000000002Q6VF78.token::coin",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "standard_fungible"
+        },
+        {
+          "amount": "9007199254740993",
+          "sender_address": "SP000000000000000000002Q6VF78.vault",
+          "condition_code": "greater_than_or_equal_to",
+          "token_contract": "SP000000000000000000002Q6VF78.token",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "contract_fungible"
+        }
+      ],
+      "swaps": []
+    },
+    "expected": {
+      "hex": [
+        "0002160000000000000000000000000000000000000000050020000000000001",
+        "0003160000000000000000000000000000000000000000057661756c74030020000000000001",
+        "010216000000000000000000000000000000000000000016000000000000000000000000000000000000000005746f6b656e04636f696e050020000000000001",
+        "0103160000000000000000000000000000000000000000057661756c7416000000000000000000000000000000000000000005746f6b656e04636f696e030020000000000001"
+      ]
+    }
+  },
+  {
+    "id": "empty-post-conditions",
+    "input": {
+      "kind": "postConditions",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": []
+    },
+    "expected": {
+      "hex": []
+    }
+  },
+  {
+    "id": "unknown-condition",
+    "input": {
+      "kind": "postConditions",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [
+        {
+          "amount": "9007199254740993",
+          "sender_address": "tx-sender",
+          "condition_code": "equal_to",
+          "token_contract": "SP000000000000000000002Q6VF78.token::coin",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "standard_stx"
+        }
+      ],
+      "swaps": []
+    },
+    "expected": {
+      "error": "Unknown Bitflow BFF API condition code: equal_to"
+    }
+  },
+  {
+    "id": "invalid-ft-contract",
+    "input": {
+      "kind": "postConditions",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [
+        {
+          "amount": "9007199254740993",
+          "sender_address": "tx-sender",
+          "condition_code": "less_than_or_equal_to",
+          "token_contract": "invalid",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "standard_fungible"
+        }
+      ],
+      "swaps": []
+    },
+    "expected": {
+      "error": "Invalid token contract: invalid"
+    }
+  },
+  {
+    "id": "invalid-principal",
+    "input": {
+      "kind": "postConditions",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [
+        {
+          "amount": "9007199254740993",
+          "sender_address": "invalid",
+          "condition_code": "less_than_or_equal_to",
+          "token_contract": "SP000000000000000000002Q6VF78.token::coin",
+          "token_decimals": 6,
+          "token_asset_name": "coin",
+          "post_condition_type": "standard_stx"
+        }
+      ],
+      "swaps": []
+    },
+    "expected": {
+      "error": "Invalid contract id: invalid"
+    }
+  },
+  {
+    "id": "simple-swap",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": [
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211455",
+          "min_received": "9007199254740993",
+          "x_for_y": true,
+          "max_steps": 7
+        }
+      ]
+    },
+    "expected": {
+      "hex": [
+        "0b000000010c0000000706616d6f756e7401ffffffffffffffffffffffffffffffff096d61782d7374657073010000000000000000000000000000000c0c6d696e2d726563656976656401000000000000000000200000000000010a706f6f6c2d74726169740616000000000000000000000000000000000000000004706f6f6c07782d666f722d79030d782d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d780d792d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d79"
+      ]
+    }
+  },
+  {
+    "id": "empty-swaps",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": []
+    },
+    "expected": {
+      "hex": ["0b00000000"]
+    }
+  },
+  {
+    "id": "step-scaling",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": [
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211455",
+          "min_received": "9007199254740993",
+          "x_for_y": true,
+          "max_steps": 200
+        },
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211455",
+          "min_received": "9007199254740993",
+          "x_for_y": false,
+          "max_steps": 100
+        }
+      ]
+    },
+    "expected": {
+      "hex": [
+        "0b000000020c0000000706616d6f756e7401ffffffffffffffffffffffffffffffff096d61782d737465707301000000000000000000000000000000bf0c6d696e2d726563656976656401000000000000000000200000000000010a706f6f6c2d74726169740616000000000000000000000000000000000000000004706f6f6c07782d666f722d79030d782d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d780d792d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d790c0000000706616d6f756e7401ffffffffffffffffffffffffffffffff096d61782d737465707301000000000000000000000000000000620c6d696e2d726563656976656401000000000000000000200000000000010a706f6f6c2d74726169740616000000000000000000000000000000000000000004706f6f6c07782d666f722d79040d782d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d780d792d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d79"
+      ]
+    }
+  },
+  {
+    "id": "step-clamping",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": [
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211455",
+          "min_received": "9007199254740993",
+          "x_for_y": true,
+          "max_steps": -10
+        },
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211455",
+          "min_received": "9007199254740993",
+          "x_for_y": false,
+          "max_steps": 1000
+        }
+      ]
+    },
+    "expected": {
+      "hex": [
+        "0b000000020c0000000706616d6f756e7401ffffffffffffffffffffffffffffffff096d61782d737465707301000000000000000000000000000000010c6d696e2d726563656976656401000000000000000000200000000000010a706f6f6c2d74726169740616000000000000000000000000000000000000000004706f6f6c07782d666f722d79030d782d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d780d792d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d790c0000000706616d6f756e7401ffffffffffffffffffffffffffffffff096d61782d737465707301000000000000000000000000000001210c6d696e2d726563656976656401000000000000000000200000000000010a706f6f6c2d74726169740616000000000000000000000000000000000000000004706f6f6c07782d666f722d79040d782d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d780d792d746f6b656e2d74726169740616000000000000000000000000000000000000000007746f6b656e2d79"
+      ]
+    }
+  },
+  {
+    "id": "negative-amount",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": [
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "-1",
+          "min_received": "9007199254740993",
+          "x_for_y": true,
+          "max_steps": 7
+        }
+      ]
+    },
+    "expected": {
+      "error": "Cannot construct unsigned clarity integer from negative value"
+    }
+  },
+  {
+    "id": "uint-overflow",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": [
+        {
+          "pool_trait": "SP000000000000000000002Q6VF78.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211456",
+          "min_received": "9007199254740993",
+          "x_for_y": true,
+          "max_steps": 7
+        }
+      ]
+    },
+    "expected": {
+      "error": "Cannot construct unsigned clarity integer greater than 340282366920938463463374607431768211455"
+    }
+  },
+  {
+    "id": "invalid-trait",
+    "input": {
+      "kind": "swaps",
+      "sender": "SP000000000000000000002Q6VF78",
+      "postConditions": [],
+      "swaps": [
+        {
+          "pool_trait": "invalid.pool",
+          "x_token_trait": "SP000000000000000000002Q6VF78.token-x",
+          "y_token_trait": "SP000000000000000000002Q6VF78.token-y",
+          "amount": "340282366920938463463374607431768211455",
+          "min_received": "9007199254740993",
+          "x_for_y": true,
+          "max_steps": 7
+        }
+      ]
+    },
+    "expected": {
+      "error": "Invalid c32 address: must start with \"S\""
+    }
+  }
+]

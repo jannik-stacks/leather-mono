@@ -130,3 +130,17 @@ S225 calls buildStacksTx directly from [execution-type.spec.ts](../../packages/s
 The reference audit also replaces unrelated shared transaction/post-condition proofs with existing owner tests for wallet UTXO matching, pending PoX transactions, the DAO wrapper, pool-fee decoding, multisig SIP-10 construction and transaction-hex construction. Shared protocol proofs elsewhere still pin their underlying wire formats; the checker checks reference existence, not semantic reachability, so reviewers must follow each proof to its production owner when changing those entries.
 
 Baseline comparison resolves AGENTGRAPH_BASE to a commit before reading its inventory. Invalid revisions, Git failures, malformed JSON and invalid inventory shapes fail the check. An unset AGENTGRAPH_BASE prints that comparison is unavailable; a valid baseline commit without an inventory prints its revision and explains that the inventory is being introduced. Neither case silently swallows an unexpected error.
+
+## Known quirks
+
+- SIP-10 transaction-hex construction ignores its network input; default deployments (including explicit Clarity 6) omit the version byte.
+- A supplied zero nonce can fall back to the next nonce in the mobile request path.
+- Sponsored approvals can continue broadcasting after replying and can reply twice.
+- Bitflow adds five steps per hop, clamps each to 1–290, then floors proportional scaling; the resulting total can be below 290.
+- DAO rewards and withdrawals convert uints to JavaScript numbers, losing precision above the safe integer range. Past withdrawals retain negative blocks-until-unlock values. Missing Granite/Zest tuple fields can throw a TypeError rather than a validation error.
+
+## Additional production-entry vectors
+
+- S192: [swap.utils.spec.ts](../../packages/services/src/swap/swap.utils.spec.ts) calls both Bitflow converters through [bitflow-contract.vectors-driver.ts](../../packages/services/src/swap/bitflow-contract.vectors-driver.ts). [bitflow-contract.json](../../packages/services/src/swap/vectors/bitflow-contract.json) records post-condition principal/asset forms, comparators, full-width amounts, calldata, step limits/scaling and invalid inputs.
+- S196–S202: [stacking-dao-ststxbtc.service.spec.ts](../../packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts) uses [yield-consumers.vectors-driver.ts](../../packages/services/src/yield/providers/stacking-dao/yield-consumers.vectors-driver.ts) to call Granite/Zest getAccountPositions and DAO getSbtcReward/getLstWithdrawals. [yield-consumers.json](../../packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json) pins literal Hiro replies, serialized request arguments, balances/quotes, principal filtering, both withdrawal contracts, unlock heights, precision and rejection behavior. The service methods and their parsers remain real; only external service dependencies are stubbed.
+- S075: [use-swap-dependencies.spec.ts](../../apps/extension/src/app/pages/swap/hooks/use-swap-dependencies.spec.ts) invokes the hook's actual stacks.broadcast function and the real SDK transport. [swap-broadcast.json](../../apps/extension/src/app/pages/swap/hooks/vectors/swap-broadcast.json) pins the complete JSON transaction body, URL, content type, success txid, node rejection reason, missing txid, malformed response and network errors. Only the HTTP transport and unrelated app hooks are mocked.

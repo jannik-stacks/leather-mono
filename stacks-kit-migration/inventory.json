@@ -4598,8 +4598,8 @@
       "proof": [
         {
           "test": {
-            "file": "packages/stacks/src/transactions/post-condition-contract.vectors.spec.ts",
-            "name": "pins every post-condition family, principal form and condition code"
+            "file": "apps/extension/src/app/pages/swap/hooks/use-swap-dependencies.spec.ts",
+            "name": "pins swap broadcast request bytes, success, rejection and missing txid"
           }
         }
       ]
@@ -12117,8 +12117,8 @@
       "proof": [
         {
           "test": {
-            "file": "packages/stacks/src/transactions/post-condition-contract.vectors.spec.ts",
-            "name": "pins every post-condition family, principal form and condition code"
+            "file": "packages/services/src/swap/swap.utils.spec.ts",
+            "name": "pins Bitflow converter post-condition bytes, calldata, step scaling and rejection"
           }
         }
       ]
@@ -12411,7 +12411,11 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "granite-borrow-position"
           }
         }
       ]
@@ -12450,7 +12454,11 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "granite-earn-large"
           }
         }
       ]
@@ -12508,7 +12516,21 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "granite-borrow-position"
+          }
+        },
+        {
+          "test": {
+            "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "granite-earn-large"
           }
         }
       ]
@@ -12559,7 +12581,21 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "dao-reward-positive"
+          }
+        },
+        {
+          "test": {
+            "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "dao-withdrawal-ok"
           }
         }
       ]
@@ -12609,7 +12645,11 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "dao-withdrawal-ok"
           }
         }
       ]
@@ -12665,7 +12705,11 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "zest-position"
           }
         }
       ]
@@ -12725,7 +12769,11 @@
         {
           "test": {
             "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
-            "name": "pins yield read-only arguments and Clarity response validation"
+            "name": "pins %s production requests, amounts and errors"
+          },
+          "vector": {
+            "file": "packages/services/src/yield/providers/stacking-dao/vectors/yield-consumers.json",
+            "id": "zest-position"
           }
         }
       ]
@@ -15275,6 +15323,48 @@
           "line": 13,
           "symbol": "decodeProposalPayload",
           "owner": "decodeProposalPayload"
+        }
+      ]
+    },
+    {
+      "id": "V-BITFLOW",
+      "file": "packages/services/src/swap/bitflow-contract.vectors-driver.ts",
+      "symbol": [
+        "postConditionToHex",
+        "serializeCV"
+      ],
+      "sinks": [
+        "wire"
+      ],
+      "flow": "Bitflow converter outputs serialized to literal post-condition and Clarity wire bytes",
+      "proof": [
+        {
+          "test": {
+            "file": "packages/services/src/swap/swap.utils.spec.ts",
+            "name": "pins Bitflow converter post-condition bytes, calldata, step scaling and rejection"
+          }
+        }
+      ]
+    },
+    {
+      "id": "V-YIELD-CONSUMERS",
+      "file": "packages/services/src/yield/providers/stacking-dao/yield-consumers.vectors-driver.ts",
+      "symbol": [
+        "deserializeCV",
+        "serializeCV"
+      ],
+      "sinks": [
+        "wire",
+        "api",
+        "display"
+      ],
+      "flow": "Recorded Hiro wire replies through real Granite, Zest and DAO services to request bytes, balances and errors",
+      "proof": [
+        {
+          "test": {
+            "file": "packages/services/src/yield/providers/stacking-dao/stacking-dao-ststxbtc.service.spec.ts",
+            "name": "pins %s production requests, amounts and errors"
+          }
         }
       ]
     }

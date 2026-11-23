@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import z from 'zod';
 
 import { stxAsset } from '@leather.io/constants';
 import type {
@@ -9,6 +11,7 @@ import type {
 import { createMoney } from '@leather.io/utils';
 
 import { createTestSip10Asset } from '../test/swap-fixtures';
+import { bitflowVector, bitflowVectorSchema } from './bitflow-contract.vectors-driver';
 import { hasValidMinReceiveAmountPostCondition } from './swap.utils';
 
 function makeExecutionData(
@@ -252,5 +255,15 @@ describe(hasValidMinReceiveAmountPostCondition.name, () => {
       );
       expect(hasValidMinReceiveAmountPostCondition(executionData, new BigNumber(0.04))).toBe(true);
     });
+  });
+});
+
+describe('Stacks migration vectors: Bitflow converters', () => {
+  test('pins Bitflow converter post-condition bytes, calldata, step scaling and rejection', () => {
+    const vectors = z
+      .array(bitflowVectorSchema)
+      .parse(JSON.parse(readFileSync(__dirname + '/vectors/bitflow-contract.json', 'utf8')));
+    const outputs = vectors.map(vector => bitflowVector(vector.input));
+    expect(outputs).toEqual(vectors.map(vector => vector.expected));
   });
 });
